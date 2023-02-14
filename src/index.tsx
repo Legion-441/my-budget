@@ -6,8 +6,23 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
 
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from './firebase';
+
 const container = document.getElementById('root')!;
 const root = createRoot(container);
+
+
+async function getTransactions() {
+  const querySnapshot = await getDocs(collection(db, 'transactions'));
+  querySnapshot.forEach((doc) => {
+    
+    console.log(doc);
+  });
+}
+
+getTransactions();
+
 
 root.render(
   <React.StrictMode>
