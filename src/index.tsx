@@ -13,13 +13,12 @@ const container = document.getElementById('root')!;
 const root = createRoot(container);
 
 
-async function getTransactions() {
+const getTransactions = async () => {
   const querySnapshot = await getDocs(collection(db, 'transactions'));
   querySnapshot.forEach((doc) => {
-    
     console.log(doc);
   });
-}
+};
 
 getTransactions();
 

@@ -1,11 +1,11 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 
 //! Reducers
-// import XXX from './../slices/app/XXX.slice'
+import appReducer from './../slices/app/app.slice'
 
 export const store = configureStore({
   reducer: {
-    
+    app: appReducer,
   },
 });
 
