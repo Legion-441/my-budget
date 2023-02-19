@@ -12,17 +12,6 @@ import { db } from './firebase';
 const container = document.getElementById('root')!;
 const root = createRoot(container);
 
-
-const getTransactions = async () => {
-  const querySnapshot = await getDocs(collection(db, 'transactions'));
-  querySnapshot.forEach((doc) => {
-    console.log(doc);
-  });
-};
-
-getTransactions();
-
-
 root.render(
   <React.StrictMode>
     <Provider store={store}>
