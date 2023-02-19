@@ -51,8 +51,6 @@ const AppHeader: React.FC = () => {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-
-          {/* BURGER MENU */}
           <IconButton
             size="large"
             edge="start"
@@ -62,29 +60,21 @@ const AppHeader: React.FC = () => {
           >
             <MenuIcon />
           </IconButton>
-
-          {/* MUI LOGO */}
           <Typography
             variant="h6"
             noWrap
             component="div"
             sx={{ display: 'block' }}
           >
-            MUI
+            MyBudget | PatchPocket
           </Typography>
-
-          {/* SPACE */}
           <Box sx={{ flexGrow: 1 }} />
-          
-          {/* USER MENU */}
           <Box sx={{ display: 'flex' }}>
-
             <IconButton size="large" aria-label="show 4 new mails" color="inherit">
               <Badge badgeContent={4} color="error">
                 <MailIcon />
               </Badge>
             </IconButton>
-
             <IconButton
               size="large"
               aria-label="show 17 new notifications"
@@ -94,7 +84,6 @@ const AppHeader: React.FC = () => {
                 <NotificationsIcon />
               </Badge>
             </IconButton>
-
             <IconButton
               size="large"
               edge="end"
@@ -107,7 +96,6 @@ const AppHeader: React.FC = () => {
               <AccountCircle />
             </IconButton>
           </Box>
-
         </Toolbar>
       </AppBar>
       {renderMenu}
