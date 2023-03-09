@@ -30,8 +30,9 @@ function App() {
               <Route index element={<DashboardMainView />} />
               <Route path='details' element={<DashboardDetailsView />} />
             </Route>
-            <Route path='user' element={<></>}>
-            </Route>
+            <Route path='history' element={<>HISTORY</>}></Route>
+            <Route path='settings' element={<>SETTINGS</>}></Route>
+            <Route path='user' element={<></>}></Route>
             <Route path='*' element={<NotFoundView />} />
           </Route>
         </Routes>
