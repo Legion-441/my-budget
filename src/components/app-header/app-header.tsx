@@ -12,10 +12,13 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { ExtendableNavBar } from '../nav-bar/extendable-nav-bar/extendable-nav-bar'
 
-const AppHeader: React.FC = () => {
-  const [drawerOpen, setDrawerOpen] = React.useState(false);
+interface Props {
+  handleDrawerToggle: () => void;
+}
+
+const AppHeader: React.FC<Props> = (props: Props) => {
+  const { handleDrawerToggle } = props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const isMenuOpen = Boolean(anchorEl);
@@ -26,12 +29,6 @@ const AppHeader: React.FC = () => {
 
   const handleMenuClose = () => {
     setAnchorEl(null);
-  };
-
-  const handleDrawerToggle = () => {
-    setDrawerOpen(!drawerOpen);
-    console.log(drawerOpen);
-    
   };
 
   const menuId = 'primary-search-account-menu';
@@ -131,7 +128,6 @@ const AppHeader: React.FC = () => {
           </Toolbar>
         </AppBar>
         {renderMenu}
-        {/* <ExtendableNavBar drawerOpen={drawerOpen} handleDrawerToggle={handleDrawerToggle}></ExtendableNavBar> */}
       </Box>
       <Toolbar/>
     </>

@@ -1,48 +1,36 @@
-import { Container } from '@mui/material'
+import * as React from 'react';
 import { Outlet } from 'react-router-dom'
-import AppHeader from '../../components/app-header/app-header'
-import { PageContainer } from '../../styled/page-container/page-container.styled'
-
-import Toolbar from '@mui/material/Toolbar';
-import Box from '@mui/material/Box';
+//! Material
+import { Container } from '@mui/material'
 import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import { PageContainer } from '../../styled/page-container/page-container.styled'
+//! Components
+import AppHeader from '../../components/app-header/app-header'
 import MobileBottomNavigation from '../../components/nav-bar/bottom-nav-bar/bottom-nav-bar';
+import { ExtendableNavBar } from '../../components/nav-bar/extendable-nav-bar/extendable-nav-bar';
+
+import { useLocation } from "react-router-dom";
+
+
+
 
 const MainView: React.FC = () => {
+    console.log(useLocation().pathname.split('/').filter((item) => item !== ''));
+    const [drawerOpen, setDrawerOpen] = React.useState(false);
+    // const [selectedSubPage, setSelectedSubPage] = useState("");
+
+    const handleDrawerToggle = () => {
+        setDrawerOpen(!drawerOpen);
+        console.log(drawerOpen);
+        
+    };
+
     return <>
-        <AppHeader />
-        {/* <>NavBar</> */}
-        {/* <>NavBarMobile</> */}
+        <AppHeader handleDrawerToggle={handleDrawerToggle} />
+        <ExtendableNavBar drawerOpen={drawerOpen} handleDrawerToggle={handleDrawerToggle} />
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
             <Container>
-                <Typography paragraph>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
-                enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
-                imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus.
-                Convallis convallis tellus id interdum velit laoreet id donec ultrices.
-                Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-                adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra
-                nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum
-                leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis
-                feugiat vivamus at augue. At augue eget arcu dictum varius duis at
-                consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
-                sapien faucibus et molestie ac.
-                </Typography>
-                <Typography paragraph>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
-                enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
-                imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus.
-                Convallis convallis tellus id interdum velit laoreet id donec ultrices.
-                Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-                adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra
-                nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum
-                leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis
-                feugiat vivamus at augue. At augue eget arcu dictum varius duis at
-                consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
-                sapien faucibus et molestie ac.
-                </Typography>
                 <PageContainer>
                     <Outlet />
                 </PageContainer>
