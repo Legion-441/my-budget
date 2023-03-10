@@ -22,15 +22,19 @@ const drawerWidth = [240, 60];
 interface Props {
   drawerOpen: boolean;
   handleDrawerToggle: () => void;
+  temporaryDrawerOpen: boolean;
+  handleTemporaryDrawerToggle: () => void;
 }
 
 export const ExtendableNavBar: React.FC<Props> = (props: Props) => {
   const { drawerOpen, handleDrawerToggle } = props;
+  const { temporaryDrawerOpen, handleTemporaryDrawerToggle } = props;
 
   const theme = useTheme();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'));
 
   console.log(drawerOpen);
+  console.log(temporaryDrawerOpen);
   
   
   const drawer = <>
@@ -70,18 +74,17 @@ export const ExtendableNavBar: React.FC<Props> = (props: Props) => {
       </Drawer>
       
       <Drawer
+      //TODO: make drawer close on button click
           variant="temporary"
-          open={drawerOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true,
-          }}
+          open={temporaryDrawerOpen}
+          onClose={handleTemporaryDrawerToggle}
+          ModalProps={{keepMounted: true}}
           sx={{
-            display: {lg: 'none', md : 'block'},
+            display: {xs: 'none', sm : 'block', lg: 'none'},
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth[0] },
           }}
         >
-          {drawer}
+        {drawer}
       </Drawer>
 
     </Box>
