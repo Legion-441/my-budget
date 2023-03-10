@@ -10,10 +10,9 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import { useMediaQuery, useTheme } from '@mui/material';
 //! PAGES
 import { pages } from '../nav-pages';
-//! ICONS
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import { CustomLink } from '../../../styled/custom-link/custom-link.styled';
 
 
@@ -28,45 +27,63 @@ interface Props {
 export const ExtendableNavBar: React.FC<Props> = (props: Props) => {
   const { drawerOpen, handleDrawerToggle } = props;
 
+  const theme = useTheme();
+  const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'));
+
+  console.log(drawerOpen);
+  
+  
+  const drawer = <>
+      <Toolbar />
+      <Divider />
+      <List>
+        {pages.map((item) => (
+          <CustomLink to={item.path} key={item.label} >
+            <ListItem disablePadding >
+              <ListItemButton>
+                <ListItemIcon>
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText primary={item.label} />
+              </ListItemButton>
+            </ListItem>
+          </CustomLink>
+        ))}
+      </List>
+    </>
+  
   return(
-    <Drawer
-        variant="permanent"
-        sx={{
-          display: { xs: 'none', sm: 'inherit' },
-          flexShrink: 0,
-          [`& .MuiDrawer-paper`]: { width: drawerWidth[Number(drawerOpen)], boxSizing: 'border-box' },
-        }}
+    <Box
+        component="nav"
+        sx={{display: { xs: 'none', sm: 'block' }}}
       >
-        <Toolbar />
-        <Box sx={{ overflow: 'auto' }}>
-          <List>
-            {['Inbox'].map((text) => (
-              <ListItem key={text} disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    <InboxIcon />
-                  </ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-          <Divider />
-          <List>
-            {pages.map((item) => (
-              <CustomLink to={item.path}>
-                <ListItem key={item.label} disablePadding >
-                  <ListItemButton>
-                    <ListItemIcon>
-                      {item.icon}
-                    </ListItemIcon>
-                    <ListItemText primary={item.label} />
-                  </ListItemButton>
-                </ListItem>
-              </CustomLink>
-            ))}
-          </List>
-        </Box>
+      <Drawer
+          variant="permanent"
+          anchor="left"
+          sx={{
+            width: drawerWidth[isLargeScreen? Number(!drawerOpen) : 1],
+            flexShrink: 0,
+            [`& .MuiDrawer-paper`]: { width: drawerWidth[isLargeScreen? Number(!drawerOpen) : 1], boxSizing: 'border-box' },
+          }}
+        >
+        {drawer}
       </Drawer>
+      
+      <Drawer
+          variant="temporary"
+          open={drawerOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{
+            keepMounted: true,
+          }}
+          sx={{
+            display: {lg: 'none', md : 'block'},
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth[0] },
+          }}
+        >
+          {drawer}
+      </Drawer>
+
+    </Box>
   )
 }

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Outlet } from 'react-router-dom'
+import { useLocation } from "react-router-dom";
 //! Material
 import { Container } from '@mui/material'
 import Typography from '@mui/material/Typography';
@@ -9,9 +10,6 @@ import { PageContainer } from '../../styled/page-container/page-container.styled
 import AppHeader from '../../components/app-header/app-header'
 import MobileBottomNavigation from '../../components/nav-bar/bottom-nav-bar/bottom-nav-bar';
 import { ExtendableNavBar } from '../../components/nav-bar/extendable-nav-bar/extendable-nav-bar';
-
-import { useLocation } from "react-router-dom";
-
 
 
 
@@ -26,7 +24,7 @@ const MainView: React.FC = () => {
         
     };
 
-    return <>
+    return <Box sx={{ display: 'flex' }}>
         <AppHeader handleDrawerToggle={handleDrawerToggle} />
         <ExtendableNavBar drawerOpen={drawerOpen} handleDrawerToggle={handleDrawerToggle} />
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
@@ -37,7 +35,7 @@ const MainView: React.FC = () => {
             </Container>
         </Box>
         <MobileBottomNavigation/>
-    </>
+    </Box>
 }
 
 export default MainView

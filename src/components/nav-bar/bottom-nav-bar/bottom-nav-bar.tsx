@@ -45,6 +45,9 @@ const MobileBottomNavigation: React.FC = () => {
   const [value, setValue] = React.useState(0);
   const ref = React.useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const NavActionButtons = pages.map((item) => (
+    <BottomNavigationAction label={item.label} icon={item.icon} onClick={() => navigate(item.path)} />
+  ))
 
 
   return (
@@ -61,7 +64,7 @@ const MobileBottomNavigation: React.FC = () => {
           }}
         >
           {pages.map((item) => (
-              <BottomNavigationAction label={item.label} icon={item.icon} onClick={() => navigate(item.path)} />
+              <BottomNavigationAction key={item.label} label={item.label} icon={item.icon} onClick={() => navigate(item.path)} />
           ))}
         </BottomNavigation>
       </Paper>

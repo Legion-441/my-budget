@@ -55,7 +55,7 @@ const AppHeader: React.FC<Props> = (props: Props) => {
 
   return (
     <>
-      <Box sx={{ flexGrow: 1 }}>
+      <Box sx={{ flexGrow: 0 }}>
         <AppBar position="fixed" sx={{zIndex: (theme) => theme.zIndex.drawer + 1}}>
           <Toolbar>
             <Box sx={{
@@ -129,7 +129,6 @@ const AppHeader: React.FC<Props> = (props: Props) => {
         </AppBar>
         {renderMenu}
       </Box>
-      <Toolbar/>
     </>
   );
 }
