@@ -12,6 +12,8 @@ import NotFoundView from './views/not-found/notFound';
 import { ThemeProvider } from '@mui/material/styles';
 import { AppColor, selectAppColorMode } from './slices/app/app.slice';
 import { darkTheme, lightTheme } from './styled/theme';
+import HistoryView from './views/history/history';
+import SettingsView from './views/settings/settings';
 
 function App() {
   const dispatch = useAppDispatch()
@@ -30,8 +32,8 @@ function App() {
               <Route index element={<DashboardMainView />} />
               <Route path='details' element={<DashboardDetailsView />} />
             </Route>
-            <Route path='history' element={<>HISTORY</>}></Route>
-            <Route path='settings' element={<>SETTINGS</>}></Route>
+            <Route path='history' element={<HistoryView/>}></Route>
+            <Route path='settings' element={<SettingsView/>}></Route>
             <Route path='user' element={<></>}></Route>
             <Route path='*' element={<NotFoundView />} />
           </Route>
