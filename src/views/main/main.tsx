@@ -35,7 +35,7 @@ const MainView: React.FC = () => {
         console.log("drawer "+drawerOpen);
     };
 
-    return <Box sx={{ display: 'flex' }}>
+    return <Box sx={{ display: 'flex', minHeight: "100vh", backgroundColor: "#eee" }}>
         <AppHeader handleDrawerToggle={isLargeScreen ? handleDrawerToggle : handleTemporaryDrawerToggle} />
         <ExtendableNavBar 
             drawerOpen={drawerOpen}
@@ -43,9 +43,8 @@ const MainView: React.FC = () => {
             temporaryDrawerOpen={temporaryDrawerOpen}
             handleTemporaryDrawerToggle={handleTemporaryDrawerToggle}
             />
-        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-            <Toolbar />
-            <Container>
+        <Box component="main" sx={{ flexGrow: 1, p: 3, my: 8}}>
+            <Container maxWidth="xl">
                 <PageContainer>
                     <Outlet />
                 </PageContainer>

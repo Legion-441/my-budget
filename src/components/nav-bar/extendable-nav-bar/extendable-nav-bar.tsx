@@ -58,21 +58,20 @@ export const ExtendableNavBar: React.FC<Props> = (props: Props) => {
   
   return(
     <Box
-        component="nav"
-        sx={{display: { xs: 'none', sm: 'block' }}}
-      >
-      <Drawer
-          variant="permanent"
-          anchor="left"
-          sx={{
-            width: drawerWidth[isLargeScreen? Number(!drawerOpen) : 1],
-            flexShrink: 0,
-            [`& .MuiDrawer-paper`]: { width: drawerWidth[isLargeScreen? Number(!drawerOpen) : 1], boxSizing: 'border-box' },
-          }}
-        >
-        {drawer}
-      </Drawer>
-      
+      component="nav"
+      sx={{display: { xs: 'none', sm: 'block' }}}
+    >
+        <Drawer
+            variant="permanent"
+            anchor="left"
+            sx={{
+              width: drawerWidth[isLargeScreen? Number(!drawerOpen) : 1],
+              flexShrink: 0,
+              [`& .MuiDrawer-paper`]: { width: drawerWidth[isLargeScreen? Number(!drawerOpen) : 1], boxSizing: 'border-box'},
+            }}
+          >
+          {drawer}
+        </Drawer>
       <Drawer
       //TODO: make drawer close on button click
           variant="temporary"
@@ -86,6 +85,8 @@ export const ExtendableNavBar: React.FC<Props> = (props: Props) => {
         >
         {drawer}
       </Drawer>
+      
+      
 
     </Box>
   )
