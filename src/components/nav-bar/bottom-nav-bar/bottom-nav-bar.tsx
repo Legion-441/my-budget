@@ -1,17 +1,11 @@
 import * as React from 'react';
-import { CustomLink } from '../../../styled/custom-link/custom-link.styled';
+import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import Paper from '@mui/material/Paper';
 //! PAGES
-import { pages } from '../nav-pages';
-//! ICONS
-import HistoryIcon from '@mui/icons-material/History';
-import DonutLargeIcon from '@mui/icons-material/DonutLarge';
-import SettingsIcon from '@mui/icons-material/Settings';
-
-import { useNavigate } from 'react-router-dom';
+import { navLinks } from '../nav-pages';
 
 
 const MobileBottomNavigation: React.FC = () => {
@@ -45,8 +39,8 @@ const MobileBottomNavigation: React.FC = () => {
   const [value, setValue] = React.useState(0);
   const ref = React.useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-  const NavActionButtons = pages.map((item) => (
-    <BottomNavigationAction key={item.label} label={item.label} icon={item.icon} onClick={() => navigate(item.path)} />
+  const NavActionButtons: JSX.Element[] = navLinks.map((item) => (
+    <BottomNavigationAction key={item.label} label={item.label} icon={item.icon} onClick={() => item.path && navigate(item.path)} />
   ))
 
 

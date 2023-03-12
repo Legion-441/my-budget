@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -12,7 +11,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { useMediaQuery, useTheme } from '@mui/material';
 //! PAGES
-import { pages } from '../nav-pages';
+import { navLinks } from '../nav-pages';
 import { CustomLink } from '../../../styled/custom-link/custom-link.styled';
 
 
@@ -41,8 +40,8 @@ export const ExtendableNavBar: React.FC<Props> = (props: Props) => {
       <Toolbar />
       <Divider />
       <List>
-        {pages.map((item) => (
-          <CustomLink to={item.path} key={item.label} >
+        {navLinks.map((item) => (
+          <CustomLink to={item.path ?? "#"} key={item.label} >
             <ListItem disablePadding >
               <ListItemButton>
                 <ListItemIcon>

@@ -17,11 +17,11 @@ interface Props {
   handleDrawerToggle: () => void;
 }
 
-const AppHeader: React.FC<Props> = (props: Props) => {
+const AppHeader: React.FC<Props> = (props: Props): JSX.Element => {
   const { handleDrawerToggle } = props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-  const isMenuOpen = Boolean(anchorEl);
+  const isMenuOpen: boolean = Boolean(anchorEl);
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -32,7 +32,7 @@ const AppHeader: React.FC<Props> = (props: Props) => {
   };
 
   const menuId = 'primary-search-account-menu';
-  const renderMenu = (
+  const renderMenu: JSX.Element = (
     <Menu
       anchorEl={anchorEl}
       anchorOrigin={{
