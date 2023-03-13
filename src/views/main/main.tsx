@@ -20,19 +20,16 @@ const MainView: React.FC = () => {
 
     const theme = useTheme();
     const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'));
-
-    console.log("temp drawer "+temporaryDrawerOpen);  
+  
     const handleTemporaryDrawerToggle = () => {
         setTemporaryDrawerOpen(!temporaryDrawerOpen);
-        console.log("temp drawer "+temporaryDrawerOpen);  
     };
 
     const handleDrawerToggle = () => {
         setDrawerOpen(!drawerOpen);
-        console.log("drawer "+drawerOpen);
     };
 
-    return <Box sx={{ display: 'flex', minHeight: "100vh", backgroundColor: "#eee" }}>
+    return <Box sx={{ display: 'flex', minHeight: "100vh", backgroundColor: "#fafafb" }}>
         <AppHeader handleDrawerToggle={isLargeScreen ? handleDrawerToggle : handleTemporaryDrawerToggle} />
         <ExtendableNavBar 
             drawerOpen={drawerOpen}

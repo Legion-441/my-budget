@@ -1,25 +1,22 @@
 import { useAppDispatch, useAppSelector } from './app/hooks';
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import './App.css';
-
 //! Views
 import HomeView from './views/home/home';
 import MainView from './views/main/main';
 import DashboardDetailsView from './views/dashboard/dashboard-details/dashboard-details';
 import DashboardMainView from './views/dashboard/dashboard';
 import NotFoundView from './views/not-found/notFound';
-
+import HistoryView from './views/history/history';
+import SettingsView from './views/settings/settings';
+//! MUI & styles
 import { ThemeProvider } from '@mui/material/styles';
 import { AppColor, selectAppColorMode } from './slices/app/app.slice';
 import { darkTheme, lightTheme } from './styled/theme';
-import HistoryView from './views/history/history';
-import SettingsView from './views/settings/settings';
 
-function App() {
+const App: React.FC = () => {
   const dispatch = useAppDispatch()
   const appColorMode: AppColor = useAppSelector(selectAppColorMode)
-  console.log(window.matchMedia('(prefers-color-scheme)'));
-  console.log(navigator.userAgent);
   
   
   return (

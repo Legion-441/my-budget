@@ -1,5 +1,5 @@
 import * as React from 'react';
-
+//! MUI & styles
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
@@ -14,8 +14,6 @@ import { useMediaQuery, useTheme } from '@mui/material';
 import { navLinks } from '../nav-pages';
 import { CustomLink } from '../../../styled/custom-link/custom-link.styled';
 
-
-
 const drawerWidth = [240, 60];
 
 interface Props {
@@ -25,35 +23,34 @@ interface Props {
   handleTemporaryDrawerToggle: () => void;
 }
 
-export const ExtendableNavBar: React.FC<Props> = (props: Props) => {
+export const ExtendableNavBar: React.FC<Props> = (props: Props)=> {
   const { drawerOpen, handleDrawerToggle } = props;
   const { temporaryDrawerOpen, handleTemporaryDrawerToggle } = props;
 
-  const theme = useTheme();
+  const theme = useTheme();  
   const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'));
-
-  console.log(drawerOpen);
-  console.log(temporaryDrawerOpen);
   
   
-  const drawer = <>
-      <Toolbar />
-      <Divider />
-      <List>
-        {navLinks.map((item) => (
-          <CustomLink to={item.path ?? "#"} key={item.label} >
-            <ListItem disablePadding >
-              <ListItemButton>
-                <ListItemIcon>
-                  {item.icon}
-                </ListItemIcon>
-                <ListItemText primary={item.label} />
-              </ListItemButton>
-            </ListItem>
-          </CustomLink>
-        ))}
-      </List>
-    </>
+  const drawer: JSX.Element = (
+      <>
+        <Toolbar />
+        <Divider />
+        <List>
+          {navLinks.map((item) => (
+            <CustomLink to={item.path ?? "#"} key={item.label} >
+              <ListItem disablePadding >
+                <ListItemButton>
+                  <ListItemIcon>
+                    {item.icon}
+                  </ListItemIcon>
+                  <ListItemText primary={item.label} />
+                </ListItemButton>
+              </ListItem>
+            </CustomLink>
+          ))}
+        </List>
+      </>
+    )
   
   return(
     <Box
@@ -84,9 +81,6 @@ export const ExtendableNavBar: React.FC<Props> = (props: Props) => {
         >
         {drawer}
       </Drawer>
-      
-      
-
     </Box>
   )
 }

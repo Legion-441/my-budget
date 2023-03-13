@@ -17,7 +17,7 @@ interface Props {
   handleDrawerToggle: () => void;
 }
 
-const AppHeader: React.FC<Props> = (props: Props): JSX.Element => {
+const AppHeader: React.FC<Props> = (props: Props) => {
   const { handleDrawerToggle } = props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
