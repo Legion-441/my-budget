@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Outlet } from 'react-router-dom'
+import { Outlet, useParams } from 'react-router-dom'
 //! Material
 import { Container } from '@mui/material'
 import Box from '@mui/material/Box';
@@ -13,6 +13,7 @@ import { ExtendableNavBar } from '../../components/nav-bar/extendable-nav-bar/ex
 
 
 const MainView: React.FC = () => {
+    const { id } = useParams()
     // console.log(useLocation().pathname.split('/').filter((item) => item !== ''));
     const [drawerOpen, setDrawerOpen] = React.useState(true);
     const [temporaryDrawerOpen, setTemporaryDrawerOpen] = React.useState(false);
@@ -36,6 +37,7 @@ const MainView: React.FC = () => {
             handleDrawerToggle={handleDrawerToggle}
             temporaryDrawerOpen={temporaryDrawerOpen}
             handleTemporaryDrawerToggle={handleTemporaryDrawerToggle}
+            budgetId = {id}
             />
         <Box component="main" sx={{ flexGrow: 1, p: 3, my: 8}}>
             <Container maxWidth="xl">

@@ -25,15 +25,18 @@ const App: React.FC = () => {
         <Routes>
           <Route element={<MainView />} >
             <Route index element={<HomeView />} />
-            <Route path='dash' element={<Outlet />}>
-              <Route index element={<DashboardMainView />} />
-              <Route path='details' element={<DashboardDetailsView />} />
+            <Route path='budget/:id' element={<Outlet />} >
+              <Route path='dash' element={<Outlet />}>
+                <Route index element={<DashboardMainView />} />
+                <Route path='details' element={<DashboardDetailsView />} />
+              </Route>
+              <Route path='history' element={<HistoryView/>} />
+              <Route path='settings' element={<SettingsView/>} />
             </Route>
-            <Route path='history' element={<HistoryView/>}></Route>
-            <Route path='settings' element={<SettingsView/>}></Route>
-            <Route path='user' element={<></>}></Route>
-            <Route path='*' element={<NotFoundView />} />
+            <Route path='profile' element={<>PROFILE</>} />
           </Route>
+            <Route path='*' element={<NotFoundView />} />
+            <Route path='login' element={<>LOGIN</>} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
