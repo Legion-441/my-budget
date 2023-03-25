@@ -18,25 +18,28 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import BrokenImageIcon from '@mui/icons-material/BrokenImage';
 //!
 import { navLinks } from "../nav-pages";
-import { BudgetsListItem, budgetsListPlaceholder } from "../../budgets-list-placeholder/budgets-list-placeholder";
+import { budgetsListPlaceholder } from "../../budgets-list-placeholder/budgets-list-placeholder";
 import { useNavigate } from "react-router-dom";
 import Icon from "@mui/material/Icon";
+import { ToggleDrawerProps } from "../../../views/main/main";
 //! Test
 
-const drawerWidth = [240, 80];
+const drawerWidth = [240, 60];
 
-interface Props {
+interface ExtNavBarProps {
   drawerOpen: boolean;
   handleDrawerToggle: () => void;
   temporaryDrawerOpen: boolean;
-  handleTemporaryDrawerToggle: () => void;
+  handleTemporaryDrawerToggle: (props: ToggleDrawerProps) => void;
   budgetId: string | undefined
+  selectedSubPage: number | undefined
 }
 
-export const ExtendableNavBar: React.FC<Props> = (props: Props) => {
+export const ExtendableNavBar: React.FC<ExtNavBarProps> = (props: ExtNavBarProps) => {
   const { drawerOpen, handleDrawerToggle } = props;
   const { temporaryDrawerOpen, handleTemporaryDrawerToggle } = props;
   const { budgetId } = props;
+  const { selectedSubPage } = props;
   const [listOpen, setListOpen] = React.useState(false);
     
   const navigate = useNavigate();
@@ -47,6 +50,7 @@ export const ExtendableNavBar: React.FC<Props> = (props: Props) => {
   
   const theme = useTheme();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"));
+  const drawerFontSize = isLargeScreen ? (drawerOpen ? "16px" : "12px") : (temporaryDrawerOpen ? "16px" : "12px")
 
   const selectedBudget = budgetsListPlaceholder.find((budget) => budget.id === budgetId)
 
@@ -59,7 +63,7 @@ export const ExtendableNavBar: React.FC<Props> = (props: Props) => {
           </Icon>
         </ListItemIcon>
         <ListItemText primary={
-          <Typography variant="body1" style={{ fontSize: drawerOpen ? "16px" : "12px" }}>
+          <Typography variant="body1" style={{ fontSize: drawerFontSize}}>
             {selectedBudget ? selectedBudget.name : "Not found" }
           </Typography>
         } />
@@ -68,12 +72,16 @@ export const ExtendableNavBar: React.FC<Props> = (props: Props) => {
       <Collapse in={listOpen} timeout="auto" unmountOnExit>
         <List component="div" disablePadding dense={true} >
           {budgetsListPlaceholder.map((item) => (
-            <ListItemButton sx={{ pl: 4 }} key={item.id} onClick={() => navigate(`/budget/${item.id}/dash`)}>
+            <ListItemButton sx={{ pl: 4 }} key={item.id} onClick={() => {
+              navigate(`/budget/${item.id}/dash`);
+              setListOpen(false);
+              handleTemporaryDrawerToggle("close")
+            }}>
               <ListItemIcon>
                 {item.icon}
               </ListItemIcon>
               <ListItemText primary={
-                <Typography variant="body1" style={{ fontSize: drawerOpen ? "16px" : "12px" }}>
+                <Typography variant="body1" style={{ fontSize: drawerFontSize }}>
                   {item.name}
                 </Typography>
               } />
@@ -91,13 +99,18 @@ export const ExtendableNavBar: React.FC<Props> = (props: Props) => {
         {budgetList}
         <Divider />
         {budgetId ?
-          navLinks.map((item) => (
-            <ListItem disablePadding key={item.label} onClick={() => navigate(item.path ? `/budget/${budgetId}${item.path}` : "#")}>
-              <ListItemButton>
+          navLinks.map((item, index) => (
+            <ListItem disablePadding key={item.label} onClick={() => {
+              navigate(item.subPath ? `/budget/${budgetId}/${item.subPath}` : "#");
+              handleTemporaryDrawerToggle("close")
+            }}>
+              <ListItemButton
+                selected={selectedSubPage === index}
+              >
                 <ListItemIcon>{item.icon}</ListItemIcon>
                 <ListItemText
                     primary={
-                      <Typography variant="body1" style={{ fontSize: drawerOpen ? "16px" : "12px" }}>
+                      <Typography variant="body1" style={{ fontSize: drawerFontSize }}>
                         {item.label}
                       </Typography>
                     }
@@ -112,6 +125,7 @@ export const ExtendableNavBar: React.FC<Props> = (props: Props) => {
   return (
     <Box component="nav" sx={{ display: { xs: "none", sm: "block" } }}>
       <Drawer
+        PaperProps={{ elevation: 3 }}
         variant="permanent"
         anchor="left"
         sx={{
@@ -126,7 +140,7 @@ export const ExtendableNavBar: React.FC<Props> = (props: Props) => {
         {drawer}
       </Drawer>
       <Drawer
-        //TODO: make drawer close on button click
+        PaperProps={{ elevation: 3 }}
         variant="temporary"
         open={temporaryDrawerOpen}
         onClose={handleTemporaryDrawerToggle}
