@@ -17,13 +17,13 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import BrokenImageIcon from '@mui/icons-material/BrokenImage';
 //!
-import { navLinks } from "../nav-pages";
-import { budgetsListPlaceholder } from "../../budgets-list-placeholder/budgets-list-placeholder";
+import { navLinks } from "./nav-pages";
+import { budgetsListPlaceholder } from "../budgets-list-placeholder/budgets-list-placeholder";
 import { useNavigate } from "react-router-dom";
 import Icon from "@mui/material/Icon";
-import { DarkModeSwitch } from "../darkModeSwitch";
-import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { selectIsDrawerOpen, selectIsTempDrawerOpen, toggleTempDrawer } from "../../../slices/app/app.slice";
+import { DarkModeSwitch } from "./darkModeSwitch";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { selectIsDrawerOpen, selectIsTempDrawerOpen, toggleTempDrawer } from "../../slices/app/app.slice";
 
 // TODO: Implement temporary drawer toggle on screen size change.
 

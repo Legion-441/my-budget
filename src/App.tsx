@@ -4,7 +4,7 @@ import './App.css';
 //! Views
 import HomeView from './views/home/home';
 import MainView from './views/main/main';
-import DashboardDetailsView from './views/dashboard/dashboard-details/dashboard-details';
+import DashboardDetailsView from './views/dashboard/dashboard-details';
 import DashboardMainView from './views/dashboard/dashboard';
 import NotFoundView from './views/not-found/notFound';
 import HistoryView from './views/history/history';

@@ -5,7 +5,7 @@ import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import Paper from '@mui/material/Paper';
 //! PAGES
-import { navLinks } from '../nav-pages';
+import { navLinks } from './nav-pages';
 
 interface MobileNavBarProps {
   budgetId: string | undefined
@@ -26,7 +26,7 @@ const MobileBottomNavigation: React.FC<MobileNavBarProps> = (props: MobileNavBar
       onClick={() => item.subPath && navigate(`/budget/${budgetId}/${item.subPath}`)} />
   ))
   
-
+// TODO: Implement elevation of bottom navbar in dark mode
   return (
     <Box sx={{
         display: { xs: 'inherit', sm: 'none' },

@@ -7,8 +7,8 @@ import Box from '@mui/material/Box';
 import { PageContainer } from '../../styled/page-container/page-container.styled'
 //! Components
 import AppHeader from '../../components/app-header/app-header'
-import MobileBottomNavigation from '../../components/nav-bar/bottom-nav-bar/bottom-nav-bar';
-import { ExtendableNavBar } from '../../components/nav-bar/extendable-nav-bar/extendable-nav-bar';
+import MobileBottomNavigation from '../../components/nav-bar/bottom-nav-bar';
+import { ExtendableNavBar } from '../../components/nav-bar/extendable-nav-bar';
 import { navLinks } from '../../components/nav-bar/nav-pages';
 
 
