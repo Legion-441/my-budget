@@ -12,14 +12,21 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useAppDispatch } from '../../app/hooks';
+import { useMediaQuery, useTheme } from '@mui/material';
+import { toggleDrawer, toggleTempDrawer } from '../../slices/app/app.slice';
 
-interface Props {
-  handleDrawerToggle: () => void;
-}
 
-const AppHeader: React.FC<Props> = (props: Props) => {
-  const { handleDrawerToggle } = props;
+const AppHeader: React.FC = () => {
+  const dispatch = useAppDispatch()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  const theme = useTheme();
+  const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'));
+
+  const handleDrawerToggle = () => {
+    dispatch(isLargeScreen ? toggleDrawer() : toggleTempDrawer())
+  };
 
   const isMenuOpen: boolean = Boolean(anchorEl);
 

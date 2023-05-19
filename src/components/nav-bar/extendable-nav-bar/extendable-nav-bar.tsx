@@ -21,23 +21,23 @@ import { navLinks } from "../nav-pages";
 import { budgetsListPlaceholder } from "../../budgets-list-placeholder/budgets-list-placeholder";
 import { useNavigate } from "react-router-dom";
 import Icon from "@mui/material/Icon";
-import { ToggleDrawerProps } from "../../../views/main/main";
-//! Test
+import { DarkModeSwitch } from "../darkModeSwitch";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { selectIsDrawerOpen, selectIsTempDrawerOpen, toggleTempDrawer } from "../../../slices/app/app.slice";
+
+// TODO: Implement temporary drawer toggle on screen size change.
 
 const drawerWidth = [240, 60];
 
 interface ExtNavBarProps {
-  drawerOpen: boolean;
-  handleDrawerToggle: () => void;
-  temporaryDrawerOpen: boolean;
-  handleTemporaryDrawerToggle: (props: ToggleDrawerProps) => void;
   budgetId: string | undefined
   selectedSubPage: number | undefined
 }
 
 export const ExtendableNavBar: React.FC<ExtNavBarProps> = (props: ExtNavBarProps) => {
-  const { drawerOpen, handleDrawerToggle } = props;
-  const { temporaryDrawerOpen, handleTemporaryDrawerToggle } = props;
+  const dispatch = useAppDispatch()
+  const isDrawerOpen = useAppSelector(selectIsDrawerOpen)
+  const isTempDrawerOpen = useAppSelector(selectIsTempDrawerOpen)
   const { budgetId } = props;
   const { selectedSubPage } = props;
   const [listOpen, setListOpen] = React.useState(false);
@@ -50,7 +50,7 @@ export const ExtendableNavBar: React.FC<ExtNavBarProps> = (props: ExtNavBarProps
   
   const theme = useTheme();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"));
-  const drawerFontSize = isLargeScreen ? (drawerOpen ? "16px" : "12px") : (temporaryDrawerOpen ? "16px" : "12px")
+  const drawerFontSize = isLargeScreen ? (isDrawerOpen ? "16px" : "12px") : (isTempDrawerOpen ? "16px" : "12px")
 
   const selectedBudget = budgetsListPlaceholder.find((budget) => budget.id === budgetId)
 
@@ -64,7 +64,7 @@ export const ExtendableNavBar: React.FC<ExtNavBarProps> = (props: ExtNavBarProps
         </ListItemIcon>
         <ListItemText primary={
           <Typography variant="body1" style={{ fontSize: drawerFontSize}}>
-            {selectedBudget ? selectedBudget.name : "Not found" }
+            {selectedBudget ? selectedBudget.name : "Not selected" }
           </Typography>
         } />
         {listOpen ? <ExpandLess /> : <ExpandMore />}
@@ -75,7 +75,7 @@ export const ExtendableNavBar: React.FC<ExtNavBarProps> = (props: ExtNavBarProps
             <ListItemButton sx={{ pl: 4 }} key={item.id} onClick={() => {
               navigate(`/budget/${item.id}/dash`);
               setListOpen(false);
-              handleTemporaryDrawerToggle("close")
+              isTempDrawerOpen && dispatch(toggleTempDrawer());
             }}>
               <ListItemIcon>
                 {item.icon}
@@ -102,7 +102,7 @@ export const ExtendableNavBar: React.FC<ExtNavBarProps> = (props: ExtNavBarProps
           navLinks.map((item, index) => (
             <ListItem disablePadding key={item.label} onClick={() => {
               navigate(item.subPath ? `/budget/${budgetId}/${item.subPath}` : "#");
-              handleTemporaryDrawerToggle("close")
+              isTempDrawerOpen && dispatch(toggleTempDrawer())
             }}>
               <ListItemButton
                 selected={selectedSubPage === index}
@@ -119,6 +119,7 @@ export const ExtendableNavBar: React.FC<ExtNavBarProps> = (props: ExtNavBarProps
             </ListItem>
         )) : null}
       </List>
+      <DarkModeSwitch/>
     </>
   );
 
@@ -129,10 +130,10 @@ export const ExtendableNavBar: React.FC<ExtNavBarProps> = (props: ExtNavBarProps
         variant="permanent"
         anchor="left"
         sx={{
-          width: drawerWidth[isLargeScreen ? Number(!drawerOpen) : 1],
+          width: drawerWidth[isLargeScreen ? Number(!isDrawerOpen) : 1],
           flexShrink: 0,
           [`& .MuiDrawer-paper`]: {
-            width: drawerWidth[isLargeScreen ? Number(!drawerOpen) : 1],
+            width: drawerWidth[isLargeScreen ? Number(!isDrawerOpen) : 1],
             boxSizing: "border-box",
           },
         }}
@@ -142,8 +143,8 @@ export const ExtendableNavBar: React.FC<ExtNavBarProps> = (props: ExtNavBarProps
       <Drawer
         PaperProps={{ elevation: 3 }}
         variant="temporary"
-        open={temporaryDrawerOpen}
-        onClose={handleTemporaryDrawerToggle}
+        open={isTempDrawerOpen}
+        onClose={() => {dispatch(toggleTempDrawer())}}
         ModalProps={{ keepMounted: true }}
         sx={{
           display: { xs: "none", sm: "block", lg: "none" },

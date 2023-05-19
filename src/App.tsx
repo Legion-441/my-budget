@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from './app/hooks';
+import { useAppSelector } from './app/hooks';
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import './App.css';
 //! Views
@@ -15,7 +15,6 @@ import { AppColor, selectAppColorMode } from './slices/app/app.slice';
 import { darkTheme, lightTheme } from './styled/theme';
 
 const App: React.FC = () => {
-  const dispatch = useAppDispatch()
   const appColorMode: AppColor = useAppSelector(selectAppColorMode)
   
   
