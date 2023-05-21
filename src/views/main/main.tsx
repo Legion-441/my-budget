@@ -2,8 +2,7 @@ import * as React from 'react';
 import { useEffect } from 'react';
 import { Outlet, useLocation, useParams } from 'react-router-dom'
 //! Material
-import { Container } from '@mui/material'
-import Box from '@mui/material/Box';
+import { Container, Box } from '@mui/material'
 import { PageContainer } from '../../styled/page-container/page-container.styled'
 //! Components
 import AppHeader from '../../components/app-header/app-header'
@@ -27,7 +26,7 @@ const MainView: React.FC = () => {
     }, [location, budgetId]);
 
     return <Box sx={{ display: 'flex', minHeight: "100vh", bgcolor: 'background.default' }}>
-        <AppHeader/>
+        <AppHeader budgetId = {budgetId} />
         <ExtendableNavBar 
             budgetId = {budgetId}
             selectedSubPage = {selectedSubPage}

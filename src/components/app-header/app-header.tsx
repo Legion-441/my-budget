@@ -1,27 +1,29 @@
 import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Badge from '@mui/material/Badge';
-import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { useAppDispatch } from '../../app/hooks';
+import { AppBar, Box, Toolbar, IconButton, Typography, Badge, Button } from '@mui/material';
 import { useMediaQuery, useTheme } from '@mui/material';
+import { ExpandMore, ExpandLess, Menu, Mail, Notifications, AccountCircle } from '@mui/icons-material';
+import { useAppDispatch } from '../../app/hooks';
 import { toggleDrawer, toggleTempDrawer } from '../../slices/app/app.slice';
 import AppProfileMenu from './profile-menu';
+import BudgetsDrawer from './budgets-drawer';
+import { budgetsListPlaceholder } from '../budgets-list-placeholder/budgets-list-placeholder';
 
-
-const AppHeader: React.FC = () => {
-  const dispatch = useAppDispatch()
+interface AppHeaderProps {
+  budgetId: string | undefined
+}
+const AppHeader: React.FC<AppHeaderProps> = ({budgetId}) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
-  const theme = useTheme();
+  const [isBudgetDrawerOpen, setIsBudgetDrawerOpen] = React.useState<boolean>(!budgetId);
   
+  const dispatch = useAppDispatch()
+  
+  const selectedBudget = budgetsListPlaceholder.find((budget) => budget.id === budgetId)
+
+  const handleBudgetDrawerToggle = () => {
+    setIsBudgetDrawerOpen(!isBudgetDrawerOpen)
+  };
+  
+  const theme = useTheme();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'));
 
   const handleDrawerToggle = () => {
@@ -32,7 +34,7 @@ const AppHeader: React.FC = () => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMenuClose = () => {
+  const handleProfileMenuClose = () => {
     setAnchorEl(null);
   };
 
@@ -55,7 +57,7 @@ const AppHeader: React.FC = () => {
                 onClick={handleDrawerToggle}
                 sx={{ mr: 2 }}
               >
-                <MenuIcon />
+                <Menu />
               </IconButton>
               <img src="/favicon.ico" alt="Logo" style={{ height: '30px', marginRight: '10px' }} />
               <Typography
@@ -67,26 +69,31 @@ const AppHeader: React.FC = () => {
                 myBudget
               </Typography>
             </Box>
-            <Box sx={{
+            <Button
+              onClick={handleBudgetDrawerToggle}
+              sx={{
                 display: { sm: 'none', xs: 'flex' },
                 alignItems: 'center'
-              }}>
-              <Typography
-                variant="h6"
-                noWrap
-                component="div"
-                sx={{ display: 'block' }}
-              >
-                My budget name
-              </Typography>
-              <ExpandMoreIcon />
-            </Box>
-
+              }}
+              startIcon={selectedBudget?.icon}>
+              {/* <Box sx={{
+                  display: { sm: 'none', xs: 'flex' },
+                  alignItems: 'center'
+                }}> */}
+                <Typography
+                  variant="body1"
+                  fontSize={"medium"}
+                >
+                  {selectedBudget ? selectedBudget.name : 'Wybierz budżet...'}
+                </Typography>
+                {isBudgetDrawerOpen ? <ExpandLess /> : <ExpandMore />}
+              {/* </Box> */}
+            </Button>
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ display: 'flex' }}>
               <IconButton size="large" aria-label="show 4 new mails" color="inherit">
                 <Badge badgeContent={4} color="error">
-                  <MailIcon />
+                  <Mail />
                 </Badge>
               </IconButton>
               <IconButton
@@ -95,7 +102,7 @@ const AppHeader: React.FC = () => {
                 color="inherit"
               >
                 <Badge badgeContent={17} color="error">
-                  <NotificationsIcon />
+                  <Notifications />
                 </Badge>
               </IconButton>
               <IconButton
@@ -112,7 +119,8 @@ const AppHeader: React.FC = () => {
             </Box>
           </Toolbar>
         </AppBar>
-        <AppProfileMenu anchorEl={anchorEl} handleMenuClose={handleMenuClose}/>
+        <AppProfileMenu anchorEl={anchorEl} handleProfileMenuClose={handleProfileMenuClose}/>
+        <BudgetsDrawer isBudgetDrawerOpen={isBudgetDrawerOpen} handleBudgetDrawerToggle={handleBudgetDrawerToggle} />
       </Box>
     </>
   );

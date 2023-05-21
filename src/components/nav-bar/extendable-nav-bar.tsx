@@ -34,13 +34,11 @@ interface ExtNavBarProps {
   selectedSubPage: number | undefined
 }
 
-export const ExtendableNavBar: React.FC<ExtNavBarProps> = (props: ExtNavBarProps) => {
+export const ExtendableNavBar: React.FC<ExtNavBarProps> = ({ budgetId, selectedSubPage }) => {
   const dispatch = useAppDispatch()
   const isDrawerOpen = useAppSelector(selectIsDrawerOpen)
   const isTempDrawerOpen = useAppSelector(selectIsTempDrawerOpen)
-  const { budgetId } = props;
-  const { selectedSubPage } = props;
-  const [listOpen, setListOpen] = React.useState(false);
+  const [listOpen, setListOpen] = React.useState(!budgetId);
     
   const navigate = useNavigate();
 
@@ -64,7 +62,7 @@ export const ExtendableNavBar: React.FC<ExtNavBarProps> = (props: ExtNavBarProps
         </ListItemIcon>
         <ListItemText primary={
           <Typography variant="body1" style={{ fontSize: drawerFontSize}}>
-            {selectedBudget ? selectedBudget.name : "Not selected" }
+            {selectedBudget ? selectedBudget.name : "Wybierz budżet..." }
           </Typography>
         } />
         {listOpen ? <ExpandLess /> : <ExpandMore />}

@@ -4,10 +4,10 @@ import { AccountCircle, Settings, Logout } from '@mui/icons-material'
 
 interface AppMenuProps {
   anchorEl: null | HTMLElement;
-  handleMenuClose: () => void;
+  handleProfileMenuClose: () => void;
 }
 
-const AppProfileMenu: React.FC<AppMenuProps> = ({anchorEl, handleMenuClose}) => {
+const AppProfileMenu: React.FC<AppMenuProps> = ({anchorEl, handleProfileMenuClose}) => {
   const isMenuOpen: boolean = Boolean(anchorEl);
   const menuId = 'primary-search-account-menu';
 
@@ -25,7 +25,7 @@ const AppProfileMenu: React.FC<AppMenuProps> = ({anchorEl, handleMenuClose}) => 
         horizontal: 'right',
       }}
       open={isMenuOpen}
-      onClose={handleMenuClose}
+      onClose={handleProfileMenuClose}
       PaperProps={{
         elevation: 15,
         sx: {
@@ -35,20 +35,20 @@ const AppProfileMenu: React.FC<AppMenuProps> = ({anchorEl, handleMenuClose}) => 
         },
       }}
     >
-      <MenuItem onClick={handleMenuClose}>
+      <MenuItem onClick={handleProfileMenuClose}>
         <ListItemIcon>
           <AccountCircle />
         </ListItemIcon>
         Profile
       </MenuItem>
       <Divider />
-      <MenuItem onClick={handleMenuClose}>
+      <MenuItem onClick={handleProfileMenuClose}>
         <ListItemIcon>
           <Settings fontSize="small" />
         </ListItemIcon>
         App settings
       </MenuItem>
-      <MenuItem onClick={handleMenuClose}>
+      <MenuItem onClick={handleProfileMenuClose}>
         <ListItemIcon>
           <Logout fontSize="small" />
         </ListItemIcon>
