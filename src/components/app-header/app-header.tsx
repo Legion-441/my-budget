@@ -5,8 +5,6 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Badge from '@mui/material/Badge';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
@@ -15,6 +13,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useAppDispatch } from '../../app/hooks';
 import { useMediaQuery, useTheme } from '@mui/material';
 import { toggleDrawer, toggleTempDrawer } from '../../slices/app/app.slice';
+import AppProfileMenu from './profile-menu';
 
 
 const AppHeader: React.FC = () => {
@@ -22,13 +21,12 @@ const AppHeader: React.FC = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const theme = useTheme();
+  
   const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'));
 
   const handleDrawerToggle = () => {
     dispatch(isLargeScreen ? toggleDrawer() : toggleTempDrawer())
   };
-
-  const isMenuOpen: boolean = Boolean(anchorEl);
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -39,26 +37,6 @@ const AppHeader: React.FC = () => {
   };
 
   const menuId = 'primary-search-account-menu';
-  const renderMenu: JSX.Element = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'right',
-      }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-    </Menu>
-  );
 
   return (
     <>
@@ -134,7 +112,7 @@ const AppHeader: React.FC = () => {
             </Box>
           </Toolbar>
         </AppBar>
-        {renderMenu}
+        <AppProfileMenu anchorEl={anchorEl} handleMenuClose={handleMenuClose}/>
       </Box>
     </>
   );
