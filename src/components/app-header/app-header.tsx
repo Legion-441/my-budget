@@ -19,23 +19,20 @@ const AppHeader: React.FC<AppHeaderProps> = ({budgetId}) => {
   
   const selectedBudget = budgetsListPlaceholder.find((budget) => budget.id === budgetId)
 
-  const handleBudgetDrawerToggle = () => {
-    setIsBudgetDrawerOpen(!isBudgetDrawerOpen)
-  };
   
   const theme = useTheme();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'));
-
+  
   const handleDrawerToggle = () => {
     dispatch(isLargeScreen ? toggleDrawer() : toggleTempDrawer())
   };
-
-  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+  
+  const handleBudgetDrawerToggle = () => {
+    setIsBudgetDrawerOpen(!isBudgetDrawerOpen)
   };
 
-  const handleProfileMenuClose = () => {
-    setAnchorEl(null);
+  const handleToggleProfileMenu = (event?: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(!anchorEl && event ? event.currentTarget : null)
   };
 
   const menuId = 'primary-search-account-menu';
@@ -76,10 +73,6 @@ const AppHeader: React.FC<AppHeaderProps> = ({budgetId}) => {
                 alignItems: 'center'
               }}
               startIcon={selectedBudget?.icon}>
-              {/* <Box sx={{
-                  display: { sm: 'none', xs: 'flex' },
-                  alignItems: 'center'
-                }}> */}
                 <Typography
                   variant="body1"
                   fontSize={"medium"}
@@ -87,7 +80,6 @@ const AppHeader: React.FC<AppHeaderProps> = ({budgetId}) => {
                   {selectedBudget ? selectedBudget.name : 'Wybierz budżet...'}
                 </Typography>
                 {isBudgetDrawerOpen ? <ExpandLess /> : <ExpandMore />}
-              {/* </Box> */}
             </Button>
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ display: 'flex' }}>
@@ -111,7 +103,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({budgetId}) => {
                 aria-label="account of current user"
                 aria-controls={menuId}
                 aria-haspopup="true"
-                onClick={handleProfileMenuOpen}
+                onClick={handleToggleProfileMenu}
                 color="inherit"
               >
                 <AccountCircle />
@@ -119,7 +111,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({budgetId}) => {
             </Box>
           </Toolbar>
         </AppBar>
-        <AppProfileMenu anchorEl={anchorEl} handleProfileMenuClose={handleProfileMenuClose}/>
+        <AppProfileMenu anchorEl={anchorEl} handleToggleProfileMenu={handleToggleProfileMenu}/>
         <BudgetsDrawer isBudgetDrawerOpen={isBudgetDrawerOpen} handleBudgetDrawerToggle={handleBudgetDrawerToggle} />
       </Box>
     </>
