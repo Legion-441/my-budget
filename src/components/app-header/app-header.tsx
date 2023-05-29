@@ -5,34 +5,33 @@ import { ExpandMore, ExpandLess, Menu, Mail, Notifications, AccountCircle } from
 import { useAppDispatch } from '../../app/hooks';
 import { toggleDrawer, toggleTempDrawer } from '../../slices/app/app.slice';
 import AppProfileMenu from './profile-menu';
-import BudgetsDrawer from './budgets-drawer';
 import { budgetsListPlaceholder } from '../budgets-list-placeholder/budgets-list-placeholder';
+import AppBudgetsMenu from './budgets-menu';
 
 interface AppHeaderProps {
   budgetId: string | undefined
 }
 const AppHeader: React.FC<AppHeaderProps> = ({budgetId}) => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [isBudgetDrawerOpen, setIsBudgetDrawerOpen] = React.useState<boolean>(!budgetId);
+  const [profileAnchorEl, setProfileAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [budgetAnchorEl, setBudgetAnchorEl] = React.useState<null | HTMLElement>(null);
   
   const dispatch = useAppDispatch()
   
   const selectedBudget = budgetsListPlaceholder.find((budget) => budget.id === budgetId)
 
-  
   const theme = useTheme();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'));
   
   const handleDrawerToggle = () => {
     dispatch(isLargeScreen ? toggleDrawer() : toggleTempDrawer())
   };
-  
-  const handleBudgetDrawerToggle = () => {
-    setIsBudgetDrawerOpen(!isBudgetDrawerOpen)
-  };
 
   const handleToggleProfileMenu = (event?: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(!anchorEl && event ? event.currentTarget : null)
+    setProfileAnchorEl(!profileAnchorEl && event ? event.currentTarget : null)
+  };
+  
+  const handleToggleBudgetsMenu = (event?: React.MouseEvent<HTMLElement>) => {
+    setBudgetAnchorEl(!budgetAnchorEl && event ? event.currentTarget : null)
   };
 
   const menuId = 'primary-search-account-menu';
@@ -56,7 +55,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({budgetId}) => {
               >
                 <Menu />
               </IconButton>
-              <img src="/favicon.ico" alt="Logo" style={{ height: '30px', marginRight: '10px' }} />
+              <img src="/Logo.svg" alt="Logo" style={{ height: '40px', marginRight: '10px' }} />
               <Typography
                 variant="h6"
                 noWrap
@@ -67,7 +66,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({budgetId}) => {
               </Typography>
             </Box>
             <Button
-              onClick={handleBudgetDrawerToggle}
+              onClick={handleToggleBudgetsMenu}
               sx={{
                 display: { sm: 'none', xs: 'flex' },
                 alignItems: 'center'
@@ -79,7 +78,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({budgetId}) => {
                 >
                   {selectedBudget ? selectedBudget.name : 'Wybierz budżet...'}
                 </Typography>
-                {isBudgetDrawerOpen ? <ExpandLess /> : <ExpandMore />}
+                {!budgetAnchorEl===null ? <ExpandLess /> : <ExpandMore />}
             </Button>
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ display: 'flex' }}>
@@ -111,8 +110,8 @@ const AppHeader: React.FC<AppHeaderProps> = ({budgetId}) => {
             </Box>
           </Toolbar>
         </AppBar>
-        <AppProfileMenu anchorEl={anchorEl} handleToggleProfileMenu={handleToggleProfileMenu}/>
-        <BudgetsDrawer isBudgetDrawerOpen={isBudgetDrawerOpen} handleBudgetDrawerToggle={handleBudgetDrawerToggle} />
+        <AppBudgetsMenu anchorEl={budgetAnchorEl} handleToggleBudgetsMenu={handleToggleBudgetsMenu}/>
+        <AppProfileMenu anchorEl={profileAnchorEl} handleToggleProfileMenu={handleToggleProfileMenu}/>
       </Box>
     </>
   );
