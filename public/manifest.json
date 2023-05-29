@@ -1,12 +1,7 @@
 {
   "short_name": "My Budget",
-  "name": "My personal and group budget tracker",
+  "name": "My budget tracker",
   "icons": [
-    {
-      "src": "favicon.ico",
-      "sizes": "128x128 64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
-    },
     {
       "src": "logo192.png",
       "type": "image/png",
