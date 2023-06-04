@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { Menu, MenuItem, Divider, ListItemIcon, ListItemText, Typography } from '@mui/material';
-import { AccountCircle, Settings, Logout } from '@mui/icons-material'
+import { Menu, MenuItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { budgetsListPlaceholder } from '../budgets-list-placeholder/budgets-list-placeholder';
 
@@ -11,7 +10,7 @@ interface AppMenuProps {
 
 const AppBudgetsMenu: React.FC<AppMenuProps> = ({anchorEl, handleToggleBudgetsMenu}) => {
   const isMenuOpen: boolean = Boolean(anchorEl);
-  const menuId = 'primary-search-account-menu';
+  const menuId = 'primary-search-budget-menu';
   const navigate = useNavigate();
 
   return (

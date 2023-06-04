@@ -15,7 +15,6 @@ interface MobileNavBarProps {
 const MobileBottomNavigation: React.FC<MobileNavBarProps> = (props: MobileNavBarProps) => {
   const { budgetId } = props;
   const { selectedSubPage } = props;
-  const [value, setValue] = React.useState(0);
   const ref = React.useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const NavActionButtons: JSX.Element[] = navLinks.map((item) => (
@@ -32,10 +31,14 @@ const MobileBottomNavigation: React.FC<MobileNavBarProps> = (props: MobileNavBar
         display: { xs: 'inherit', sm: 'none' },
         pb: 7 
       }} ref={ref}>
-      <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
+      <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={4}>
         <BottomNavigation
           showLabels
           value={selectedSubPage}
+          sx={{
+            bgcolor: 'transparent',
+            color: "red"
+          }}
         >
           {NavActionButtons}
         </BottomNavigation>

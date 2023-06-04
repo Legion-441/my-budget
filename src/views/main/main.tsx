@@ -31,8 +31,8 @@ const MainView: React.FC = () => {
             budgetId = {budgetId}
             selectedSubPage = {selectedSubPage}
             />
-        <Box component="main" sx={{ flexGrow: 1, p: 3, my: 8}}>
-            <Container maxWidth="xl">
+        <Box component="main" sx={{ flexGrow: 1, p: 2, my: 8}}>
+            <Container disableGutters maxWidth="xl">
                 <PageContainer>
                     <Outlet />
                 </PageContainer>
