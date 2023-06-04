@@ -31,7 +31,7 @@ const MobileBottomNavigation: React.FC<MobileNavBarProps> = (props: MobileNavBar
         display: { xs: 'inherit', sm: 'none' },
         pb: 7 
       }} ref={ref}>
-      <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={4}>
+      <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} square={true} elevation={4}>
         <BottomNavigation
           showLabels
           value={selectedSubPage}

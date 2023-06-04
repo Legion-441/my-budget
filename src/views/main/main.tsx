@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useEffect } from 'react';
 import { Outlet, useLocation, useParams } from 'react-router-dom'
 //! Material
-import { Container, Box } from '@mui/material'
+import { Container, Box, Toolbar } from '@mui/material'
 import { PageContainer } from '../../styled/page-container/page-container.styled'
 //! Components
 import AppHeader from '../../components/app-header/app-header'
@@ -31,12 +31,14 @@ const MainView: React.FC = () => {
             budgetId = {budgetId}
             selectedSubPage = {selectedSubPage}
             />
-        <Box component="main" sx={{ flexGrow: 1, p: 2, my: 8}}>
+        <Box component="main" sx={{ flexGrow: 1, pt: {sm: 2, xs: 1}, px: {sm: 2, xs: 1} }}>
+            <Toolbar/>
             <Container disableGutters maxWidth="xl">
                 <PageContainer>
                     <Outlet />
                 </PageContainer>
             </Container>
+            <Toolbar/>
         </Box>
         {budgetId && <MobileBottomNavigation budgetId={budgetId} selectedSubPage={selectedSubPage}/>}
     </Box>

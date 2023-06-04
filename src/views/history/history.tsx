@@ -1,31 +1,28 @@
 import * as React from 'react';
-import { Box, Collapse, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Box, Collapse, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, useMediaQuery, useTheme } from "@mui/material";
 import PaperCard from '../../styled/paper-card/paper-card.styled';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
 
 
 function createData(
-  date: string,
+  // date: string,
   name: string,
   category: string,
   subcategory: string,
   price: number,
 ) {
   return {
-    date,
+    // date,
     name,
     category,
     subcategory,
     price,
     history: [
       {
-        date: '2020-01-05',
         customerId: '11091700',
         amount: 3,
       },
       {
-        date: '2020-01-02',
         customerId: 'Anonymous',
         amount: 1,
       },
@@ -33,8 +30,8 @@ function createData(
   };
 }
 
-function Row(props: { row: ReturnType<typeof createData> }) {
-  const { row } = props;
+function Row(props: { row: ReturnType<typeof createData>, isSmallScreen: boolean }) {
+  const { row, isSmallScreen } = props;
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -46,15 +43,19 @@ function Row(props: { row: ReturnType<typeof createData> }) {
             size="small"
             onClick={() => setOpen(!open)}
           >
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
           </IconButton>
         </TableCell>
-        <TableCell component="th" scope="row">
+        {/* <TableCell component="th" scope="row">
           {row.date}
-        </TableCell>
+        </TableCell> */}
         <TableCell align="right">{row.name}</TableCell>
+        {!isSmallScreen && (
+          <>
         <TableCell align="right">{row.category}</TableCell>
         <TableCell align="right">{row.subcategory}</TableCell>
+          </>
+        )}
         <TableCell align="right">{row.price}</TableCell>
       </TableRow>
       <TableRow>
@@ -67,7 +68,6 @@ function Row(props: { row: ReturnType<typeof createData> }) {
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Date</TableCell>
                     <TableCell>Customer</TableCell>
                     <TableCell align="right">Amount</TableCell>
                     <TableCell align="right">Total price ($)</TableCell>
@@ -75,10 +75,7 @@ function Row(props: { row: ReturnType<typeof createData> }) {
                 </TableHead>
                 <TableBody>
                   {row.history.map((historyRow) => (
-                    <TableRow key={historyRow.date}>
-                      <TableCell component="th" scope="row">
-                        {historyRow.date}
-                      </TableCell>
+                    <TableRow key={historyRow.customerId}>
                       <TableCell>{historyRow.customerId}</TableCell>
                       <TableCell align="right">{historyRow.amount}</TableCell>
                       <TableCell align="right">
@@ -97,35 +94,43 @@ function Row(props: { row: ReturnType<typeof createData> }) {
 }
 
 const rows = [
-  createData('1/1/2023', 'Sandwich', 'Grocery', 'Meal', 25.99),
-  createData('2/1/2023', 'Fuel', 'Transport', 'Car', 5.00),
-  createData('2/1/2023', 'Glass', 'Home', 'Dish', 18.99),
-  createData('4/1/2023', 'Chair', 'Home', 'Furniture', 6.99),
-  createData('5/1/2023', 'Sandwich', 'Grocery', 'Meal', 10.00),
-  createData('5/1/2023', 'Sandwich', 'Grocery', 'Meal', 21.50),
+  createData('Sandwich', 'Grocery', 'Meal', 25.99),
+  createData('Fuel', 'Transport', 'Car', 5.00),
+  createData('Glass', 'Home', 'Dish', 18.99),
+  createData('Chair', 'Home', 'Furniture', 6.99),
+  createData('Sandwich', 'Grocery', 'Meal', 10.00),
+  createData('Sandwich', 'Grocery', 'Meal', 21.50),
 ];
 
 const HistoryView: React.FC  = () => {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
   return (
-    <TableContainer component={PaperCard}>
-      <Table aria-label="collapsible table">
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>Date</TableCell>
-            <TableCell align="right">Name</TableCell>
-            <TableCell align="right">Category</TableCell>
-            <TableCell align="right">Subcategory</TableCell>
-            <TableCell align="right">Price</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <Row key={row.name} row={row} />
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <PaperCard>
+      <TableContainer>
+        <Table aria-label="collapsible table">
+          <TableHead>
+            <TableRow>
+              <TableCell />
+              {/* <TableCell>Date</TableCell> */}
+              <TableCell align="right">Name</TableCell>
+              {isSmallScreen ? null : (<>
+                <TableCell align="right">Category</TableCell>
+                <TableCell align="right">Subcategory</TableCell>
+              </>
+              )}
+              <TableCell align="right">Price</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <Row key={row.name} row={row} isSmallScreen={isSmallScreen}/>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </PaperCard>
   );
 }
 
