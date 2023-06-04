@@ -1,9 +1,13 @@
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
+import PaperCard from '../../styled/paper-card/paper-card.styled';
+import { Button, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const DashboardMainView: React.FC = () => {
+  const navigate = useNavigate()
   return <>
-    <Paper sx={{p: 2}} >
+    <PaperCard>
+      {/* //TODO: fix the navigate function */}
+      <Button onClick={() => navigate(`/details`)}>Details</Button>
       <Typography paragraph>
         DASHBOARD - MAIN
       </Typography>
@@ -35,7 +39,7 @@ const DashboardMainView: React.FC = () => {
         consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
         sapien faucibus et molestie ac.
       </Typography>
-    </Paper>
+    </PaperCard>
   </>
 }
 

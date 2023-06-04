@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Box, Collapse, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import Paper from "@mui/material/Paper"
+import PaperCard from '../../styled/paper-card/paper-card.styled';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
@@ -107,7 +107,7 @@ const rows = [
 
 const HistoryView: React.FC  = () => {
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={PaperCard}>
       <Table aria-label="collapsible table">
         <TableHead>
           <TableRow>

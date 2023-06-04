@@ -1,8 +1,9 @@
-import Paper from "@mui/material/Paper"
+import { Paper } from "@mui/material"
+import PaperCard from "../../styled/paper-card/paper-card.styled"
 
 const SettingsView: React.FC  = () => {
 return <>
-    <Paper sx={{p: 2, mb: 2}} >
+    <PaperCard>
       SettingsView <br/>
       SettingsView <br/>
       SettingsView <br/>
@@ -10,8 +11,8 @@ return <>
       SettingsView <br/>
       SettingsView <br/>
       SettingsView <br/>
-    </Paper>
-    <Paper sx={{p: 2}} >
+    </PaperCard>
+    <PaperCard>
       SettingsView <br/>
       SettingsView <br/>
       SettingsView <br/>
@@ -19,7 +20,7 @@ return <>
       SettingsView <br/>
       SettingsView <br/>
       SettingsView <br/>
-    </Paper>
+    </PaperCard>
   </>
 }
 

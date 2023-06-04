@@ -1,11 +1,11 @@
-import Paper from '@mui/material/Paper';
+import PaperCard from '../../styled/paper-card/paper-card.styled';
 import Typography from '@mui/material/Typography';
 
 const DashboardDetailsView: React.FC = () => {
   return <>
-      <Paper sx={{p: 2}} >
+      <PaperCard>
         <Typography>DASHBOARD - DETAILS</Typography>
-      </Paper>
+      </PaperCard>
     </>
 }
 
