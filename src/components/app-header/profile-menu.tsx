@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Menu, MenuItem, Divider, ListItemIcon } from '@mui/material';
 import { AccountCircle, Settings, Logout } from '@mui/icons-material'
+import { DarkModeSwitch } from './darkModeSwitch';
 
 interface AppMenuProps {
   anchorEl: null | HTMLElement;
@@ -41,6 +42,7 @@ const AppProfileMenu: React.FC<AppMenuProps> = ({anchorEl, handleToggleProfileMe
         </ListItemIcon>
         Profile
       </MenuItem>
+      <DarkModeSwitch/>
       <Divider />
       <MenuItem onClick={handleToggleProfileMenu}>
         <ListItemIcon>

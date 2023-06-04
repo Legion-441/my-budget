@@ -7,7 +7,7 @@ import { Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText
 import { useMediaQuery, useTheme } from "@mui/material";
 //* Components
 import { navLinks } from "./nav-pages";
-import { DarkModeSwitch } from "./darkModeSwitch";
+import { DarkModeSwitch } from "../app-header/darkModeSwitch";
 
 // TODO: Implement temporary drawer toggle on screen size change.
 
@@ -42,21 +42,21 @@ export const ExtendableNavBar: React.FC<ExtNavBarProps> = ({ budgetId, selectedS
             }}>
               <ListItemButton
                 selected={selectedSubPage === index}
+                sx={{ overflow: "hidden" }}
               >
                 <ListItemIcon>{item.icon}</ListItemIcon>
                 <ListItemText
-                    primary={
-                      <Typography variant="body1" style={{ fontSize: drawerFontSize }}>
-                        {item.label}
-                      </Typography>
-                    }
-                  />
+                  primary={
+                    <Typography variant="body1" style={{ fontSize: drawerFontSize }}>
+                      {item.label}
+                    </Typography>
+                  }
+                />
               </ListItemButton>
             </ListItem>
           )) : null}
       </List>
     </Box>
-    <DarkModeSwitch/>
     </>
   );
 
@@ -78,7 +78,7 @@ export const ExtendableNavBar: React.FC<ExtNavBarProps> = ({ budgetId, selectedS
         {drawer}
       </Drawer>
       <Drawer
-        PaperProps={{ elevation: 3 }}
+        PaperProps={{ elevation: 4 }}
         variant="temporary"
         open={isTempDrawerOpen}
         onClose={() => {dispatch(toggleTempDrawer())}}
