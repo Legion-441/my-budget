@@ -27,7 +27,7 @@ const AppBudgetsMenu: React.FC<AppMenuProps> = ({anchorEl, handleToggleBudgetsMe
         horizontal: 'right',
       }}
       open={isMenuOpen}
-      onClose={handleToggleBudgetsMenu}
+      onClose={() => handleToggleBudgetsMenu()}
       PaperProps={{
         elevation: 15,
         sx: {

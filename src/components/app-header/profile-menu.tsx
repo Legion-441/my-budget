@@ -26,7 +26,7 @@ const AppProfileMenu: React.FC<AppMenuProps> = ({anchorEl, handleToggleProfileMe
         horizontal: 'right',
       }}
       open={isMenuOpen}
-      onClose={handleToggleProfileMenu}
+      onClose={() => handleToggleProfileMenu()}
       PaperProps={{
         elevation: 15,
         sx: {
@@ -36,7 +36,7 @@ const AppProfileMenu: React.FC<AppMenuProps> = ({anchorEl, handleToggleProfileMe
         },
       }}
     >
-      <MenuItem onClick={handleToggleProfileMenu}>
+      <MenuItem onClick={() => handleToggleProfileMenu()}>
         <ListItemIcon>
           <AccountCircle />
         </ListItemIcon>
@@ -44,13 +44,13 @@ const AppProfileMenu: React.FC<AppMenuProps> = ({anchorEl, handleToggleProfileMe
       </MenuItem>
       <DarkModeSwitch/>
       <Divider />
-      <MenuItem onClick={handleToggleProfileMenu}>
+      <MenuItem onClick={() => handleToggleProfileMenu()}>
         <ListItemIcon>
           <Settings fontSize="small" />
         </ListItemIcon>
         App settings
       </MenuItem>
-      <MenuItem onClick={handleToggleProfileMenu}>
+      <MenuItem onClick={() => handleToggleProfileMenu()}>
         <ListItemIcon>
           <Logout fontSize="small" />
         </ListItemIcon>
