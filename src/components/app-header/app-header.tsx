@@ -1,6 +1,8 @@
 import * as React from 'react';
-import { useAppDispatch } from '../../app/hooks';
-import { toggleDrawer, toggleTempDrawer } from '../../slices/app/app.slice';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { selectUserInfo, toggleDrawer, toggleTempDrawer } from '../../slices/app/app.slice';
+//* Utils
+import { getIconComponent } from '../../utils/iconUtils';
 //* MUI
 import { AppBar, Box, Toolbar, IconButton, Typography, Badge, Button } from '@mui/material';
 import { useMediaQuery, useTheme } from '@mui/material';
@@ -8,7 +10,6 @@ import { ExpandMore, ExpandLess, Menu, Mail, Notifications, AccountCircle } from
 //* Components
 import AppProfileMenu from './profile-menu';
 import AppBudgetsMenu from './budgets-menu';
-import { budgetsListPlaceholder } from '../budgets-list-placeholder/budgets-list-placeholder';
 
 interface AppHeaderProps {
   budgetId: string | undefined
@@ -19,7 +20,8 @@ const AppHeader: React.FC<AppHeaderProps> = ({budgetId}) => {
   
   const dispatch = useAppDispatch()
   
-  const selectedBudget = budgetsListPlaceholder.find((budget) => budget.id === budgetId)
+  const { budgetsList } = useAppSelector(selectUserInfo)
+  const selectedBudget = budgetsList.find((budget) => budget.id === budgetId)
 
   const theme = useTheme();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'));
@@ -72,6 +74,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({budgetId}) => {
               id='BudgetButton'
               color="inherit"
               variant="outlined"
+              disabled={budgetsList.length == 0}
               onClick={handleToggleBudgetsMenu}
               sx={{
                 display: 'flex',
@@ -79,7 +82,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({budgetId}) => {
                 flexGrow: {sm: 0, xs: 1},
                 minWidth: {sm: 200, xs: 80}
               }}
-              startIcon={selectedBudget?.icon}
+              startIcon={selectedBudget && getIconComponent(selectedBudget.icon)}
               endIcon={budgetAnchorEl===null ? <ExpandMore /> : <ExpandLess />}
             >
               <Typography

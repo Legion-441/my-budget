@@ -1,7 +1,11 @@
 import * as React from 'react';
-import { Menu, MenuItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { budgetsListPlaceholder } from '../budgets-list-placeholder/budgets-list-placeholder';
+import { useAppSelector } from '../../app/hooks';
+import { selectUserInfo } from '../../slices/app/app.slice';
+//* Utils
+import { getIconComponent } from '../../utils/iconUtils';
+//* MUI
+import { Menu, MenuItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
 
 interface AppMenuProps {
   anchorEl: null | HTMLElement;
@@ -12,6 +16,8 @@ const AppBudgetsMenu: React.FC<AppMenuProps> = ({anchorEl, handleToggleBudgetsMe
   const isMenuOpen: boolean = Boolean(anchorEl);
   const menuId = 'primary-search-budget-menu';
   const navigate = useNavigate();
+
+  const { budgetsList } = useAppSelector(selectUserInfo)
 
   return (
     <Menu
@@ -37,13 +43,13 @@ const AppBudgetsMenu: React.FC<AppMenuProps> = ({anchorEl, handleToggleBudgetsMe
         },
       }}
     >
-      {budgetsListPlaceholder.map((item) => (
+      {budgetsList.map((item) => (
         <MenuItem key={item.id} onClick={() => {
           navigate(`/budget/${item.id}/dash`);
           handleToggleBudgetsMenu();
         }}>
           <ListItemIcon>
-          {React.cloneElement(item.icon, { fontSize: 'small' })}
+            {getIconComponent(item.icon)}
           </ListItemIcon>
           <ListItemText primary={
             <Typography variant="body1">

@@ -3,18 +3,36 @@ import { RootState } from "../../app/store";
 
 export type AppColor = 'light' | "dark"
 
+export interface BudgetsListItem {
+  name: string,
+  id: string,
+  icon: string
+}
+
+export interface UserInfo {
+  username: string
+  budgetsList: BudgetsListItem[]
+}
+
 export interface AppState {
   appColorMode: AppColor;
   isDrawerOpen: boolean;
   isTempDrawerOpen: boolean;
-  username: string;
+  userInfo: UserInfo
 }
 
 const initialState: AppState = {
   appColorMode: 'dark',
   isDrawerOpen: true,
   isTempDrawerOpen: false,
-  username: "",
+  userInfo: {
+    username: "",
+    budgetsList: [
+      { name: 'Personal', id: '1', icon: 'Person'},
+      { name: 'Family', id: '2', icon: 'Groups'},
+      { name: 'Holiday', id: '3', icon: 'Surfing'},
+    ]
+  },
 }
 
 export const appSlice = createSlice({
@@ -31,7 +49,10 @@ export const appSlice = createSlice({
       state.isTempDrawerOpen = !state.isTempDrawerOpen
     },
     setUsername: (state, action: PayloadAction<string>) => {
-      state.username = action.payload
+      state.userInfo.username = action.payload
+    },
+    setBudgetsList: (state, action: PayloadAction<BudgetsListItem[]>) => {
+      state.userInfo.budgetsList = action.payload
     }
   }
 })
@@ -43,6 +64,6 @@ export const { setAppColorMode, toggleDrawer, toggleTempDrawer } = appSlice.acti
 export const selectAppColorMode = (state: RootState): AppColor => state.app.appColorMode;
 export const selectIsDrawerOpen = (state: RootState): boolean => state.app.isDrawerOpen
 export const selectIsTempDrawerOpen = (state: RootState): boolean => state.app.isTempDrawerOpen
-export const selectUsername = (state: RootState): string => state.app.username
+export const selectUserInfo = (state: RootState): UserInfo => state.app.userInfo
 
 export default appSlice.reducer
