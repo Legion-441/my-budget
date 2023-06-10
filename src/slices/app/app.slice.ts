@@ -7,12 +7,14 @@ export interface AppState {
   appColorMode: AppColor;
   isDrawerOpen: boolean;
   isTempDrawerOpen: boolean;
+  username: string;
 }
 
 const initialState: AppState = {
   appColorMode: 'dark',
   isDrawerOpen: true,
   isTempDrawerOpen: false,
+  username: "",
 }
 
 export const appSlice = createSlice({
@@ -27,6 +29,9 @@ export const appSlice = createSlice({
     },
     toggleTempDrawer: (state) => {
       state.isTempDrawerOpen = !state.isTempDrawerOpen
+    },
+    setUsername: (state, action: PayloadAction<string>) => {
+      state.username = action.payload
     }
   }
 })
@@ -38,5 +43,6 @@ export const { setAppColorMode, toggleDrawer, toggleTempDrawer } = appSlice.acti
 export const selectAppColorMode = (state: RootState): AppColor => state.app.appColorMode;
 export const selectIsDrawerOpen = (state: RootState): boolean => state.app.isDrawerOpen
 export const selectIsTempDrawerOpen = (state: RootState): boolean => state.app.isTempDrawerOpen
+export const selectUsername = (state: RootState): string => state.app.username
 
 export default appSlice.reducer
