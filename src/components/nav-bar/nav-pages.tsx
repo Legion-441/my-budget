@@ -13,7 +13,7 @@ export type navLinksItemsDto = navLinksItem[]
 
 
 export const navLinks: navLinksItemsDto = [
-  { label: 'Dashboard', icon: <DashboardIcon />, subPath: 'dash' },
-  { label: 'History', icon: <HistoryIcon />, subPath: 'history' },
-  { label: 'Settings', icon: <SettingsIcon />, subPath: 'settings' }
+  { label: 'Pulpit', icon: <DashboardIcon />, subPath: 'dash' },
+  { label: 'Historia', icon: <HistoryIcon />, subPath: 'history' },
+  { label: 'Ustawienia', icon: <SettingsIcon />, subPath: 'settings' }
 ]
