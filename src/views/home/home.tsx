@@ -1,5 +1,5 @@
 import { useAppSelector } from "../../app/hooks"
-import { selectPickedBudgetId, selectUserInfo } from "../../slices/app/app.slice"
+import { selectUserInfo } from "../../slices/app/app.slice"
 //* MUI & Icons
 import { Box, Button, Stack } from "@mui/material"
 import { Group, Person } from "@mui/icons-material"
