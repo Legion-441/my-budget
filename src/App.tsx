@@ -13,18 +13,19 @@ import SettingsView from './views/settings/settings';
 import { ThemeProvider } from '@mui/material/styles';
 import { AppColor, selectAppColorMode } from './slices/app/app.slice';
 import { darkTheme, lightTheme } from './styled/theme';
+import BudgetView from './views/budget/budget';
 
 const App: React.FC = () => {
   const appColorMode: AppColor = useAppSelector(selectAppColorMode)
-  
-  
+
+
   return (
     <ThemeProvider theme={appColorMode === 'light' ? lightTheme : darkTheme}>
       <BrowserRouter>
         <Routes>
           <Route element={<MainView />} >
             <Route index element={<HomeView />} />
-            <Route path='budget/:id' element={<Outlet />} >
+            <Route path='budget/:id' element={<BudgetView />} >
               <Route path='dash' element={<Outlet />}>
                 <Route index element={<DashboardMainView />} />
                 <Route path='details' element={<DashboardDetailsView />} />
@@ -33,9 +34,9 @@ const App: React.FC = () => {
               <Route path='settings' element={<SettingsView/>} />
             </Route>
             <Route path='profile' element={<>PROFILE</>} />
-          </Route>
             <Route path='*' element={<NotFoundView />} />
-            <Route path='login' element={<>LOGIN</>} />
+          </Route>
+          <Route path='login' element={<>LOGIN</>} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
