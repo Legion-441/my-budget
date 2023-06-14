@@ -14,10 +14,10 @@ interface AppMenuProps {
 
 const AppBudgetsMenu: React.FC<AppMenuProps> = ({anchorEl, handleToggleBudgetsMenu}) => {
   const isMenuOpen: boolean = Boolean(anchorEl);
-  const menuId = 'primary-search-budget-menu';
   const navigate = useNavigate();
-
   const { budgetsList } = useAppSelector(selectUserInfo)
+  
+  const menuId = 'primary-search-budget-menu';
 
   return (
     <Menu
@@ -45,8 +45,8 @@ const AppBudgetsMenu: React.FC<AppMenuProps> = ({anchorEl, handleToggleBudgetsMe
     >
       {budgetsList.map((item) => (
         <MenuItem key={item.id} onClick={() => {
-          navigate(`/budget/${item.id}/dash`);
           handleToggleBudgetsMenu();
+          navigate(`/budget/${item.id}/dash`);
         }}>
           <ListItemIcon>
             {getIconComponent(item.icon)}

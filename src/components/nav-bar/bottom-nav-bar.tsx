@@ -1,22 +1,24 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Box from '@mui/material/Box';
+import { selectPickedBudgetId } from '../../slices/app/app.slice';
+//* PAGES
+import { navLinks } from './nav-pages';
+import { useAppSelector } from '../../app/hooks';
+//* MUI
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-//! PAGES
-import { navLinks } from './nav-pages';
 
 interface MobileNavBarProps {
-  budgetId: string | undefined
   selectedSubPage: number | undefined
 }
 
-const MobileBottomNavigation: React.FC<MobileNavBarProps> = (props: MobileNavBarProps) => {
-  const { budgetId } = props;
-  const { selectedSubPage } = props;
+const MobileBottomNavigation: React.FC<MobileNavBarProps> = (selectedSubPage) => {
   const ref = React.useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const budgetId = useAppSelector(selectPickedBudgetId)
+  
   const NavActionButtons: JSX.Element[] = navLinks.map((item) => (
     <BottomNavigationAction 
       key={item.label}

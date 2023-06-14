@@ -19,6 +19,7 @@ export interface AppState {
   isDrawerOpen: boolean;
   isTempDrawerOpen: boolean;
   userInfo: UserInfo
+  pickedBudgetId: string | null
 }
 
 const initialState: AppState = {
@@ -33,6 +34,7 @@ const initialState: AppState = {
       { name: 'Holiday', id: '3', icon: 'Surfing'},
     ]
   },
+  pickedBudgetId: null,
 }
 
 export const appSlice = createSlice({
@@ -53,17 +55,21 @@ export const appSlice = createSlice({
     },
     setBudgetsList: (state, action: PayloadAction<BudgetsListItem[]>) => {
       state.userInfo.budgetsList = action.payload
-    }
+    },
+    setPickedBudgetId: (state, action: PayloadAction<string | null>) => {
+      state.pickedBudgetId = action.payload
+    },
   }
 })
 
 //! Actions
-export const { setAppColorMode, toggleDrawer, toggleTempDrawer } = appSlice.actions;
+export const { setAppColorMode, toggleDrawer, toggleTempDrawer, setUsername, setBudgetsList, setPickedBudgetId } = appSlice.actions;
 
 //! Selector
 export const selectAppColorMode = (state: RootState): AppColor => state.app.appColorMode;
 export const selectIsDrawerOpen = (state: RootState): boolean => state.app.isDrawerOpen
 export const selectIsTempDrawerOpen = (state: RootState): boolean => state.app.isTempDrawerOpen
 export const selectUserInfo = (state: RootState): UserInfo => state.app.userInfo
+export const selectPickedBudgetId = (state: RootState): string | null => state.app.pickedBudgetId
 
 export default appSlice.reducer
