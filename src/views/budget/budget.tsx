@@ -21,31 +21,23 @@ const BudgetView: React.FC = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const location = useLocation();
-  const navigate = useNavigate();
   const budgetId = useAppSelector(selectPickedBudgetId);
   const { budgetsList } = useAppSelector(selectUserInfo)
-
-  useEffect(() => {
-    const selectedBudget = budgetsList.some((budget) => budget.id === budgetId)
-    setSelectedBudget(selectedBudget)
-
-  }, [budgetsList, budgetId])
+  const CurrentSubPageName = location.pathname.split('/').filter(Boolean)[2]
 
 
   useEffect(() => {
-    const paramBudgetId = !id || id === 'undefined' ? null : id
-    dispatch(setPickedBudgetId(paramBudgetId))
-
-    // if (!paramBudgetId) {
-    //   navigate('/');
-    // }
-
-    const pathArray = location.pathname.split('/').filter((item) => item !== '');
-    const subPage = pathArray[2]
-    const indexOfPage = navLinks.findIndex((obj: { subPath: string; }) => obj.subPath === subPage);
+    const indexOfPage = navLinks.findIndex((obj: { subPath: string; }) => obj.subPath === CurrentSubPageName);
     setSelectedSubPage(indexOfPage)
+  }, [CurrentSubPageName])
 
-  }, [id, dispatch, navigate, location.pathname]);
+  useEffect(() => {
+    const paramBudgetId = !id || id === 'undefined' ? "" : id
+    dispatch(setPickedBudgetId(paramBudgetId))
+    const selectedBudget = budgetsList.some((budget) => budget.id === paramBudgetId)
+    setSelectedBudget(selectedBudget)
+  }, [id, budgetsList, dispatch]);
+
 
   const undefinedBudget: JSX.Element = (
     <Box component="main" sx={{ flexGrow: 1 }}>
