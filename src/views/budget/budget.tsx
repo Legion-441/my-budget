@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { useEffect } from 'react';
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom'
-import { useDispatch } from 'react-redux';
-import { useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { selectPickedBudgetId, selectUserInfo, setPickedBudgetId } from '../../slices/app/app.slice';
 //* MUI & Icons
 import { Box, Chip } from '@mui/material';
@@ -17,14 +16,14 @@ import MobileBottomNavigation from '../../components/nav-bar/bottom-nav-bar';
 
 const BudgetView: React.FC = () => {
   const [selectedSubPage, setSelectedSubPage] = React.useState<number>();
-  const [selectedBudget, setSelectedBudget] = React.useState<boolean>();
+  const [isGrantedAccess, setIsGrantedAccess] = React.useState<boolean | undefined>(undefined); //TODO: change this, its ugly
   const { id } = useParams();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const location = useLocation();
   const budgetId = useAppSelector(selectPickedBudgetId);
   const { budgetsList } = useAppSelector(selectUserInfo)
+  
   const CurrentSubPageName = location.pathname.split('/').filter(Boolean)[2]
-
 
   useEffect(() => {
     const indexOfPage = navLinks.findIndex((obj: { subPath: string; }) => obj.subPath === CurrentSubPageName);
@@ -32,18 +31,16 @@ const BudgetView: React.FC = () => {
   }, [CurrentSubPageName])
 
   useEffect(() => {
-    const paramBudgetId = !id || id === 'undefined' ? "" : id
-    dispatch(setPickedBudgetId(paramBudgetId))
-    const selectedBudget = budgetsList.some((budget) => budget.id === paramBudgetId)
-    setSelectedBudget(selectedBudget)
-  }, [id, budgetsList, dispatch]);
+    const selectedBudget: boolean = budgetsList.some((budget) => budget.id === budgetId)
+    setIsGrantedAccess(selectedBudget)
+  }, [budgetId, budgetsList, dispatch]);
 
 
   const undefinedBudget: JSX.Element = (
     <Box component="main" sx={{ flexGrow: 1 }}>
       <PaperCard>
         <h1>Nieprawidłowy identyfikator budżetu</h1>
-        <p>Wygląda na to, że podany budżet <Chip color="secondary" variant="outlined" size="small" label={id}/> nie istnieje.</p>
+        <p>Wygląda na to, że podany budżet <Chip component={"span"} color="secondary" variant="outlined" size="small" label={id}/> nie istnieje.</p>
       </PaperCard>
     </Box>
   )
@@ -52,7 +49,7 @@ const BudgetView: React.FC = () => {
     <Box component="main" sx={{ flexGrow: 1 }}>
       <PaperCard>
         <h1>Odmowa dostępu</h1>
-        <p>Wygląda na to, że nie masz uprawnień do edycji budżetu <Chip color="secondary" variant="outlined" size="small" label={id}/> .</p>
+        <p>Wygląda na to, że nie masz uprawnień do wyświetlenia budżetu <Chip component={"span"} color="secondary" variant="outlined" size="small" label={id}/> lub budżet nie istnieje.</p>
       </PaperCard>
     </Box>
   )
@@ -77,11 +74,16 @@ const BudgetView: React.FC = () => {
     </Box>
   )
   
-  return (
-    <>
-    {budgetId ? (selectedBudget ? budgetPage : deniedAccessBudget) : undefinedBudget}
-    </>
-  )
+  //TODO: consider creating separate components
+  if (isGrantedAccess === undefined) {
+    return <></>
+  }
+  
+  if (budgetId && isGrantedAccess) {
+    return budgetPage
+  } else {
+    return deniedAccessBudget
+  }
 }
 
 export default BudgetView

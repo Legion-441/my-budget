@@ -1,12 +1,26 @@
 import * as React from "react";
-import { Outlet } from "react-router-dom";
+import { useEffect } from 'react';
+import { Outlet, useParams } from "react-router-dom";
 //* MUI
 import { Container, Box, Toolbar } from "@mui/material";
 import { PageContainer } from "../../styled/page-container/page-container.styled";
 //* Components
 import AppHeader from "../../components/app-header/app-header";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { selectPickedBudgetId, setPickedBudgetId } from "../../slices/app/app.slice";
 
 const MainView: React.FC = () => {
+  const dispatch = useAppDispatch()
+  const { id } = useParams();
+  const budgetId = useAppSelector(selectPickedBudgetId);
+
+  useEffect(() => {    
+    if (budgetId !== id) {
+      const paramBudgetId = !id || id === 'undefined' ? "" : id
+      dispatch(setPickedBudgetId(paramBudgetId))
+    }
+  }, [budgetId, id, dispatch]);
+
   return (
     <Box
       display={'flex'}
