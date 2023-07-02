@@ -28,11 +28,7 @@ const initialState: AppState = {
   isTempDrawerOpen: false,
   userInfo: {
     username: "",
-    budgetsList: [
-      { name: 'Personal', id: '1', icon: 'Person'},
-      { name: 'Family', id: '2', icon: 'Groups'},
-      { name: 'Holiday', id: '3', icon: 'Surfing'},
-    ]
+    budgetsList: []
   },
   pickedBudgetId: "",
 }
