@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Groups, Person, Surfing } from "@mui/icons-material";
 
-export const iconMapping: { [key: string]: React.ElementType } = {
+const iconMapping: { [key: string]: React.ElementType } = {
   Person: Person,
   Groups: Groups,
   Surfing: Surfing,

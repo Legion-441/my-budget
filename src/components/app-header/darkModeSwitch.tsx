@@ -15,7 +15,7 @@ export const DarkModeSwitch: React.FC = () => {
     <Switch
       checked={appColorMode === 'dark'}
       onChange={handleChange}
-      inputProps={{ 'aria-label': 'toggle dark mode' }}
+      inputProps={{ 'aria-label': 'toggle dark mode', 'id': 'darkModeSwitch' }}
     />
     {appColorMode} mode
     </>
