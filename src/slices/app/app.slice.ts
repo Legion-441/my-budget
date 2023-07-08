@@ -12,6 +12,8 @@ export interface BudgetsListItem {
 export interface UserInfo {
   username: string
   budgetsList: BudgetsListItem[]
+  fetching: boolean,
+  fetchError: string | null
 }
 
 export interface AppState {
@@ -28,7 +30,9 @@ const initialState: AppState = {
   isTempDrawerOpen: false,
   userInfo: {
     username: "",
-    budgetsList: []
+    budgetsList: [],
+    fetching: false,
+    fetchError: null
   },
   pickedBudgetId: "",
 }
@@ -46,10 +50,22 @@ export const appSlice = createSlice({
     toggleTempDrawer: (state) => {
       state.isTempDrawerOpen = !state.isTempDrawerOpen
     },
+    startFetchingUserInfo: (state) => {
+      state.userInfo.fetching = true;
+      state.userInfo.fetchError = null
+    },
+    setFetchError: (state, action: PayloadAction<string>) => {
+      state.userInfo.fetching = false;
+      state.userInfo.fetchError = action.payload
+    },
     setUsername: (state, action: PayloadAction<string>) => {
+      state.userInfo.fetching = false;
+      state.userInfo.fetchError = null;
       state.userInfo.username = action.payload
     },
     setBudgetsList: (state, action: PayloadAction<BudgetsListItem[]>) => {
+      state.userInfo.fetching = false;
+      state.userInfo.fetchError = null;
       state.userInfo.budgetsList = action.payload
     },
     setPickedBudgetId: (state, action: PayloadAction<string>) => {
@@ -59,7 +75,7 @@ export const appSlice = createSlice({
 })
 
 //! Actions
-export const { setAppColorMode, toggleDrawer, toggleTempDrawer, setUsername, setBudgetsList, setPickedBudgetId } = appSlice.actions;
+export const { setAppColorMode, toggleDrawer, toggleTempDrawer, startFetchingUserInfo, setFetchError, setUsername, setBudgetsList, setPickedBudgetId } = appSlice.actions;
 
 //! Selector
 export const selectAppColorMode = (state: RootState): AppColor => state.app.appColorMode;

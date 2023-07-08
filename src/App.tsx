@@ -1,5 +1,7 @@
-import { useAppDispatch, useAppSelector } from './app/hooks';
+import { useEffect } from 'react';
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from './app/hooks';
+import { AppColor, selectAppColorMode, startFetchingUserInfo } from './slices/app/app.slice';
 import './App.css';
 //* Views
 import HomeView from './views/home/home';
@@ -9,40 +11,29 @@ import DashboardMainView from './views/dashboard/dashboard';
 import NotFoundView from './views/not-found/notFound';
 import HistoryView from './views/history/history';
 import SettingsView from './views/settings/settings';
+import BudgetView from './views/budget/budget';
 //* MUI & styles
 import { ThemeProvider } from '@mui/material/styles';
-import { AppColor, selectAppColorMode, setBudgetsList } from './slices/app/app.slice';
 import { darkTheme, lightTheme } from './styled/theme';
-import BudgetView from './views/budget/budget';
-import { useEffect } from 'react';
+//* Utils
+import { fetchBudgetsListFromFirestore } from './utils/getBudgetList';
 
 const App: React.FC = () => {
   const appColorMode: AppColor = useAppSelector(selectAppColorMode)
   const dispatch = useAppDispatch()
-
+  
   useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
+
+    dispatch(startFetchingUserInfo())
+    fetchBudgetsListFromFirestore(dispatch, signal);
     
-    fetch('http://192.168.0.4:3004/budgetlist', { signal })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`HTTP error! ${res.url} ${res.status} (${res.statusText})`);
-        }
-        return res.json()
-      })
-      .then((data) => {
-        dispatch(setBudgetsList(data.budgetsList));
-      }).catch(err => {
-        if (err.name === "AbortError") {
-          // console.error(err);
-        } else {
-          //TODO: handle errors
-          console.error(err);   
-        }
-      });
-      return () => controller.abort();
-  }, [dispatch])
+
+    return () => {
+      controller.abort();
+    };
+  }, [dispatch]);
 
 
   return (
