@@ -13,7 +13,7 @@ export interface UserInfo {
   username: string
   budgetsList: BudgetsListItem[]
   fetching: boolean,
-  fetchError: string | null
+  fetchError: string | null,
 }
 
 export interface AppState {
@@ -32,7 +32,7 @@ const initialState: AppState = {
     username: "",
     budgetsList: [],
     fetching: false,
-    fetchError: null
+    fetchError: null,
   },
   pickedBudgetId: "",
 }

@@ -1,7 +1,6 @@
-import { useEffect } from 'react';
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from './app/hooks';
-import { AppColor, selectAppColorMode, startFetchingUserInfo } from './slices/app/app.slice';
+import { AppColor, selectAppColorMode } from './slices/app/app.slice';
 import './App.css';
 //* Views
 import HomeView from './views/home/home';
@@ -15,26 +14,11 @@ import BudgetView from './views/budget/budget';
 //* MUI & styles
 import { ThemeProvider } from '@mui/material/styles';
 import { darkTheme, lightTheme } from './styled/theme';
-//* Utils
-import { fetchBudgetsListFromFirestore } from './utils/getBudgetList';
+
 
 const App: React.FC = () => {
   const appColorMode: AppColor = useAppSelector(selectAppColorMode)
-  const dispatch = useAppDispatch()
   
-  useEffect(() => {
-    const controller = new AbortController();
-    const signal = controller.signal;
-
-    dispatch(startFetchingUserInfo())
-    fetchBudgetsListFromFirestore(dispatch, signal);
-    
-
-    return () => {
-      controller.abort();
-    };
-  }, [dispatch]);
-
 
   return (
     <ThemeProvider theme={appColorMode === 'light' ? lightTheme : darkTheme}>
