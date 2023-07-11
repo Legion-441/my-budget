@@ -4,7 +4,7 @@ import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { selectPickedBudgetId, selectUserInfo, setPickedBudgetId } from '../../slices/app/app.slice';
 //* MUI & Icons
-import { Box, Chip } from '@mui/material';
+import { Box, Chip, Skeleton, Typography } from '@mui/material';
 //* Styled Components
 import { PageContainer } from '../../styled/page-container/page-container.styled';
 import PaperCard from '../../styled/paper-card/paper-card.styled';
@@ -16,12 +16,13 @@ import MobileBottomNavigation from '../../components/nav-bar/bottom-nav-bar';
 
 const BudgetView: React.FC = () => {
   const [selectedSubPage, setSelectedSubPage] = React.useState<number>();
-  const [isGrantedAccess, setIsGrantedAccess] = React.useState<boolean | undefined>(undefined); //TODO: change this, its ugly
+  const [isGrantedAccess, setIsGrantedAccess] = React.useState<boolean>(false); //TODO: change this, its ugly
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const location = useLocation();
   const budgetId = useAppSelector(selectPickedBudgetId);
-  const { budgetsList } = useAppSelector(selectUserInfo)
+  const { budgetsList, fetching } = useAppSelector(selectUserInfo)
+
   
   const CurrentSubPageName = location.pathname.split('/').filter(Boolean)[2]
 
@@ -35,7 +36,7 @@ const BudgetView: React.FC = () => {
     setIsGrantedAccess(selectedBudget)
   }, [budgetId, budgetsList, dispatch]);
 
-
+  //TODO: consider deleting this
   const undefinedBudget: JSX.Element = (
     <Box component="main" sx={{ flexGrow: 1 }}>
       <PaperCard>
@@ -75,8 +76,17 @@ const BudgetView: React.FC = () => {
   )
   
   //TODO: consider creating separate components
-  if (isGrantedAccess === undefined) {
-    return <></>
+  if (fetching) {
+    return (
+      <Box component="main" sx={{ flexGrow: 1 }}>
+      <PaperCard>
+        <Typography variant="h1"><Skeleton /></Typography>
+        <Typography variant="body1"><Skeleton /></Typography>
+        <Typography variant="body1"><Skeleton /></Typography>
+        <Typography variant="body1"><Skeleton /></Typography>
+      </PaperCard>
+    </Box> 
+    )
   }
   
   if (budgetId && isGrantedAccess) {
