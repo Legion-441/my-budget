@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { BudgetsListItem, selectPickedBudgetId, selectUserInfo, toggleDrawer, toggleTempDrawer } from '../../slices/app/app.slice';
+import { selectPickedBudgetId, toggleDrawer, toggleTempDrawer } from '../../slices/app/app.slice';
+import { BudgetsListItem, selectUserInfo, } from '../../slices/user/user.slice';
 //* MUI
-import { AppBar, Box, Toolbar, IconButton, Typography, Badge, Button } from '@mui/material';
+import { AppBar, Box, Toolbar, IconButton, Typography, Badge } from '@mui/material';
 import { useMediaQuery, useTheme } from '@mui/material';
 import { Menu, Mail, Notifications, AccountCircle } from '@mui/icons-material';
 //* Components
@@ -19,7 +20,8 @@ const AppHeader: React.FC = () => {
   const theme = useTheme();
   const dispatch = useAppDispatch()
   const budgetId = useAppSelector(selectPickedBudgetId)
-  const { budgetsList } = useAppSelector(selectUserInfo)
+  const { data } = useAppSelector(selectUserInfo)
+  const { budgetsList } = data
   
   useEffect(() => {
     const selectedBudget = budgetsList.find((budget) => budget.id === budgetId) || null

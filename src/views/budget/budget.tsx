@@ -2,7 +2,8 @@ import * as React from 'react';
 import { useEffect } from 'react';
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { selectPickedBudgetId, selectUserInfo, setPickedBudgetId } from '../../slices/app/app.slice';
+import { selectPickedBudgetId, setPickedBudgetId } from '../../slices/app/app.slice';
+import { selectUserInfo } from '../../slices/user/user.slice';
 //* MUI & Icons
 import { Box, Chip } from '@mui/material';
 //* Styled Components
@@ -16,12 +17,14 @@ import MobileBottomNavigation from '../../components/nav-bar/bottom-nav-bar';
 
 const BudgetView: React.FC = () => {
   const [selectedSubPage, setSelectedSubPage] = React.useState<number>();
-  const [isGrantedAccess, setIsGrantedAccess] = React.useState<boolean | undefined>(undefined); //TODO: change this, its ugly
+  const [isGrantedAccess, setIsGrantedAccess] = React.useState<boolean>(false); //TODO: change this, its ugly
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const location = useLocation();
   const budgetId = useAppSelector(selectPickedBudgetId);
-  const { budgetsList } = useAppSelector(selectUserInfo)
+  const { data } = useAppSelector(selectUserInfo)
+  const { budgetsList } = data
+
   
   const CurrentSubPageName = location.pathname.split('/').filter(Boolean)[2]
 
@@ -35,7 +38,7 @@ const BudgetView: React.FC = () => {
     setIsGrantedAccess(selectedBudget)
   }, [budgetId, budgetsList, dispatch]);
 
-
+  //TODO: consider deleting this
   const undefinedBudget: JSX.Element = (
     <Box component="main" sx={{ flexGrow: 1 }}>
       <PaperCard>

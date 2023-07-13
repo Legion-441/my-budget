@@ -1,5 +1,5 @@
 import { useAppSelector } from "../../app/hooks"
-import { selectUserInfo } from "../../slices/app/app.slice"
+import { selectUserInfo } from "../../slices/user/user.slice"
 //* MUI & Icons
 import { Box, Button, Stack } from "@mui/material"
 import { Group, Person } from "@mui/icons-material"
@@ -7,7 +7,8 @@ import { Group, Person } from "@mui/icons-material"
 import PaperCard from "../../styled/paper-card/paper-card.styled"
 
 const HomeView: React.FC  = () => {
-  const { username, budgetsList } = useAppSelector(selectUserInfo)
+  const { data } = useAppSelector(selectUserInfo)
+  const { username, budgetsList } = data
   
   const noBudgetInfo = (
     <PaperCard>

@@ -1,21 +1,20 @@
-import { Dispatch } from "redux";
-import { setBudgetsList, setFetchError } from "../slices/app/app.slice";
+export const fetchUserInfo = async () => {
+  const controller = new AbortController();
+  const signal = controller.signal;
 
-export const fetchBudgetsListFromFirestore = async (dispatch: Dispatch, signal: AbortSignal) => {
   try {
-    const res = await fetch('http://192.168.0.4:3004/budgetlist', { signal });
-
+    const res = await fetch(`http://192.168.0.4:3004/`, { signal });
+    
     if (!res.ok) {
-      throw new Error(`HTTP error! ${res.url} ${res.status} (${res.statusText})`);
+      throw new Error(`${res.status} ${res.statusText}`);
     }
 
     const data = await res.json();
-    dispatch(setBudgetsList(data.budgetsList));
+    return data
   } catch (error) {
     const err = error as Error
     if (err.name !== "AbortError") {
-      console.error(err);
-      dispatch(setFetchError(err.message))
+      throw err
     }
   }
 };

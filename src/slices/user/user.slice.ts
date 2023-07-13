@@ -1,5 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../../app/store";
+import { AppThunk, RootState } from "../../app/store";
+//* Utils
+import { fetchUserInfo } from "../../utils/getBudgetList";
 
 export interface BudgetsListItem {
   name: string,
@@ -28,7 +30,7 @@ const initialState: UserState = {
 }
 
 export const userSlice = createSlice({
-  name: 'app',
+  name: 'user',
   initialState,
   reducers: {
     startFetchingUserInfo: (state) => {
@@ -52,8 +54,20 @@ export const userSlice = createSlice({
   }
 })
 
+
 //! Actions
 export const { startFetchingUserInfo, setFetchError, setUsername, setBudgetsList, } = userSlice.actions;
+export const fetchUserData = (): AppThunk => async (dispatch) => {
+  dispatch(startFetchingUserInfo())
+  fetchUserInfo()
+    .then((data) => {
+      dispatch(setUsername(data.username || "" ));
+      dispatch(setBudgetsList(data.budgets || []));
+    })
+    .catch((error) => {
+      dispatch(setFetchError(error.message))
+    });
+};
 
 //! Selector
 export const selectUserInfo = (state: RootState): UserState => state.user

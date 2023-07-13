@@ -1,9 +1,9 @@
+import { BudgetsListItem } from "../../slices/user/user.slice";
 //* MUI
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { Button, Typography } from "@mui/material";
 //* Utils
 import { getIconComponent } from "../../utils/iconUtils";
-import { BudgetsListItem } from "../../slices/app/app.slice";
 
 interface BudgetListButtonProps {
   disabled: boolean;
