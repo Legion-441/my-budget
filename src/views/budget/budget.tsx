@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { useEffect } from 'react';
-import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { Outlet, useLocation, useParams } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { selectPickedBudgetId, setPickedBudgetId } from '../../slices/app/app.slice';
+import { selectPickedBudgetId } from '../../slices/app/app.slice';
 import { selectUserInfo } from '../../slices/user/user.slice';
 //* MUI & Icons
-import { Box, Chip } from '@mui/material';
+import { Box, Chip, Skeleton, Typography } from '@mui/material';
 //* Styled Components
 import { PageContainer } from '../../styled/page-container/page-container.styled';
 import PaperCard from '../../styled/paper-card/paper-card.styled';
@@ -22,7 +22,7 @@ const BudgetView: React.FC = () => {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const budgetId = useAppSelector(selectPickedBudgetId);
-  const { data } = useAppSelector(selectUserInfo)
+  const { data, isFetching } = useAppSelector(selectUserInfo)
   const { budgetsList } = data
 
   
@@ -78,8 +78,17 @@ const BudgetView: React.FC = () => {
   )
   
   //TODO: consider creating separate components
-  if (isGrantedAccess === undefined) {
-    return <></>
+  if (isFetching) {
+    return (
+      <Box component="main" sx={{ flexGrow: 1 }}>
+      <PaperCard>
+        <Typography variant="h1"><Skeleton /></Typography>
+        <Typography variant="body1"><Skeleton /></Typography>
+        <Typography variant="body1"><Skeleton /></Typography>
+        <Typography variant="body1"><Skeleton /></Typography>
+      </PaperCard>
+    </Box> 
+    )
   }
   
   if (budgetId && isGrantedAccess) {
