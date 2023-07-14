@@ -17,7 +17,7 @@ import MobileBottomNavigation from '../../components/nav-bar/bottom-nav-bar';
 
 const BudgetView: React.FC = () => {
   const [selectedSubPage, setSelectedSubPage] = React.useState<number>();
-  const [isGrantedAccess, setIsGrantedAccess] = React.useState<boolean>(false); //TODO: change this, its ugly
+  const [isGrantedAccess, setIsGrantedAccess] = React.useState<boolean>(); //TODO: change this, its ugly
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const location = useLocation();
@@ -27,27 +27,17 @@ const BudgetView: React.FC = () => {
 
   
   const CurrentSubPageName = location.pathname.split('/').filter(Boolean)[2]
-
+  
   useEffect(() => {
     const indexOfPage = navLinks.findIndex((obj: { subPath: string; }) => obj.subPath === CurrentSubPageName);
     setSelectedSubPage(indexOfPage)
   }, [CurrentSubPageName])
-
+  
   useEffect(() => {
     const selectedBudget: boolean = budgetsList.some((budget) => budget.id === budgetId)
     setIsGrantedAccess(selectedBudget)
   }, [budgetId, budgetsList, dispatch]);
 
-  //TODO: consider deleting this
-  const undefinedBudget: JSX.Element = (
-    <Box component="main" sx={{ flexGrow: 1 }}>
-      <PaperCard>
-        <h1>Nieprawidłowy identyfikator budżetu</h1>
-        <p>Wygląda na to, że podany budżet <Chip component={"span"} color="secondary" variant="outlined" size="small" label={id}/> nie istnieje.</p>
-      </PaperCard>
-    </Box>
-  )
-  
   const deniedAccessBudget: JSX.Element = (
     <Box component="main" sx={{ flexGrow: 1 }}>
       <PaperCard>
@@ -78,7 +68,7 @@ const BudgetView: React.FC = () => {
   )
   
   //TODO: consider creating separate components
-  if (isFetching) {
+  if (isFetching || isGrantedAccess === undefined) {
     return (
       <Box component="main" sx={{ flexGrow: 1 }}>
       <PaperCard>
