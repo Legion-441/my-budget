@@ -16,6 +16,8 @@ import BudgetView from './views/budget/budget';
 //* MUI & styles
 import { ThemeProvider } from '@mui/material/styles';
 import { darkTheme, lightTheme } from './styled/theme';
+import LogInView from './views/log-in/log-in';
+import SignUpView from './views/sign-up/sign-up';
 
 
 const App: React.FC = () => {
@@ -50,7 +52,8 @@ const App: React.FC = () => {
             <Route path='profile' element={<>PROFILE</>} />
             <Route path='*' element={<NotFoundView />} />
           </Route>
-          <Route path='login' element={<>LOGIN</>} />
+          <Route path='login' element={<LogInView/>} />
+          <Route path='signup' element={<SignUpView/>} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
