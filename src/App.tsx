@@ -17,6 +17,8 @@ import AuthView from './views/auth/auth';
 //* MUI & styles
 import { ThemeProvider } from '@mui/material/styles';
 import { darkTheme, lightTheme } from './styled/theme';
+//* Utils
+import ProtectedRoute from './utils/protectedRoute';
 
 
 const App: React.FC = () => {
@@ -27,18 +29,20 @@ const App: React.FC = () => {
     <ThemeProvider theme={appColorMode === 'light' ? lightTheme : darkTheme}>
       <BrowserRouter>
         <Routes>
-          <Route element={<MainView />} >
-            <Route index element={<HomeView />} />
-            <Route path='budget/:id' element={<BudgetView />} >
-              <Route path='dash' element={<Outlet />}>
-                <Route index element={<DashboardMainView />} />
-                <Route path='details' element={<DashboardDetailsView />} />
+          <Route element={<ProtectedRoute />} >
+            <Route element={<MainView />} >
+              <Route index element={<HomeView />} />
+              <Route path='budget/:id' element={<BudgetView />} >
+                <Route path='dash' element={<Outlet />}>
+                  <Route index element={<DashboardMainView />} />
+                  <Route path='details' element={<DashboardDetailsView />} />
+                </Route>
+                <Route path='history' element={<HistoryView/>} />
+                <Route path='settings' element={<SettingsView/>} />
               </Route>
-              <Route path='history' element={<HistoryView/>} />
-              <Route path='settings' element={<SettingsView/>} />
+              <Route path='profile' element={<>PROFILE</>} />
+              <Route path='*' element={<NotFoundView />} />
             </Route>
-            <Route path='profile' element={<>PROFILE</>} />
-            <Route path='*' element={<NotFoundView />} />
           </Route>
           <Route element={<AuthView/>}>
             <Route path='login' element={<LogInView/>} />
