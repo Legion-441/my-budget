@@ -1,6 +1,12 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
+//* Firebase
+import { signOut } from 'firebase/auth';
+import { auth } from '../../firebase';
+//* MUI & Icons
 import { Menu, MenuItem, Divider, ListItemIcon } from '@mui/material';
 import { AccountCircle, Settings, Logout } from '@mui/icons-material'
+//* Components
 import { DarkModeSwitch } from './darkModeSwitch';
 
 interface AppMenuProps {
@@ -11,6 +17,16 @@ interface AppMenuProps {
 const AppProfileMenu: React.FC<AppMenuProps> = ({anchorEl, handleToggleProfileMenu}) => {
   const isMenuOpen: boolean = Boolean(anchorEl);
   const menuId = 'primary-search-account-menu';
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    handleToggleProfileMenu()
+    signOut(auth).then(() => {
+      navigate('/login')
+    }).catch(error => {
+      console.error(error);
+    })
+  }
 
   return (
     <Menu
@@ -50,7 +66,7 @@ const AppProfileMenu: React.FC<AppMenuProps> = ({anchorEl, handleToggleProfileMe
         </ListItemIcon>
         App settings
       </MenuItem>
-      <MenuItem onClick={() => handleToggleProfileMenu()}>
+      <MenuItem onClick={handleLogout}>
         <ListItemIcon>
           <Logout fontSize="small" />
         </ListItemIcon>

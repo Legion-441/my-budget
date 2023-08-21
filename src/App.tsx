@@ -1,8 +1,6 @@
-import { useEffect } from 'react';
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from './app/hooks';
+import { useAppSelector } from './app/hooks';
 import { AppColor, selectAppColorMode } from './slices/app/app.slice';
-import { fetchUserData } from './slices/user/user.slice';
 import './App.css';
 //* Views
 import HomeView from './views/home/home';
@@ -23,17 +21,6 @@ import { darkTheme, lightTheme } from './styled/theme';
 
 const App: React.FC = () => {
   const appColorMode: AppColor = useAppSelector(selectAppColorMode)
-  const dispatch = useAppDispatch()
-  
-  useEffect(() => {
-    const controller = new AbortController();
-
-    dispatch(fetchUserData())
-
-    return () => {
-      controller.abort();
-    };
-  }, [dispatch]);
 
   
   return (
