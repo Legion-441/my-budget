@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 //* Firebase
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
@@ -8,35 +8,33 @@ import { Box } from "@mui/material";
 
 const ProtectedRoute: React.FC = () => {
   const [authLoading, setAuthLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isMounted, setIsMounted] = useState(true);
 
   const navigate = useNavigate()
   const location = useLocation();
-
-
+  
+  
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      setIsAuthenticated(Boolean(user))
+    setIsMounted(true);
+
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (!user && isMounted) {
+        navigate('/login', { state: { from: location.pathname } })        
+      }
       setAuthLoading(false)
     });
-    
-  }, []);
+
+    return () => {
+      setIsMounted(false);
+      unsubscribe()
+    }
+  }, [navigate, location]);
   
 
-  if (authLoading) {
-    return (
-      <Box
-        minHeight='100vh'
-        bgcolor='background.default'
-      />
-    )
-  }
-  
-  if (isAuthenticated) {
-    return <Outlet/>  
-  }
+  return (
+    authLoading ? <Box minHeight='100vh' bgcolor='background.default' /> : <Outlet /> 
+  )
 
-  return <Navigate to={"/login"} state={{ from: location }} replace />
 };
 
 export default ProtectedRoute;

@@ -17,13 +17,10 @@ interface AppMenuProps {
 const AppProfileMenu: React.FC<AppMenuProps> = ({anchorEl, handleToggleProfileMenu}) => {
   const isMenuOpen: boolean = Boolean(anchorEl);
   const menuId = 'primary-search-account-menu';
-  const navigate = useNavigate()
 
   const handleLogout = () => {
     handleToggleProfileMenu()
-    signOut(auth).then(() => {
-      navigate('/login')
-    }).catch(error => {
+    signOut(auth).catch(error => {
       console.error(error);
     })
   }
