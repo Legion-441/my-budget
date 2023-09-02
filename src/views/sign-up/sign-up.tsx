@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 //* Firebase
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '../../firebase';
 import { FirebaseError } from 'firebase/app';
 //* MUI & Icons
@@ -57,7 +57,13 @@ const SignUpView: React.FC  = () => {
         throw new Error('passwords-is-not-identical')
       }
 
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const emailPart = email.split('@')[0];
+      const username = emailPart.charAt(0).toUpperCase() + emailPart.slice(1);
+
+      await updateProfile(userCredential.user, {
+        displayName: username,
+      });
       setSending(false)
       navigate('/')
     } catch (error) {
