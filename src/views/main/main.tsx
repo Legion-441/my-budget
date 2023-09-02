@@ -31,11 +31,7 @@ const MainView: React.FC = () => {
   }, [budgetId, id, dispatch]);
 
   return (
-    <Box
-      display='flex'
-      minHeight='100vh'
-      bgcolor='background.default'
-    >
+    <>
       <AppHeader />
       <Box sx={{ flexGrow: 1, pt: { sm: 2, xs: 1 }, px: { sm: 2, xs: 1 } }}>
         <Toolbar />
@@ -46,7 +42,7 @@ const MainView: React.FC = () => {
         </Container>
         <Toolbar />
       </Box>
-    </Box>
+    </>
   );
 };
 
