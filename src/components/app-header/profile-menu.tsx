@@ -15,6 +15,7 @@ interface AppMenuProps {
 }
 
 const AppProfileMenu: React.FC<AppMenuProps> = ({anchorEl, handleToggleProfileMenu}) => {
+  const navigate = useNavigate()
   const isMenuOpen: boolean = Boolean(anchorEl);
   const menuId = 'primary-search-account-menu';
 
@@ -23,6 +24,11 @@ const AppProfileMenu: React.FC<AppMenuProps> = ({anchorEl, handleToggleProfileMe
     signOut(auth).catch(error => {
       console.error(error);
     })
+  }
+  
+  const handleProfile = () => {
+    handleToggleProfileMenu()
+    navigate('/profile')
   }
 
   return (
@@ -49,7 +55,7 @@ const AppProfileMenu: React.FC<AppMenuProps> = ({anchorEl, handleToggleProfileMe
         },
       }}
     >
-      <MenuItem onClick={() => handleToggleProfileMenu()}>
+      <MenuItem onClick={handleProfile}>
         <ListItemIcon>
           <AccountCircle />
         </ListItemIcon>
