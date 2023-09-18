@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +9,7 @@ import { FirebaseError } from 'firebase/app';
 //* MUI & Icons
 import { Button, Divider, Stack, TextField, Typography } from "@mui/material"
 //* Utils
-import { AuthErrorObject, handleAuthError } from '../../utils/errorHandling';
+import { AuthErrors, getInputError, initialAuthErrors } from '../../utils/errorHandling';
 //* Styled Components
 import PaperCard from "../../styled/paper-card/paper-card.styled"
 import { configureFirebaseUI } from '../../utils/firebaseUIAuthConfig';
@@ -18,7 +19,7 @@ const SignUpView: React.FC  = () => {
   const [email, setEmail] = React.useState<string>('')
   const [password, setPassword] = React.useState<string>('')
   const [confirmPassword, setConfirmPassword] = React.useState<string>('')
-  const [signupInputErrors, setSignupInputErrors] = React.useState<AuthErrorObject>({})
+  const [signupInputErrors, setSignupInputErrors] = React.useState<AuthErrors>({ ...initialAuthErrors })
   const [sending, setSending] = React.useState<boolean>(false);
   const navigate = useNavigate()
   
@@ -36,10 +37,11 @@ const SignUpView: React.FC  = () => {
 
     if (event.target.value.length<6) {
       setSignupInputErrors({
+        ...initialAuthErrors,
         passwordError: 'Hasło musi mieć conajmniej 6 znaków.',
       })
     } else {
-      setSignupInputErrors({})
+      setSignupInputErrors({ ...initialAuthErrors })
     }
   };
 
@@ -49,7 +51,7 @@ const SignUpView: React.FC  = () => {
 
   const handleSignUpFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setSignupInputErrors({})
+    setSignupInputErrors({ ...initialAuthErrors })
     setSending(true);
 
     try {
@@ -67,14 +69,8 @@ const SignUpView: React.FC  = () => {
       setSending(false)
       navigate('/')
     } catch (error) {
-      if (error instanceof FirebaseError || error instanceof Error) {
-        handleAuthError(error, setSignupInputErrors)
-      } else {
-        console.log(error);
-        setSignupInputErrors({
-          generalError: "Nieznany błąd"
-        })
-      };
+      const inputError = getInputError(error)
+      setSignupInputErrors(inputError)
       setSending(false)
     };
   }

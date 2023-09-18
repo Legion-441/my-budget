@@ -8,7 +8,7 @@ import { FirebaseError } from 'firebase/app';
 //* MUI & Icons
 import { Button, Checkbox, Divider, FormControlLabel, Stack, TextField, Typography } from "@mui/material"
 //* Utils
-import { AuthErrorObject, handleAuthError } from '../../utils/errorHandling';
+import { AuthErrors, getInputError, initialAuthErrors } from '../../utils/errorHandling';
 //* Styled Components
 import PaperCard from "../../styled/paper-card/paper-card.styled"
 import { configureFirebaseUI } from '../../utils/firebaseUIAuthConfig';
@@ -17,7 +17,7 @@ import { configureFirebaseUI } from '../../utils/firebaseUIAuthConfig';
 const LogInView: React.FC  = () => {
   const [email, setEmail] = React.useState<string>('')
   const [password, setPassword] = React.useState<string>('')
-  const [loginInputErrors, setLoginInputErrors] = React.useState<AuthErrorObject>({})
+  const [loginInputErrors, setLoginInputErrors] = React.useState<AuthErrors>({ ...initialAuthErrors })
   const [sending, setSending] = React.useState<boolean>(false);
   const navigate = useNavigate()
   const location = useLocation()
@@ -37,22 +37,16 @@ const LogInView: React.FC  = () => {
 
   const handleLoginFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setLoginInputErrors({})
+    setLoginInputErrors({ ...initialAuthErrors })
     setSending(true);
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
       setSending(false)
       navigate(from)
-    } catch (error) {
-      if (error instanceof FirebaseError || error instanceof Error) {        
-        handleAuthError(error, setLoginInputErrors)
-      } else {
-        console.error(error);
-        setLoginInputErrors({
-          generalError: "Nieznany błąd",
-        })
-      };
+    } catch (error) {        
+      const inputError = getInputError(error)
+        setLoginInputErrors(inputError)
       setSending(false)
     };
   }

@@ -1,81 +1,58 @@
 import { FirebaseError } from "firebase/app";
 
-export interface AuthErrorObject {
-  emailError?: string;
-  passwordError?: string;
-  confirmPasswordError?: string;
-  generalError?: string;
+export interface AuthErrors {
+  emailError: string;
+  passwordError: string;
+  confirmPasswordError: string;
+  generalError: string;
+}
+
+export const initialAuthErrors: AuthErrors = {
+  emailError: "",
+  passwordError: "",
+  confirmPasswordError: "",
+  generalError: "",
 };
 
-type AuthErrorField = keyof AuthErrorObject;
+type AuthErrorField = keyof AuthErrors;
 
-export const handleAuthError = (error: FirebaseError | Error, setInputErrors: React.Dispatch<React.SetStateAction<AuthErrorObject>>): void => {
-  const errorCode = error instanceof FirebaseError ? error.code : error.message;
+export const getInputError = (error: FirebaseError | Error | unknown): AuthErrors => {
+  let errorIdentifier: string;
 
-  let errorFields: AuthErrorField[] = ['generalError'];
-
-  switch (errorCode) {
-    case 'auth/invalid-email':
-      errorFields = ['emailError'];
-      break;
-    case 'auth/email-already-in-use':
-      errorFields = ['emailError'];
-      break;
-    case 'auth/user-not-found':
-      errorFields = ['emailError'];
-      break;
-    case 'auth/user-disabled':
-      errorFields = ['emailError'];
-      break;
-    case 'auth/weak-password':
-      errorFields = ['passwordError'];
-      break;
-    case 'passwords-is-not-identical':
-      errorFields = ['passwordError', 'confirmPasswordError'];
-      break;
-    case 'auth/wrong-password':
-      errorFields = ['passwordError'];
-      break;
-    case 'auth/too-many-requests':
-      errorFields = ['generalError'];
-      break;
-    case 'auth/provider-already-linked':
-      errorFields = ['generalError'];
-      break;
-    case 'auth/credential-already-in-use':
-      errorFields = ['generalError'];
-      break;
-    default:
-      errorFields = ['generalError'];
-      break;
+  if (error instanceof FirebaseError) {
+    errorIdentifier = error.code;
+  } else if (error instanceof Error) {
+    errorIdentifier = error.message;
+  } else {
+    errorIdentifier = "unknown-error";
   }
-  
-  
-  const errorMap: Record<string, string> = {
-    'auth/invalid-email': 'Nieprawidłowy email.',
-    'auth/email-already-in-use': 'Ten adres e-mail jest już w użyciu.',
-    'auth/user-not-found': 'Nie znaleziono użytkownika.',
-    'auth/user-disabled': 'Konto tego użytkownika zostało wyłączone',
-    'auth/weak-password': 'Hasło musi mieć conajmniej 6 znaków.',
-    'passwords-is-not-identical': 'Hasła nie są identyczne.',
-    'auth/wrong-password': 'Nieprawidłowe hasło.',
-    'auth/too-many-requests': 'Osiągnięto limit prób logowania.',
-    'auth/provider-already-linked': 'Konto dostawcy jest już powiązane.',
-    'auth/credential-already-in-use': 'Konto dostawcy jest już używane.',
+
+  type ErrorInfoObject = {
+    errorField: AuthErrorField;
+    errorText: string;
   };
 
-  const errorMessage = errorMap[errorCode] || error.message;
-  
+  const errorMap: Record<string, ErrorInfoObject> = {
+    "auth/missing-email": { errorField: "emailError", errorText: "Wprowadź adres email" },
+    "auth/invalid-email": { errorField: "emailError", errorText: "Nieprawidłowy email." },
+    "auth/email-already-in-use": { errorField: "emailError", errorText: "Ten adres e-mail jest już w użyciu." },
+    "auth/user-not-found": { errorField: "emailError", errorText: "Nie znaleziono użytkownika." },
+    "auth/user-disabled": { errorField: "emailError", errorText: "Konto tego użytkownika zostało wyłączone." },
+    "auth/weak-password": { errorField: "passwordError", errorText: "Hasło musi mieć conajmniej 6 znaków." },
+    "auth/wrong-password": { errorField: "passwordError", errorText: "Nieprawidłowe hasło." },
+    "auth/missing-password": { errorField: "passwordError", errorText: "Wprowadź hasło" },
+    "passwords-is-not-identical": { errorField: "confirmPasswordError", errorText: "Hasła nie są identyczne." },
+    "auth/too-many-requests": { errorField: "generalError", errorText: "Osiągnięto limit prób logowania." },
+    "auth/provider-already-linked": { errorField: "generalError", errorText: "Konto dostawcy jest już powiązane." },
+    "auth/credential-already-in-use": { errorField: "generalError", errorText: "Konto dostawcy jest już używane." },
+    "unknown-error": { errorField: "generalError", errorText: "Nieznany błąd." },
+    "unmatched-error": { errorField: "generalError", errorText: errorIdentifier },
+  };
 
-  setInputErrors(() => {
-    const errors: AuthErrorObject = {};
-  
-    errorFields.forEach((field) => {
-      errors[field] = errorMessage;
-    });
-  
-    return {
-      ...errors,
-    };
-  });
+  const errorObject: ErrorInfoObject = errorMap[errorIdentifier] || errorMap["unmatched-error"];
+
+  return {
+    ...initialAuthErrors,
+    [errorObject.errorField]: errorObject.errorText,
+  };
 };
