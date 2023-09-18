@@ -4,6 +4,7 @@ import { Alert, AlertTitle, Button, Divider, Stack, TextField, Typography } from
 import { AuthErrors } from "../../utils/errorHandling";
 //* Components
 import PasswordInput from "./password-input";
+import ForgotPasswordButton from "./forgot-password-button";
 //* Styled Components
 import PaperCard from "../../styled/paper-card/paper-card.styled";
 
@@ -93,8 +94,7 @@ const AuthForm: React.FC<FormProps> = ({ formType, onSubmit, alert, isSending, a
           errorAlert={passwordError || confirmPasswordError}
         />
         {isLoginForm ? (
-          null
-          // TODO: forgot password feature
+          <ForgotPasswordButton disabled={isSending} />
         ) : (
           <PasswordInput
             passwordType={"confirm password"}
