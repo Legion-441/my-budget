@@ -1,3 +1,4 @@
+import { useState } from "react";
 //* MUI & Icons
 import { Alert, AlertTitle, Button, Divider, Stack, TextField, Typography } from "@mui/material";
 //* Utils
@@ -22,6 +23,8 @@ interface FormProps {
 }
 
 const AuthForm: React.FC<FormProps> = ({ formType, onSubmit, alert, isSending, authFormData, errors, setErrors, setAuthFormData }) => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  
   const { emailError, passwordError, confirmPasswordError } = errors;
   const isLoginForm = formType === "login";
 
@@ -60,7 +63,7 @@ const AuthForm: React.FC<FormProps> = ({ formType, onSubmit, alert, isSending, a
     <PaperCard>
       <Stack
         component={"form"}
-        onSubmit={onSubmit}
+        onSubmit={!isDialogOpen ? onSubmit : undefined}
         direction="column"
         justifyContent="flex-start"
         alignItems="stretch"
@@ -94,7 +97,7 @@ const AuthForm: React.FC<FormProps> = ({ formType, onSubmit, alert, isSending, a
           errorAlert={passwordError || confirmPasswordError}
         />
         {isLoginForm ? (
-          <ForgotPasswordButton disabled={isSending} />
+          <ForgotPasswordButton disabled={isSending} isOpen={isDialogOpen} setOpen={setIsDialogOpen} />
         ) : (
           <PasswordInput
             passwordType={"confirm password"}
