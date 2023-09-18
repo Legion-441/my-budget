@@ -4,11 +4,11 @@ import 'firebase/compat/auth';
 import 'firebaseui/dist/firebaseui.css'
 import { auth } from '../firebase';
 
-export const configureFirebaseUI = (from?: string): void => {
+export const configureFirebaseUI = (from: string = "/"): void => {
   const uiConfig: firebaseui.auth.Config = {
     callbacks: {
         signInSuccessWithAuthResult: function(authResult, redirectUrl) {
-          from && window.location.assign(from)
+          window.location.assign(from)
           return false;
         }
       },
