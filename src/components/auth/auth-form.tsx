@@ -1,25 +1,24 @@
 import { useState } from "react";
 //* MUI & Icons
 import { Alert, AlertTitle, Button, Divider, Stack, TextField, Typography } from "@mui/material";
-//* Utils
-import { AuthErrors } from "../../utils/errorHandling";
 //* Components
 import PasswordInput from "./password-input";
 import ForgotPasswordButton from "./forgot-password-button";
 //* Styled Components
 import PaperCard from "../../styled/paper-card/paper-card.styled";
+//* Types
+import { AlertState, AuthData, AuthErrors } from "../../types/type";
 
-import { AlertState, AuthFormData } from "../../views/log-in/log-in";
 
 interface FormProps {
   formType: "login" | "sign-up";
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
   alert: AlertState | null;
   isSending: boolean;
-  authFormData: AuthFormData;
+  authFormData: AuthData;
   errors: AuthErrors;
   setErrors: React.Dispatch<React.SetStateAction<AuthErrors>>;
-  setAuthFormData: React.Dispatch<React.SetStateAction<AuthFormData>>;
+  setAuthFormData: React.Dispatch<React.SetStateAction<AuthData>>;
 }
 
 const AuthForm: React.FC<FormProps> = ({ formType, onSubmit, alert, isSending, authFormData, errors, setErrors, setAuthFormData }) => {
@@ -28,7 +27,7 @@ const AuthForm: React.FC<FormProps> = ({ formType, onSubmit, alert, isSending, a
   const { emailError, passwordError, confirmPasswordError } = errors;
   const isLoginForm = formType === "login";
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>, input: keyof AuthFormData) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>, input: keyof AuthData) => {
     setAuthFormData({ ...authFormData, [input]: event.target.value });
 
     if ((input === "password" || input === "confirmPassword") && !isLoginForm) {

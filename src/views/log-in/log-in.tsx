@@ -1,36 +1,25 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-//* MUI & Icons
-import { AlertColor } from "@mui/material";
 //* Utils
-import { AuthErrors, initialAuthErrors } from "../../utils/errorHandling";
+import { INITIAL_AUTH_ERRORS } from "../../utils/errorHandling";
 import { configureFirebaseUI } from "../../utils/firebaseUIAuthConfig";
 //* Components
 import AuthForm from "../../components/auth/auth-form";
 //* Services
 import handleAuth from "../../services/authService";
+//* Types
+import { AlertState, AuthData, AuthErrors } from "../../types/type";
 
-export interface AlertState {
-  severity: AlertColor;
-  title?: string;
-  message?: React.ReactNode;
-}
-
-export type AuthFormData = {
-  email: string;
-  password: string;
-  confirmPassword: string;
-};
 
 const LogInView: React.FC = () => {
-  const [authFormData, setAuthFormData] = useState<AuthFormData>({
+  const [authFormData, setAuthFormData] = useState<AuthData>({
     email: "",
     password: "",
     confirmPassword: "",
   });
   const [alert, setAlert] = useState<AlertState | null>(null);
-  const [loginInputErrors, setLoginInputErrors] = useState<AuthErrors>({ ...initialAuthErrors });
+  const [loginInputErrors, setLoginInputErrors] = useState<AuthErrors>({ ...INITIAL_AUTH_ERRORS });
   const [isSending, setIsSending] = useState<boolean>(false);
   const navigate = useNavigate();
   const location = useLocation();

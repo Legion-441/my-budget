@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../firebase";
 //* Utils
-import { AuthErrors, initialAuthErrors, getInputError } from "../utils/errorHandling";
-
-import { AuthFormData } from "../views/log-in/log-in";
+import { INITIAL_AUTH_ERRORS, getInputError } from "../utils/errorHandling";
+//* Types
+import { AuthData, AuthErrors } from "../types/type";
 
 const signupOperation = async (email: string, password: string, confirmPassword: string) => {
   if (password !== confirmPassword) {
@@ -26,12 +26,12 @@ const handleAuth = async (
   navigate: ReturnType<typeof useNavigate>,
   setSending: React.Dispatch<React.SetStateAction<boolean>>,
   setInputErrors: React.Dispatch<React.SetStateAction<AuthErrors>>,
-  authFormData: AuthFormData,
+  authFormData: AuthData,
   from: string = "/"
 ) => {
   const { email, password, confirmPassword } = authFormData;
 
-  setInputErrors({ ...initialAuthErrors });
+  setInputErrors({ ...INITIAL_AUTH_ERRORS });
   setSending(true);
 
   try {

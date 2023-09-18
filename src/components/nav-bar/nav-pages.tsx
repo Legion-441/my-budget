@@ -3,13 +3,13 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import HistoryIcon from '@mui/icons-material/History';
 import SettingsIcon from '@mui/icons-material/Settings';
 
-export interface navLinksItem {
+interface navLinksItem {
   label: string;
   icon: JSX.Element;
   subPath: string;
 }
 
-export type navLinksItemsDto = navLinksItem[]
+type navLinksItemsDto = navLinksItem[]
 
 
 export const navLinks: navLinksItemsDto = [

@@ -1,6 +1,6 @@
 //* MUI
 import { Button } from "@mui/material";
-//* components
+//* Components
 import ForgotPasswordDialog from "./forgot-password-dialog";
 
 interface ForgotPasswordButtonProps {

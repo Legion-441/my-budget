@@ -1,13 +1,10 @@
+//* Firebase
 import { FirebaseError } from "firebase/app";
+//* Types
+import { AuthErrors } from "../types/type";
 
-export interface AuthErrors {
-  emailError: string;
-  passwordError: string;
-  confirmPasswordError: string;
-  generalError: string;
-}
 
-export const initialAuthErrors: AuthErrors = {
+export const INITIAL_AUTH_ERRORS: AuthErrors = {
   emailError: "",
   passwordError: "",
   confirmPasswordError: "",
@@ -56,7 +53,7 @@ export const getInputError = (error: FirebaseError | Error | unknown): AuthError
   const errorObject: ErrorInfoObject = errorMap[errorIdentifier] || errorMap["unmatched-error"];
 
   return {
-    ...initialAuthErrors,
+    ...INITIAL_AUTH_ERRORS,
     [errorObject.errorField]: errorObject.errorText,
   };
 };

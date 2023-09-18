@@ -1,10 +1,10 @@
 import { useState } from "react";
 //* MUI
 import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@mui/material";
-//* firebase
+//* Firebase
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../../firebase";
-//* utils
+//* Utils
 import { getInputError } from "../../utils/errorHandling";
 
 

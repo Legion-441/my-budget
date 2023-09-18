@@ -2,23 +2,24 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 //* Utils
-import { AuthErrors, initialAuthErrors } from "../../utils/errorHandling";
+import { INITIAL_AUTH_ERRORS } from "../../utils/errorHandling";
 import { configureFirebaseUI } from "../../utils/firebaseUIAuthConfig";
 //* Components
 import AuthForm from "../../components/auth/auth-form";
 //* Services
 import handleAuth from "../../services/authService";
+//* Types
+import { AlertState, AuthData, AuthErrors } from "../../types/type";
 
-import { AlertState, AuthFormData } from "../log-in/log-in";
 
 const SignUpView: React.FC = () => {
-  const [authFormData, setAuthFormData] = useState<AuthFormData>({
+  const [authFormData, setAuthFormData] = useState<AuthData>({
     email: "",
     password: "",
     confirmPassword: "",
   });
   const [alert, setAlert] = useState<AlertState | null>(null);
-  const [signupInputErrors, setSignupInputErrors] = useState<AuthErrors>({ ...initialAuthErrors });
+  const [signupInputErrors, setSignupInputErrors] = useState<AuthErrors>({ ...INITIAL_AUTH_ERRORS });
   const [isSending, setIsSending] = useState<boolean>(false);
   const navigate = useNavigate();
 
