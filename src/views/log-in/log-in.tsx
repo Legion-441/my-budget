@@ -3,14 +3,12 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 //* Utils
 import { INITIAL_AUTH_ERRORS } from "../../utils/errorHandling";
-import { configureFirebaseUI } from "../../utils/firebaseUIAuthConfig";
 //* Components
 import AuthForm from "../../components/auth/auth-form";
 //* Services
-import handleAuth from "../../services/authService";
+import handleAuth, { handleOAuth } from "../../services/authService";
 //* Types
 import { AlertState, AuthData, AuthErrors } from "../../types/type";
-
 
 const LogInView: React.FC = () => {
   const [authFormData, setAuthFormData] = useState<AuthData>({
@@ -25,10 +23,6 @@ const LogInView: React.FC = () => {
   const location = useLocation();
 
   const from = location.state?.from;
-
-  useEffect(() => {
-    configureFirebaseUI(from);
-  }, [from]);
 
   const { generalError } = loginInputErrors;
 
@@ -48,11 +42,15 @@ const LogInView: React.FC = () => {
     handleAuth("login", navigate, setIsSending, setLoginInputErrors, authFormData, from);
   };
 
+  const handleSignWithGoogle = async () => {
+    handleOAuth(navigate, setLoginInputErrors, from);
+  };
 
   return (
     <AuthForm
       formType="login"
       onSubmit={handleLoginFormSubmit}
+      onOAuth={handleSignWithGoogle}
       alert={alert}
       isSending={isSending}
       authFormData={authFormData}

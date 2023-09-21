@@ -3,14 +3,12 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 //* Utils
 import { INITIAL_AUTH_ERRORS } from "../../utils/errorHandling";
-import { configureFirebaseUI } from "../../utils/firebaseUIAuthConfig";
 //* Components
 import AuthForm from "../../components/auth/auth-form";
 //* Services
-import handleAuth from "../../services/authService";
+import handleAuth, { handleOAuth } from "../../services/authService";
 //* Types
 import { AlertState, AuthData, AuthErrors } from "../../types/type";
-
 
 const SignUpView: React.FC = () => {
   const [authFormData, setAuthFormData] = useState<AuthData>({
@@ -22,10 +20,6 @@ const SignUpView: React.FC = () => {
   const [signupInputErrors, setSignupInputErrors] = useState<AuthErrors>({ ...INITIAL_AUTH_ERRORS });
   const [isSending, setIsSending] = useState<boolean>(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    configureFirebaseUI();
-  }, []);
 
   const { generalError } = signupInputErrors;
 
@@ -45,10 +39,15 @@ const SignUpView: React.FC = () => {
     handleAuth("signup", navigate, setIsSending, setSignupInputErrors, authFormData);
   };
 
+  const handleSignWithGoogle = async () => {
+    handleOAuth(navigate, setSignupInputErrors);
+  };
+
   return (
     <AuthForm
       formType="sign-up"
       onSubmit={handleSignUpFormSubmit}
+      onOAuth={handleSignWithGoogle}
       alert={alert}
       isSending={isSending}
       authFormData={authFormData}

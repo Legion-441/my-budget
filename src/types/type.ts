@@ -28,5 +28,6 @@ export type AuthErrors = {
   emailError: string;
   passwordError: string;
   confirmPasswordError: string;
+  providerError: string;
   generalError: string;
 }

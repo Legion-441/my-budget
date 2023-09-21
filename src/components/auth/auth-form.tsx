@@ -1,6 +1,7 @@
 import { useState } from "react";
 //* MUI & Icons
 import { Alert, AlertTitle, Button, Divider, Stack, TextField, Typography } from "@mui/material";
+import { Google } from "@mui/icons-material";
 //* Components
 import PasswordInput from "./password-input";
 import ForgotPasswordButton from "./forgot-password-button";
@@ -9,10 +10,10 @@ import PaperCard from "../../styled/paper-card/paper-card.styled";
 //* Types
 import { AlertState, AuthData, AuthErrors } from "../../types/type";
 
-
 interface FormProps {
   formType: "login" | "sign-up";
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  onOAuth: () => Promise<void>;
   alert: AlertState | null;
   isSending: boolean;
   authFormData: AuthData;
@@ -21,9 +22,19 @@ interface FormProps {
   setAuthFormData: React.Dispatch<React.SetStateAction<AuthData>>;
 }
 
-const AuthForm: React.FC<FormProps> = ({ formType, onSubmit, alert, isSending, authFormData, errors, setErrors, setAuthFormData }) => {
+const AuthForm: React.FC<FormProps> = ({
+  formType,
+  onSubmit,
+  onOAuth,
+  alert,
+  isSending,
+  authFormData,
+  errors,
+  setErrors,
+  setAuthFormData,
+}) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  
+
   const { emailError, passwordError, confirmPasswordError } = errors;
   const isLoginForm = formType === "login";
 
@@ -122,7 +133,12 @@ const AuthForm: React.FC<FormProps> = ({ formType, onSubmit, alert, isSending, a
         style={{ width: "100%", maxWidth: "360px", marginInline: "auto" }}
       >
         <Divider style={{ marginTop: "24px" }} />
-        <div id="firebaseui-auth-container"></div>
+        <Button type="button" variant="contained" onClick={onOAuth}>
+          <Google />
+          <Typography variant="button" marginLeft={2}>
+            Zaloguj z Google
+          </Typography>
+        </Button>
         <Stack direction="row" justifyContent="center" alignItems="center" spacing={1}>
           <Typography variant="body2">{isLoginForm ? "Nie masz jeszcze konta?" : "Masz już konto?"}</Typography>
           <Button

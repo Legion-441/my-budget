@@ -1,6 +1,8 @@
-import { useNavigate } from "react-router-dom";
+import { NavigateFunction } from "react-router-dom";
 //* Firebase
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
+import "firebase/compat/auth";
+import firebase from "firebase/compat/app";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, updateProfile } from "firebase/auth";
 import { auth } from "../firebase";
 //* Utils
 import { INITIAL_AUTH_ERRORS, getInputError } from "../utils/errorHandling";
@@ -23,14 +25,13 @@ const signupOperation = async (email: string, password: string, confirmPassword:
 
 const handleAuth = async (
   formType: "login" | "signup",
-  navigate: ReturnType<typeof useNavigate>,
+  navigate: NavigateFunction,
   setSending: React.Dispatch<React.SetStateAction<boolean>>,
   setInputErrors: React.Dispatch<React.SetStateAction<AuthErrors>>,
   authFormData: AuthData,
   from: string = "/"
 ) => {
   const { email, password, confirmPassword } = authFormData;
-
   setInputErrors({ ...INITIAL_AUTH_ERRORS });
   setSending(true);
 
@@ -51,3 +52,18 @@ const handleAuth = async (
 };
 
 export default handleAuth;
+
+export const handleOAuth = async (
+  navigate: NavigateFunction,
+  setInputErrors: React.Dispatch<React.SetStateAction<AuthErrors>>,
+  from: string = "/"
+) => {
+  try {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    await signInWithPopup(auth, provider);
+    navigate(from);
+  } catch (error) {
+    const inputErrors = getInputError(error);
+    setInputErrors(inputErrors);
+  }
+};
