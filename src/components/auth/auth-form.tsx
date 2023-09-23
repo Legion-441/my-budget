@@ -130,7 +130,12 @@ const AuthForm: React.FC<FormProps> = ({ formType }) => {
         </Stack>
       </Stack>
 
-      <AuthFooter isLoginForm={isLoginForm} isSending={isSending} providerClick={() => handleOAuth(navigate, setErrors)} />
+      <AuthFooter
+        isLoginForm={isLoginForm}
+        isSending={isSending}
+        providerError={errors.providerError}
+        providerClick={() => handleOAuth(navigate, setErrors)}
+      />
     </PaperCard>
   );
 };
