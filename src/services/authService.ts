@@ -7,7 +7,7 @@ import { auth } from "../firebase";
 //* Utils
 import { INITIAL_AUTH_ERRORS, getInputError } from "../utils/errorHandling";
 //* Types
-import { AuthData, AuthErrors } from "../types/type";
+import { AuthData, AuthErrors, FormType } from "../types/authTypes";
 
 const signupOperation = async (email: string, password: string, confirmPassword: string) => {
   if (password !== confirmPassword) {
@@ -24,7 +24,7 @@ const signupOperation = async (email: string, password: string, confirmPassword:
 };
 
 const handleAuth = async (
-  formType: "login" | "signup",
+  formType: FormType,
   navigate: NavigateFunction,
   setSending: React.Dispatch<React.SetStateAction<boolean>>,
   setInputErrors: React.Dispatch<React.SetStateAction<AuthErrors>>,

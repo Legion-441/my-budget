@@ -1,60 +1,60 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 //* MUI & Icons
-import { Alert, AlertTitle, Button, Divider, Stack, TextField, Typography } from "@mui/material";
-import { Google } from "@mui/icons-material";
+import { Alert, AlertTitle, Button, Stack, TextField } from "@mui/material";
+//* Utils
+import { INITIAL_AUTH_ERRORS } from "../../utils/errorHandling";
+import { validateConfirmPassword, validateLengthPassword } from "../../utils/authInputValidation";
 //* Components
 import PasswordInput from "./password-input";
 import ForgotPasswordButton from "./forgot-password-button";
+import AuthFooter from "./auth-footer";
 //* Styled Components
 import PaperCard from "../../styled/paper-card/paper-card.styled";
+//* Services
+import handleAuth, { handleOAuth } from "../../services/authService";
 //* Types
-import { AlertState, AuthData, AuthErrors } from "../../types/type";
+import { AlertState } from "../../types/AppTypes";
+import { AuthData, AuthErrors, FormType } from "../../types/authTypes";
 
-interface FormProps {
-  formType: "login" | "sign-up";
-  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
-  onOAuth: () => Promise<void>;
-  alert: AlertState | null;
-  isSending: boolean;
-  authFormData: AuthData;
-  errors: AuthErrors;
-  setErrors: React.Dispatch<React.SetStateAction<AuthErrors>>;
-  setAuthFormData: React.Dispatch<React.SetStateAction<AuthData>>;
-}
+const INITIAL_AUTH_FORM_DATA: AuthData = {
+  email: "",
+  password: "",
+  confirmPassword: "",
+};
 
-const AuthForm: React.FC<FormProps> = ({
-  formType,
-  onSubmit,
-  onOAuth,
-  alert,
-  isSending,
-  authFormData,
-  errors,
-  setErrors,
-  setAuthFormData,
-}) => {
+type FormProps = { formType: FormType };
+
+const AuthForm: React.FC<FormProps> = ({ formType }) => {
+  const [authFormData, setAuthFormData] = useState<AuthData>({ ...INITIAL_AUTH_FORM_DATA });
+  const [alert, setAlert] = useState<AlertState | null>(null);
+  const [errors, setErrors] = useState<AuthErrors>({ ...INITIAL_AUTH_ERRORS });
+  const [isSending, setIsSending] = useState<boolean>(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const { emailError, passwordError, confirmPasswordError } = errors;
+  const { generalError } = errors;
   const isLoginForm = formType === "login";
+  const from = isLoginForm && location.state?.from;
+
+  useEffect(() => {
+    if (generalError) {
+      setAlert({
+        severity: "error",
+        message: generalError,
+      });
+    } else {
+      setAlert(null);
+    }
+  }, [generalError]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>, input: keyof AuthData) => {
     setAuthFormData({ ...authFormData, [input]: event.target.value });
 
-    if ((input === "password" || input === "confirmPassword") && !isLoginForm) {
-      const validateLengthPassword = (password: string) => {
-        if (password.length < 6) {
-          return "Hasło musi mieć conajmniej 6 znaków.";
-        }
-        return "";
-      };
-      const validateConfirmPassword = (password: string, confirmPassword: string) => {
-        if (password !== confirmPassword) {
-          return "Hasła nie są identyczne.";
-        }
-        return "";
-      };
-
+    if (!isLoginForm && (input === "password" || input === "confirmPassword")) {
       const newPasswordError = input === "password" ? validateLengthPassword(event.target.value) : errors.passwordError;
       const newConfirmPasswordError = validateConfirmPassword(
         input === "password" ? event.target.value : authFormData.password,
@@ -69,11 +69,16 @@ const AuthForm: React.FC<FormProps> = ({
     }
   };
 
+  const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    handleAuth(formType, navigate, setIsSending, setErrors, authFormData, from);
+  };
+
   return (
     <PaperCard>
       <Stack
         component={"form"}
-        onSubmit={!isDialogOpen ? onSubmit : undefined}
+        onSubmit={!isDialogOpen ? handleFormSubmit : undefined}
         direction="column"
         justifyContent="flex-start"
         alignItems="stretch"
@@ -125,35 +130,7 @@ const AuthForm: React.FC<FormProps> = ({
         </Stack>
       </Stack>
 
-      <Stack
-        direction="column"
-        justifyContent="flex-start"
-        alignItems="stretch"
-        spacing={2}
-        style={{ width: "100%", maxWidth: "360px", marginInline: "auto" }}
-      >
-        <Divider style={{ marginTop: "24px" }} />
-        <Button type="button" variant="contained" onClick={onOAuth}>
-          <Google />
-          <Typography variant="button" marginLeft={2}>
-            Zaloguj z Google
-          </Typography>
-        </Button>
-        <Stack direction="row" justifyContent="center" alignItems="center" spacing={1}>
-          <Typography variant="body2">{isLoginForm ? "Nie masz jeszcze konta?" : "Masz już konto?"}</Typography>
-          <Button
-            disabled={isSending}
-            variant="text"
-            type="button"
-            onClick={() => {
-              window.location.replace(isLoginForm ? "/signup" : "/login");
-            }}
-            size="small"
-          >
-            {isLoginForm ? "Dołącz teraz." : "Zaloguj się teraz."}
-          </Button>
-        </Stack>
-      </Stack>
+      <AuthFooter isLoginForm={isLoginForm} isSending={isSending} providerClick={() => handleOAuth(navigate, setErrors)} />
     </PaperCard>
   );
 };

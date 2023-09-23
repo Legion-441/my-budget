@@ -9,14 +9,13 @@ interface ForgotPasswordButtonProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ForgotPasswordButton: React.FC<ForgotPasswordButtonProps> = ({ disabled, isOpen, setOpen}) => {
-
+const ForgotPasswordButton: React.FC<ForgotPasswordButtonProps> = ({ disabled, isOpen, setOpen }) => {
   const handleOpenDialog = () => {
-    setOpen(true)
+    setOpen(true);
   };
 
   const handleCloseDialog = () => {
-    setOpen(false)
+    setOpen(false);
   };
 
   return (

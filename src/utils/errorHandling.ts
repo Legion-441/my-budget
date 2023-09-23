@@ -1,8 +1,7 @@
 //* Firebase
 import { FirebaseError } from "firebase/app";
 //* Types
-import { AuthErrors } from "../types/type";
-
+import { AuthErrors } from "../types/authTypes";
 
 export const INITIAL_AUTH_ERRORS: AuthErrors = {
   emailError: "",
