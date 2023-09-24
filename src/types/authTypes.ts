@@ -8,7 +8,7 @@ export type AuthErrors = {
   emailError: string;
   passwordError: string;
   confirmPasswordError: string;
-  providerError: string;
+  externalProviderError: string;
   generalError: string;
 };
 

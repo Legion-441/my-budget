@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect } from 'react';
+import { useEffect } from "react";
 import { Outlet, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { selectPickedBudgetId, setPickedBudgetId } from "../../slices/app/app.slice";
@@ -11,22 +11,22 @@ import { PageContainer } from "../../styled/page-container/page-container.styled
 import AppHeader from "../../components/app-header/app-header";
 
 const MainView: React.FC = () => {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   const { id } = useParams();
   const budgetId = useAppSelector(selectPickedBudgetId);
 
-  useEffect(() => {      
-      const controller = new AbortController();
-      dispatch(fetchUserData())
-      return () => {
-        controller.abort()
-      };
+  useEffect(() => {
+    const controller = new AbortController();
+    dispatch(fetchUserData());
+    return () => {
+      controller.abort();
+    };
   }, [dispatch]);
 
-  useEffect(() => {    
+  useEffect(() => {
     if (budgetId !== id) {
-      const paramBudgetId = !id || id === 'undefined' ? "" : id
-      dispatch(setPickedBudgetId(paramBudgetId))
+      const paramBudgetId = !id || id === "undefined" ? "" : id;
+      dispatch(setPickedBudgetId(paramBudgetId));
     }
   }, [budgetId, id, dispatch]);
 

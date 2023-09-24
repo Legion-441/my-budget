@@ -7,7 +7,7 @@ export const INITIAL_AUTH_ERRORS: AuthErrors = {
   emailError: "",
   passwordError: "",
   confirmPasswordError: "",
-  providerError: "",
+  externalProviderError: "",
   generalError: "",
 };
 
@@ -42,9 +42,9 @@ export const getInputError = (error: FirebaseError | Error | unknown): AuthError
     "auth/missing-password": { errorField: "passwordError", errorText: "Wprowadź hasło" },
     "passwords-is-not-identical": { errorField: "confirmPasswordError", errorText: "Hasła nie są identyczne." },
     //* provider errors
-    "auth/unauthorized-domain": { errorField: "providerError", errorText: "Obecna domena nie jest upoważniona do operacji OAuth." },
-    "auth/popup-closed-by-user": { errorField: "providerError", errorText: "Popup zamknięte przez użytkownika" },
-    "auth/cancelled-popup-request": { errorField: "providerError", errorText: "Żądanie otwarcia popup anulowane" },
+    "auth/unauthorized-domain": { errorField: "externalProviderError", errorText: "Obecna domena nie jest upoważniona do operacji OAuth." },
+    "auth/popup-closed-by-user": { errorField: "externalProviderError", errorText: "Popup zamknięte przez użytkownika" },
+    "auth/cancelled-popup-request": { errorField: "externalProviderError", errorText: "Żądanie otwarcia popup anulowane" },
     //* general errors
     "auth/too-many-requests": { errorField: "generalError", errorText: "Osiągnięto limit prób logowania." },
     "auth/provider-already-linked": { errorField: "generalError", errorText: "Konto dostawcy jest już powiązane." },

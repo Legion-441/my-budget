@@ -35,8 +35,7 @@ const AuthForm: React.FC<FormProps> = ({ formType }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { emailError, passwordError, confirmPasswordError } = errors;
-  const { generalError } = errors;
+  const { emailError, passwordError, confirmPasswordError, externalProviderError, generalError } = errors;
   const isLoginForm = formType === "login";
   const from = isLoginForm && location.state?.from;
 
@@ -55,7 +54,7 @@ const AuthForm: React.FC<FormProps> = ({ formType }) => {
     setAuthFormData({ ...authFormData, [input]: event.target.value });
 
     if (!isLoginForm && (input === "password" || input === "confirmPassword")) {
-      const newPasswordError = input === "password" ? validateLengthPassword(event.target.value) : errors.passwordError;
+      const newPasswordError = input === "password" ? validateLengthPassword(event.target.value) : passwordError;
       const newConfirmPasswordError = validateConfirmPassword(
         input === "password" ? event.target.value : authFormData.password,
         input === "confirmPassword" ? event.target.value : authFormData.confirmPassword
@@ -133,7 +132,7 @@ const AuthForm: React.FC<FormProps> = ({ formType }) => {
       <AuthFooter
         isLoginForm={isLoginForm}
         isSending={isSending}
-        providerError={errors.providerError}
+        externalProviderError={externalProviderError}
         providerClick={() => handleOAuth(navigate, setErrors)}
       />
     </PaperCard>

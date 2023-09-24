@@ -1,32 +1,30 @@
+import { useEffect, useState } from "react";
 //* MUI & Icons
 import { Alert, AlertTitle, Button, Divider, Stack, Typography } from "@mui/material";
 import { Google } from "@mui/icons-material";
-import { useEffect, useState } from "react";
+//* Types
 import { AlertState } from "../../types/AppTypes";
 
 type AuthFooterProps = {
   isLoginForm: boolean;
   isSending: boolean;
-  providerError: string;
+  externalProviderError: string;
   providerClick: () => Promise<void>;
 };
 
-const AuthFooter: React.FC<AuthFooterProps> = ({ isLoginForm, isSending, providerError, providerClick }) => {
-  const [providerAlert, setProviderAlert] = useState<AlertState | null>({
-    severity: "error",
-    message: "this is a fckin error",
-  });
+const AuthFooter: React.FC<AuthFooterProps> = ({ isLoginForm, isSending, externalProviderError, providerClick }) => {
+  const [externalProviderAlert, setExternalProviderAlert] = useState<AlertState | null>(null);
 
   useEffect(() => {
-    if (providerError) {
-      setProviderAlert({
+    if (externalProviderError) {
+      setExternalProviderAlert({
         severity: "error",
-        message: providerError,
+        message: externalProviderError,
       });
     } else {
-      setProviderAlert(null);
+      setExternalProviderAlert(null);
     }
-  }, [providerError]);
+  }, [externalProviderError]);
 
   return (
     <Stack
@@ -37,10 +35,10 @@ const AuthFooter: React.FC<AuthFooterProps> = ({ isLoginForm, isSending, provide
       style={{ width: "100%", maxWidth: "360px", marginInline: "auto" }}
     >
       <Divider style={{ marginTop: "24px" }} />
-      {providerAlert ? (
-        <Alert severity={providerAlert.severity} variant="outlined">
-          {providerAlert.title && <AlertTitle>{providerAlert.title}</AlertTitle>}
-          {providerAlert.message}
+      {externalProviderAlert ? (
+        <Alert severity={externalProviderAlert.severity} variant="outlined">
+          {externalProviderAlert.title && <AlertTitle>{externalProviderAlert.title}</AlertTitle>}
+          {externalProviderAlert.message}
         </Alert>
       ) : null}
       <Button type="button" variant="contained" onClick={providerClick}>
