@@ -20,7 +20,7 @@ export interface UserState {
   fetchError: string | null
 }
 
-const initialState: UserState = {
+const INITIAL_USER_STATE: UserState = {
   data: {
     username: "",
     budgetsList: [],
@@ -31,7 +31,7 @@ const initialState: UserState = {
 
 export const userSlice = createSlice({
   name: 'user',
-  initialState,
+  initialState: INITIAL_USER_STATE,
   reducers: {
     startFetchingUserInfo: (state) => {
       state.isFetching = true;
@@ -51,12 +51,17 @@ export const userSlice = createSlice({
       state.fetchError = null;
       state.data.budgetsList = action.payload
     },
+    clearUserInfo: (state) => {
+      state.isFetching = false;
+      state.fetchError = null;
+      state.data = INITIAL_USER_STATE.data
+    },
   }
 })
 
 
 //! Actions
-export const { startFetchingUserInfo, setFetchError, setUsername, setBudgetsList, } = userSlice.actions;
+export const { startFetchingUserInfo, setFetchError, setUsername, setBudgetsList, clearUserInfo } = userSlice.actions;
 export const fetchUserData = (): AppThunk => async (dispatch) => {
   dispatch(startFetchingUserInfo())
   fetchUserInfo()
