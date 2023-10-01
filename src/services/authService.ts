@@ -29,7 +29,7 @@ const handleAuth = async (
   setSending: React.Dispatch<React.SetStateAction<boolean>>,
   setInputErrors: React.Dispatch<React.SetStateAction<AuthErrors>>,
   authFormData: AuthData,
-  from: string = "/"
+  from: string
 ) => {
   const { email, password, confirmPassword } = authFormData;
   setInputErrors({ ...INITIAL_AUTH_ERRORS });
@@ -43,7 +43,7 @@ const handleAuth = async (
     }
 
     setSending(false);
-    navigate(from);
+    navigate(from || "/");
   } catch (error) {
     const inputErrors = getAuthInputError(error);
     setInputErrors(inputErrors);
