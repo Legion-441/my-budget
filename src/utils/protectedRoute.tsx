@@ -28,7 +28,7 @@ const ProtectedRoute: React.FC = () => {
       setIsMounted(false);
       unsubscribe()
     }
-  }, [navigate, location]);
+  }, [navigate, location, isMounted]);
   
 
   return (

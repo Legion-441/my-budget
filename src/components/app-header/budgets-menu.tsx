@@ -15,7 +15,7 @@ interface AppMenuProps {
 const AppBudgetsMenu: React.FC<AppMenuProps> = ({anchorEl, handleToggleBudgetsMenu}) => {
   const isMenuOpen: boolean = Boolean(anchorEl);
   const navigate = useNavigate();
-  const { data, isFetching, fetchError } = useAppSelector(selectUserInfo)
+  const { data } = useAppSelector(selectUserInfo)
   const { budgetsList } = data
   
   const menuId = 'primary-search-budget-menu';

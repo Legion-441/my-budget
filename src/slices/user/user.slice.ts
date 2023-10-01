@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../../app/store";
 //* Utils
-import { fetchUserInfo } from "../../utils/getBudgetList";
+import { fetchFirebaseUserInfo } from "../../utils/userInfo";
 
 export interface BudgetsListItem {
   name: string,
@@ -10,7 +10,6 @@ export interface BudgetsListItem {
 }
 
 export interface UserInfo {
-  username: string
   budgetsList: BudgetsListItem[]
 }
 
@@ -22,7 +21,6 @@ export interface UserState {
 
 const initialState: UserState = {
   data: {
-    username: "",
     budgetsList: [],
   },
   isFetching: false,
@@ -41,11 +39,6 @@ export const userSlice = createSlice({
       state.isFetching = false;
       state.fetchError = action.payload
     },
-    setUsername: (state, action: PayloadAction<string>) => {
-      state.isFetching = false;
-      state.fetchError = null;
-      state.data.username = action.payload
-    },
     setBudgetsList: (state, action: PayloadAction<BudgetsListItem[]>) => {
       state.isFetching = false;
       state.fetchError = null;
@@ -56,13 +49,12 @@ export const userSlice = createSlice({
 
 
 //! Actions
-export const { startFetchingUserInfo, setFetchError, setUsername, setBudgetsList, } = userSlice.actions;
+export const { startFetchingUserInfo, setFetchError, setBudgetsList, } = userSlice.actions;
 export const fetchUserData = (): AppThunk => async (dispatch) => {
   dispatch(startFetchingUserInfo())
-  fetchUserInfo()
+  fetchFirebaseUserInfo()
     .then((data) => {
-      dispatch(setUsername(data.username || "" ));
-      dispatch(setBudgetsList(data.budgets || []));
+      dispatch(setBudgetsList(data?.budgets || []));
     })
     .catch((error) => {
       dispatch(setFetchError(error.message))

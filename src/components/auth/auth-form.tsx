@@ -37,7 +37,7 @@ const AuthForm: React.FC<FormProps> = ({ formType }) => {
 
   const { emailError, passwordError, confirmPasswordError, externalProviderError, generalError } = errors;
   const isLoginForm = formType === "login";
-  const from = isLoginForm && location.state?.from;
+  const from = isLoginForm && location.state.from
 
   useEffect(() => {
     if (generalError) {
