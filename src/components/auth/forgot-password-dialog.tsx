@@ -5,7 +5,7 @@ import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText,
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../../firebase";
 //* Utils
-import { getAuthInputError } from "../../utils/AuthErrorHandling";
+import { getAuthInputError } from "../../utils/authErrorHandling";
 
 
 interface ForgotPasswordDialogProps {

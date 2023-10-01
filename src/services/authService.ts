@@ -5,7 +5,7 @@ import firebase from "firebase/compat/app";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, updateProfile } from "firebase/auth";
 import { auth } from "../firebase";
 //* Utils
-import { INITIAL_AUTH_ERRORS, getAuthInputError } from "../utils/AuthErrorHandling";
+import { INITIAL_AUTH_ERRORS, getAuthInputError } from "../utils/authErrorHandling";
 //* Types
 import { AuthData, AuthErrors, FormType } from "../types/authTypes";
 
