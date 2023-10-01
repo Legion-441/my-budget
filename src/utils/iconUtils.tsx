@@ -1,16 +1,15 @@
 import * as React from 'react';
-import { Groups, Person, Surfing } from "@mui/icons-material";
+import { Groups, ImageNotSupported, Person, Surfing } from "@mui/icons-material";
 
-const iconMapping: { [key: string]: React.ElementType } = {
-  Person: Person,
-  Groups: Groups,
-  Surfing: Surfing,
+type BudgetIcon = "Person" | "Groups" | "Surfing"
+
+const iconMapping: Record<BudgetIcon, React.ElementType> = {
+  "Person": Person,
+  "Groups": Groups,
+  "Surfing": Surfing,
 };
 
 export const getIconComponent = (icon: string): React.ReactNode => {
-  const IconComponent = iconMapping[icon];
-  if (IconComponent) {
-    return <IconComponent fontSize="small" />;
-  }
-  return null;
+  const IconComponent: React.ElementType = iconMapping[icon as BudgetIcon] || ImageNotSupported;
+  return <IconComponent fontSize="small" />;
 }
