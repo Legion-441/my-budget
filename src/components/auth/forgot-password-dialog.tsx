@@ -5,7 +5,7 @@ import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText,
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../../firebase";
 //* Utils
-import { getInputError } from "../../utils/errorHandling";
+import { getAuthInputError } from "../../utils/AuthErrorHandling";
 
 
 interface ForgotPasswordDialogProps {
@@ -26,7 +26,7 @@ const ForgotPasswordDialog = ({ isOpen, onClose }: ForgotPasswordDialogProps) =>
         setIsEmailSend(true);
       })
       .catch((error) => {
-        const inputError = getInputError(error);
+        const inputError = getAuthInputError(error);
         setError(inputError.emailError);
       });
   };

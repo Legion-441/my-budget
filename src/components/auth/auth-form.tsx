@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 //* MUI & Icons
 import { Alert, AlertTitle, Button, Stack, TextField } from "@mui/material";
 //* Utils
-import { INITIAL_AUTH_ERRORS } from "../../utils/errorHandling";
+import { INITIAL_AUTH_ERRORS } from "../../utils/AuthErrorHandling";
 import { validateConfirmPassword, validateLengthPassword } from "../../utils/authInputValidation";
 //* Components
 import PasswordInput from "./password-input";

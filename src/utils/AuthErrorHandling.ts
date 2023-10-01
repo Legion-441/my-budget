@@ -13,7 +13,7 @@ export const INITIAL_AUTH_ERRORS: AuthErrors = {
 
 type AuthErrorField = keyof AuthErrors;
 
-export const getInputError = (error: FirebaseError | Error | unknown): AuthErrors => {
+export const getAuthInputError = (error: FirebaseError | Error | unknown): AuthErrors => {
   let errorIdentifier: string;
 
   if (error instanceof FirebaseError) {
