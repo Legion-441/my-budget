@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 //* MUI & Icons
 import { Alert, AlertTitle, Button, Stack, TextField } from "@mui/material";
 //* Utils
-import { INITIAL_AUTH_ERRORS } from "../../utils/errorHandling";
+import { INITIAL_AUTH_ERRORS } from "../../utils/authErrorHandling";
 import { validateConfirmPassword, validateLengthPassword } from "../../utils/authInputValidation";
 //* Components
 import PasswordInput from "./password-input";
@@ -37,7 +37,7 @@ const AuthForm: React.FC<FormProps> = ({ formType }) => {
 
   const { emailError, passwordError, confirmPasswordError, externalProviderError, generalError } = errors;
   const isLoginForm = formType === "login";
-  const from = isLoginForm && location.state.from
+  const from = isLoginForm && location.state.from;
 
   useEffect(() => {
     if (generalError) {
@@ -52,24 +52,26 @@ const AuthForm: React.FC<FormProps> = ({ formType }) => {
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>, input: keyof AuthData) => {
     setAuthFormData({ ...authFormData, [input]: event.target.value });
-
-    if (!isLoginForm && (input === "password" || input === "confirmPassword")) {
-      const newPasswordError = input === "password" ? validateLengthPassword(event.target.value) : passwordError;
-      const newConfirmPasswordError = validateConfirmPassword(
-        input === "password" ? event.target.value : authFormData.password,
-        input === "confirmPassword" ? event.target.value : authFormData.confirmPassword
-      );
-
-      setErrors({
-        ...errors,
-        passwordError: newPasswordError,
-        confirmPasswordError: newConfirmPasswordError,
-      });
-    }
   };
 
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (!isLoginForm) {
+      const newPasswordError = validateLengthPassword(authFormData.password);
+      const newConfirmPasswordError = validateConfirmPassword(authFormData.password, authFormData.confirmPassword);
+
+      setErrors({
+        ...INITIAL_AUTH_ERRORS,
+        passwordError: newPasswordError,
+        confirmPasswordError: newConfirmPasswordError,
+      });
+
+      if (newPasswordError || newConfirmPasswordError) {
+        return;
+      }
+    }
+
     handleAuth(formType, navigate, setIsSending, setErrors, authFormData, from);
   };
 

@@ -5,7 +5,7 @@ import firebase from "firebase/compat/app";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, updateProfile } from "firebase/auth";
 import { auth, db } from "../firebase";
 //* Utils
-import { INITIAL_AUTH_ERRORS, getInputError } from "../utils/errorHandling";
+import { INITIAL_AUTH_ERRORS, getAuthInputError } from "../utils/authErrorHandling";
 //* Types
 import { AuthData, AuthErrors, FormType } from "../types/authTypes";
 import { createFirestoreUserInfo } from "../utils/userInfo";
@@ -54,7 +54,7 @@ const handleAuth = async (
     setSending(false);
     navigate(from || "/");
   } catch (error) {
-    const inputErrors = getInputError(error);
+    const inputErrors = getAuthInputError(error);
     setInputErrors(inputErrors);
     setSending(false);
   }
@@ -72,7 +72,7 @@ export const handleOAuth = async (
     await signInWithPopup(auth, provider);
     navigate(from);
   } catch (error) {
-    const inputErrors = getInputError(error);
+    const inputErrors = getAuthInputError(error);
     setInputErrors(inputErrors);
   }
 };

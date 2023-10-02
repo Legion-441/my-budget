@@ -1,56 +1,62 @@
-import * as React from 'react';
-import { useNavigate } from 'react-router-dom';
+import * as React from "react";
+import { useNavigate } from "react-router-dom";
+import { clearUserInfo } from "../../slices/user/user.slice";
+import { useDispatch } from "react-redux";
 //* Firebase
-import { signOut } from 'firebase/auth';
-import { auth } from '../../firebase';
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebase";
 //* MUI & Icons
-import { Menu, MenuItem, Divider, ListItemIcon } from '@mui/material';
-import { AccountCircle, Settings, Logout } from '@mui/icons-material'
+import { Menu, MenuItem, Divider, ListItemIcon } from "@mui/material";
+import { AccountCircle, Settings, Logout } from "@mui/icons-material";
 //* Components
-import { DarkModeSwitch } from './darkModeSwitch';
+import { DarkModeSwitch } from "./darkModeSwitch";
 
 interface AppMenuProps {
   anchorEl: null | HTMLElement;
   handleToggleProfileMenu: () => void;
 }
 
-const AppProfileMenu: React.FC<AppMenuProps> = ({anchorEl, handleToggleProfileMenu}) => {
-  const navigate = useNavigate()
+const AppProfileMenu: React.FC<AppMenuProps> = ({ anchorEl, handleToggleProfileMenu }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const isMenuOpen: boolean = Boolean(anchorEl);
-  const menuId = 'primary-search-account-menu';
+  const menuId = "primary-search-account-menu";
 
-  const handleLogout = () => {
-    handleToggleProfileMenu()
-    signOut(auth).catch(error => {
+  const handleLogout = async () => {
+    handleToggleProfileMenu();
+    try {
+      await signOut(auth);
+      dispatch(clearUserInfo());
+    } catch (error) {
       console.error(error);
-    })
-  }
-  
+    }
+  };
+
   const handleProfile = () => {
-    handleToggleProfileMenu()
-    navigate('/profile')
-  }
+    handleToggleProfileMenu();
+    navigate("/profile");
+  };
 
   return (
     <Menu
       anchorEl={anchorEl}
       anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'right',
+        vertical: "bottom",
+        horizontal: "right",
       }}
       id={menuId}
       keepMounted
       transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
+        vertical: "top",
+        horizontal: "right",
       }}
       open={isMenuOpen}
       onClose={() => handleToggleProfileMenu()}
       PaperProps={{
         elevation: 15,
         sx: {
-          overflow: 'visible',
-          filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+          overflow: "visible",
+          filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
           mt: 1.5,
         },
       }}
@@ -61,7 +67,7 @@ const AppProfileMenu: React.FC<AppMenuProps> = ({anchorEl, handleToggleProfileMe
         </ListItemIcon>
         Profile
       </MenuItem>
-      <DarkModeSwitch/>
+      <DarkModeSwitch />
       <Divider />
       <MenuItem onClick={() => handleToggleProfileMenu()}>
         <ListItemIcon>
@@ -77,6 +83,6 @@ const AppProfileMenu: React.FC<AppMenuProps> = ({anchorEl, handleToggleProfileMe
       </MenuItem>
     </Menu>
   );
-}
+};
 
 export default AppProfileMenu;
