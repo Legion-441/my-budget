@@ -2,26 +2,31 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../../app/store";
 //* Utils
 import { fetchFirebaseUserInfo } from "../../utils/userInfo";
+import { Timestamp } from "firebase/firestore";
 
 export interface BudgetsListItem {
   name: string,
   id: string,
   icon: string
+  createdAt: Timestamp,
+  ownerID: string
 }
 
-export interface UserInfo {
-  budgetsList: BudgetsListItem[]
+export interface UserBudgets {
+  budgetsListAsOwner: BudgetsListItem[]
+  budgetsListAsMember: BudgetsListItem[]
 }
 
 export interface UserState {
-  data: UserInfo
+  data: UserBudgets
   isFetching: boolean
   fetchError: string | null
 }
 
 const INITIAL_USER_STATE: UserState = {
   data: {
-    budgetsList: [],
+    budgetsListAsOwner: [],
+    budgetsListAsMember: [],
   },
   isFetching: false,
   fetchError: null,
@@ -39,10 +44,10 @@ export const userSlice = createSlice({
       state.isFetching = false;
       state.fetchError = action.payload
     },
-    setBudgetsList: (state, action: PayloadAction<BudgetsListItem[]>) => {
+    setBudgetsList: (state, action: PayloadAction<UserBudgets>) => {
       state.isFetching = false;
       state.fetchError = null;
-      state.data.budgetsList = action.payload
+      state.data = action.payload
     },
     clearUserInfo: (state) => {
       state.isFetching = false;
@@ -59,7 +64,7 @@ export const fetchUserData = (): AppThunk => async (dispatch) => {
   dispatch(startFetchingUserInfo())
   fetchFirebaseUserInfo()
     .then((data) => {
-      dispatch(setBudgetsList(data?.budgets || []));
+      dispatch(setBudgetsList(data || INITIAL_USER_STATE.data));
     })
     .catch((error) => {
       dispatch(setFetchError(error.message))
