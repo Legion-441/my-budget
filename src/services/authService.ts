@@ -3,32 +3,23 @@ import { NavigateFunction } from "react-router-dom";
 import "firebase/compat/auth";
 import firebase from "firebase/compat/app";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, updateProfile } from "firebase/auth";
-import { auth, db } from "../firebase";
+import { auth } from "../firebase";
 //* Utils
 import { INITIAL_AUTH_ERRORS, getAuthInputError } from "../utils/authErrorHandling";
 //* Types
 import { AuthData, AuthErrors, FormType } from "../types/authTypes";
-import { createFirestoreUserInfo } from "../utils/userInfo";
-import { doc } from "firebase/firestore";
 
 const signupOperation = async (email: string, password: string, confirmPassword: string) => {
   if (password !== confirmPassword) throw new Error("passwords-is-not-identical");
 
   const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-  
-  try {
-    const currentUserUid = userCredential.user.uid
-    const userInfoDoc = doc(db, "users", currentUserUid )
-    await createFirestoreUserInfo(userInfoDoc)
-  } catch (error) {
-    console.error(error);
-  }
-  
+    
   try {
     const emailUsername = email.split("@")[0].split(".")[0];
     const initialUsername = emailUsername.charAt(0).toUpperCase() + emailUsername.slice(1);
     await updateProfile(userCredential.user, { displayName: initialUsername });
   } catch (error) {
+    // TODO: handle errors
     console.error(error);
   }
 };
