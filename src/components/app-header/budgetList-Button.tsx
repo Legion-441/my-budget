@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { BudgetsListItem, fetchUserData, selectUserInfo } from "../../slices/user/user.slice";
+import { fetchUserData, selectUserInfo } from "../../slices/user/user.slice";
 //* MUI
 import { ExpandLess, ExpandMore, Refresh } from "@mui/icons-material";
 import { Box, Button, IconButton, Typography } from "@mui/material";
@@ -8,17 +8,19 @@ import { Box, Button, IconButton, Typography } from "@mui/material";
 import CustomAlert from "../../styled/budgetList-alert/budgetList-alert.styled";
 //* Utils
 import { getIconComponent } from "../../utils/iconUtils";
+//* Types
+import { BudgetsListItem } from "../../types/AppTypes";
 
 interface BudgetListButtonProps {
   disabled: boolean;
-  isOpen: boolean
+  isOpen: boolean;
   handleToggleBudgetsMenu: () => void;
   selectedBudget: null | BudgetsListItem;
 }
 
-const BudgetListButton: React.FC<BudgetListButtonProps> = ({disabled, isOpen, handleToggleBudgetsMenu, selectedBudget }) => {
-  const { isFetching, fetchError } = useAppSelector(selectUserInfo)
-  const dispatch = useAppDispatch()
+const BudgetListButton: React.FC<BudgetListButtonProps> = ({ disabled, isOpen, handleToggleBudgetsMenu, selectedBudget }) => {
+  const { isFetching, fetchError } = useAppSelector(selectUserInfo);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const controller = new AbortController();
@@ -27,54 +29,53 @@ const BudgetListButton: React.FC<BudgetListButtonProps> = ({disabled, isOpen, ha
     };
   }, []);
 
-
   if (fetchError) {
     return (
-      <Box 
+      <Box
         sx={{
-          flexGrow: {sm: 0, xs: 1},
-          minWidth: {sm: 200, xs: 80}
+          flexGrow: { sm: 0, xs: 1 },
+          minWidth: { sm: 200, xs: 80 },
         }}
       >
         <CustomAlert
           variant="outlined"
           severity="error"
-          sx={{ 
-            flexGrow: {sm: 0, xs: 1},
+          sx={{
+            flexGrow: { sm: 0, xs: 1 },
           }}
           action={
             <IconButton aria-label="refresh" size="small" onClick={() => dispatch(fetchUserData())}>
               <Refresh fontSize="small" />
             </IconButton>
-          }           
+          }
         >
           <Typography
             noWrap={true}
             variant="body1"
             fontSize={"medium"}
-            overflow='hidden'
-            textOverflow='ellipsis'
+            overflow="hidden"
+            textOverflow="ellipsis"
           >
             {fetchError}
           </Typography>
         </CustomAlert>
       </Box>
-    )
+    );
   }
 
   return (
     <Button
-      id='BudgetButton'
-      aria-label='Wybierz budżet'
+      id="BudgetButton"
+      aria-label="Wybierz budżet"
       color="inherit"
       variant="outlined"
       disabled={isFetching || disabled}
       onClick={handleToggleBudgetsMenu}
       sx={{
-        display: 'flex',
-        alignItems: 'center',
-        flexGrow: {sm: 0, xs: 1},
-        minWidth: {sm: 200, xs: 80}
+        display: "flex",
+        alignItems: "center",
+        flexGrow: { sm: 0, xs: 1 },
+        minWidth: { sm: 200, xs: 80 },
       }}
       startIcon={selectedBudget?.icon && getIconComponent(selectedBudget.icon)}
       endIcon={isOpen ? <ExpandLess /> : <ExpandMore />}
@@ -83,15 +84,15 @@ const BudgetListButton: React.FC<BudgetListButtonProps> = ({disabled, isOpen, ha
         noWrap={true}
         variant="body1"
         fontSize={"medium"}
-        overflow='hidden'
-        textOverflow='ellipsis'
+        overflow="hidden"
+        textOverflow="ellipsis"
         flexGrow={1}
-        textAlign={'left'}
+        textAlign={"left"}
       >
-        {isFetching ? 'Pobieram listę...' : (selectedBudget?.name || 'Wybierz budżet...')}
+        {isFetching ? "Pobieram listę..." : selectedBudget?.name || "Wybierz budżet..."}
       </Typography>
     </Button>
-  )
-}
+  );
+};
 
 export default BudgetListButton;

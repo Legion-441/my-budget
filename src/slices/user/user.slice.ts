@@ -1,32 +1,24 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../../app/store";
 //* Utils
-import { fetchFirebaseUserInfo } from "../../utils/userInfo";
-import { Timestamp } from "firebase/firestore";
+import { fetchUserBudgetsList } from "../../utils/userInfo";
+//* Types
+import { BudgetsListItem } from "../../types/AppTypes";
 
-export interface BudgetsListItem {
-  name: string,
-  id: string,
-  icon: string
-  createdAt: Timestamp,
-  ownerID: string
+
+type BudgetsLists = {
+  budgetsList: BudgetsListItem[]
 }
 
-export interface UserBudgets {
-  budgetsListAsOwner: BudgetsListItem[]
-  budgetsListAsMember: BudgetsListItem[]
-}
-
-export interface UserState {
-  data: UserBudgets
+type UserState = {
+  data: BudgetsLists
   isFetching: boolean
   fetchError: string | null
 }
 
 const INITIAL_USER_STATE: UserState = {
   data: {
-    budgetsListAsOwner: [],
-    budgetsListAsMember: [],
+    budgetsList: [],
   },
   isFetching: false,
   fetchError: null,
@@ -44,15 +36,15 @@ export const userSlice = createSlice({
       state.isFetching = false;
       state.fetchError = action.payload
     },
-    setBudgetsList: (state, action: PayloadAction<UserBudgets>) => {
+    setBudgetsList: (state, action: PayloadAction<BudgetsListItem[]>) => {
       state.isFetching = false;
       state.fetchError = null;
-      state.data = action.payload
+      state.data.budgetsList = action.payload
     },
     clearUserInfo: (state) => {
       state.isFetching = false;
       state.fetchError = null;
-      state.data = INITIAL_USER_STATE.data
+      state = INITIAL_USER_STATE
     },
   }
 })
@@ -62,9 +54,9 @@ export const userSlice = createSlice({
 export const { startFetchingUserInfo, setFetchError, setBudgetsList, clearUserInfo } = userSlice.actions;
 export const fetchUserData = (): AppThunk => async (dispatch) => {
   dispatch(startFetchingUserInfo())
-  fetchFirebaseUserInfo()
+  fetchUserBudgetsList()
     .then((data) => {
-      dispatch(setBudgetsList(data || INITIAL_USER_STATE.data));
+      dispatch(setBudgetsList(data || INITIAL_USER_STATE));
     })
     .catch((error) => {
       dispatch(setFetchError(error.message))
