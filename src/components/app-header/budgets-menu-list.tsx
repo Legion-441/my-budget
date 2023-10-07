@@ -2,7 +2,7 @@ import * as React from "react";
 //* Firebase
 import { auth } from "../../firebase";
 //* Utils
-import { getIconComponent } from "../../utils/iconUtils";
+import { getIconComponent } from "../../utils/icon-utils";
 //* MUI
 import { MenuItem, ListItemIcon, ListItemText, Divider } from "@mui/material";
 //* Types

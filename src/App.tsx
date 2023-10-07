@@ -19,7 +19,7 @@ import UserProfileView from './views/user-profile/user-profile';
 import { ThemeProvider } from '@mui/material/styles';
 import { darkTheme, lightTheme } from './styled/theme';
 //* Utils
-import ProtectedRoute from './utils/protectedRoute';
+import ProtectedRoute from './utils/protected-route';
 
 
 const App: React.FC = () => {

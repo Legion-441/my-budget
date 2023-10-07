@@ -1,5 +1,5 @@
 //* Firebase
-import { DocumentData, Query, QuerySnapshot, collection, getDocs, or, query, where } from "firebase/firestore";
+import { DocumentData, QuerySnapshot, collection, getDocs, or, query, where } from "firebase/firestore";
 import { auth, db } from "../firebase";
 //* Types
 import { BudgetsListItem } from "../types/AppTypes";

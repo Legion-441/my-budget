@@ -7,7 +7,7 @@ import { Box, Button, IconButton, Typography } from "@mui/material";
 //* Styled Components
 import CustomAlert from "../../styled/budgetList-alert/budgetList-alert.styled";
 //* Utils
-import { getIconComponent } from "../../utils/iconUtils";
+import { getIconComponent } from "../../utils/icon-utils";
 //* Types
 import { BudgetsListItem } from "../../types/AppTypes";
 
