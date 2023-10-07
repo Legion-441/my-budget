@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../../app/store";
 //* Utils
-import { fetchUserBudgetsList } from "../../utils/fetch-budgets-list";
+import { fetchUserBudgetsList } from "../../services/fetch-budgets-list";
 //* Types
 import { BudgetsListItem } from "../../types/AppTypes";
 
