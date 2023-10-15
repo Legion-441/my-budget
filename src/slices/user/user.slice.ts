@@ -5,16 +5,15 @@ import { fetchUserBudgetsList } from "../../services/fetch-budgets-list";
 //* Types
 import { BudgetsListItem } from "../../types/AppTypes";
 
-
 type BudgetsLists = {
-  budgetsList: BudgetsListItem[]
-}
+  budgetsList: BudgetsListItem[];
+};
 
 type UserState = {
-  data: BudgetsLists
-  isFetching: boolean
-  fetchError: string | null
-}
+  data: BudgetsLists;
+  isFetching: boolean;
+  fetchError: string | null;
+};
 
 const INITIAL_USER_STATE: UserState = {
   data: {
@@ -22,48 +21,50 @@ const INITIAL_USER_STATE: UserState = {
   },
   isFetching: false,
   fetchError: null,
-}
+};
 
 export const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState: INITIAL_USER_STATE,
   reducers: {
     startFetchingUserInfo: (state) => {
       state.isFetching = true;
-      state.fetchError = null
+      state.fetchError = null;
     },
     setFetchError: (state, action: PayloadAction<string>) => {
       state.isFetching = false;
-      state.fetchError = action.payload
+      state.fetchError = action.payload;
     },
     setBudgetsList: (state, action: PayloadAction<BudgetsListItem[]>) => {
       state.isFetching = false;
       state.fetchError = null;
-      state.data.budgetsList = action.payload
+      state.data.budgetsList = action.payload;
+    },
+    addBudgetToList: (state, action: PayloadAction<BudgetsListItem>) => {
+      state.data.budgetsList.push(action.payload);
     },
     clearUserInfo: (state) => {
       state.isFetching = false;
       state.fetchError = null;
-      state = INITIAL_USER_STATE
+      state = INITIAL_USER_STATE;
     },
-  }
-})
-
+  },
+});
 
 //! Actions
-export const { startFetchingUserInfo, setFetchError, setBudgetsList, clearUserInfo } = userSlice.actions;
+export const { startFetchingUserInfo, setFetchError, setBudgetsList, addBudgetToList, clearUserInfo } = userSlice.actions;
 export const fetchUserData = (): AppThunk => async (dispatch) => {
-  dispatch(startFetchingUserInfo())
+  dispatch(startFetchingUserInfo());
   fetchUserBudgetsList()
     .then((data) => {
       dispatch(setBudgetsList(data || INITIAL_USER_STATE));
     })
     .catch((error) => {
-      dispatch(setFetchError(error.message))
+      dispatch(setFetchError(error.message));
     });
 };
 
 //! Selector
-export const selectUserInfo = (state: RootState): UserState => state.user
+export const selectUserInfo = (state: RootState): UserState => state.user;
 
-export default userSlice.reducer
+export default userSlice.reducer;
