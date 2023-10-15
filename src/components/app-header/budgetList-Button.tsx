@@ -89,7 +89,7 @@ const BudgetListButton: React.FC<BudgetListButtonProps> = ({ disabled, isOpen, h
         flexGrow={1}
         textAlign={"left"}
       >
-        {isFetching ? "Pobieram listę..." : selectedBudget?.name || "Wybierz budżet..."}
+        {isFetching ? "Pobieram listę..." : selectedBudget?.budgetName || "Wybierz budżet..."}
       </Typography>
     </Button>
   );
