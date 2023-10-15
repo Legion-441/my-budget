@@ -6,16 +6,16 @@ import { AlertColor } from "@mui/material";
 import { iconMapping } from "../utils/icon-utils";
 
 export type Owner = {
-  ownerID: string;
-  ownerUsername: string;
+  ownerID: string | null;
+  ownerUsername: string | null;
 };
 
 export type BudgetsListItem = {
-  budgetName: string | undefined;
-  createdAt: Date | undefined;
+  budgetName: string | null;
+  createdAt: number | null;
   description: string;
   id: string;
-  icon: string | undefined;
+  icon: string | null;
   memberIDs: string[];
   owner: Owner;
 };

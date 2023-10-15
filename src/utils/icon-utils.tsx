@@ -31,7 +31,7 @@ export const iconMapping: Record<string, React.ElementType> = {
   Sailing: Sailing,
 };
 
-export const getIconComponent = (iconName: string | undefined): React.ReactNode => {
+export const getIconComponent = (iconName: string | null): React.ReactNode => {
   const Icon = iconMapping[iconName || "None"];
   const iconColor = Icon ? "inherit" : "disabled";
 
