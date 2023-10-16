@@ -122,7 +122,7 @@ const CreateBudgetDialog = ({ isOpen, onClose }: CreateBudgetDialogProps) => {
           <Button onClick={handleClose} type="button">
             {isDataSend ? "Gotowe" : "Anuluj"}
           </Button>
-          {isDataSend ? (
+          {!isDataSend ? (
             <Button type="submit" disabled={isDataSend}>
               Stwórz
             </Button>
