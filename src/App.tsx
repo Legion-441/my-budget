@@ -15,6 +15,7 @@ import NotFoundView from './views/not-found/notFound';
 import SettingsView from './views/settings/settings';
 import SignUpView from './views/sign-up/sign-up';
 import UserProfileView from './views/user-profile/user-profile';
+import BudgetManagementView from './views/budget-management/budgetManagement';
 //* MUI & styles
 import { ThemeProvider } from '@mui/material/styles';
 import { darkTheme, lightTheme } from './styled/theme';
@@ -42,6 +43,7 @@ const App: React.FC = () => {
                   <Route path='settings' element={<SettingsView />} />
                 </Route>
                 <Route path='profile' element={<UserProfileView />} />
+                <Route path='budget-management' element={<BudgetManagementView />} />
                 <Route path='*' element={<NotFoundView />} />
               </Route>
             </Route>
