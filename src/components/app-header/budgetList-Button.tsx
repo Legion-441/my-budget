@@ -12,13 +12,12 @@ import { getIconComponent } from "../../utils/icon-utils";
 import { BudgetsListItem } from "../../types/AppTypes";
 
 interface BudgetListButtonProps {
-  disabled: boolean;
   isOpen: boolean;
   handleToggleBudgetsMenu: () => void;
   selectedBudget: null | BudgetsListItem;
 }
 
-const BudgetListButton: React.FC<BudgetListButtonProps> = ({ disabled, isOpen, handleToggleBudgetsMenu, selectedBudget }) => {
+const BudgetListButton: React.FC<BudgetListButtonProps> = ({ isOpen, handleToggleBudgetsMenu, selectedBudget }) => {
   const { isFetching, fetchError } = useAppSelector(selectUserInfo);
   const dispatch = useAppDispatch();
 
@@ -69,7 +68,7 @@ const BudgetListButton: React.FC<BudgetListButtonProps> = ({ disabled, isOpen, h
       aria-label="Wybierz budżet"
       color="inherit"
       variant="outlined"
-      disabled={isFetching || disabled}
+      disabled={isFetching}
       onClick={handleToggleBudgetsMenu}
       sx={{
         display: "flex",

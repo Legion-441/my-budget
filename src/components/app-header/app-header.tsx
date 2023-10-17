@@ -67,7 +67,6 @@ const AppHeader: React.FC = () => {
           </Box>
           <Box sx={{ flexGrow: { sm: 1, xs: 0 } }} />
           <BudgetListButton
-            disabled={budgetsList.length === 0}
             isOpen={budgetAnchorEl !== null}
             handleToggleBudgetsMenu={handleToggleBudgetsMenu}
             selectedBudget={selectedBudget}
