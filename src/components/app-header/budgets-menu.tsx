@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
 import { selectUserInfo } from "../../slices/user/user.slice";
 //* MUI
-import { Menu } from "@mui/material";
+import { Button, Divider, Menu, MenuItem, Typography } from "@mui/material";
 //* Components
 import BudgetsMenuList from "./budgets-menu-list";
 
@@ -39,19 +39,28 @@ const AppBudgetsMenu: React.FC<AppMenuProps> = ({ anchorEl, handleToggleBudgetsM
       }}
       open={isMenuOpen}
       onClose={() => handleToggleBudgetsMenu()}
+      MenuListProps={{
+        sx: { pb: 0}
+      }}
       PaperProps={{
         elevation: 15,
         sx: {
           overflow: "visible",
           filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-          mt: 1.5,
+          mt: 0,
           alignItems: "center",
           minWidth: 200,
           maxWidth: "100%",
         },
       }}
     >
-      <BudgetsMenuList budgets={budgetsList} onClick={(itemID) => onBudgetListItemClick(itemID)} />
+      {budgetsList.length === 0 ? (
+        <MenuItem disabled>Lista jest pusta</MenuItem>
+      ) : (
+          <BudgetsMenuList budgets={budgetsList} onClick={(itemID) => onBudgetListItemClick(itemID)} />
+      )}
+      <Divider style={{ marginBottom: 0}} />
+      <Button color="secondary" style={{ width: '100%'}} onClick={() => {handleToggleBudgetsMenu(); navigate(`/budget-management`)}}>Zarządzaj</Button>
     </Menu>
   );
 };
