@@ -2,21 +2,10 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addBudgetToList } from "../../slices/user/user.slice";
 //* MUI
-import {
-  Alert,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  IconButton,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { AddCircle } from "@mui/icons-material";
+import { Alert, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
 //* Components
 import IconSelector from "./Icon-selector";
+import MembersSelector from "./members-selector";
 //* Utils
 import { createBudget } from "../../services/budget-list-operations";
 //* Types
@@ -56,12 +45,16 @@ const CreateBudgetDialog = ({ isOpen, onClose }: CreateBudgetDialogProps) => {
       });
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>, input: keyof BudgetInfoFormData) => {
+  const handleTextInputChange = (event: React.ChangeEvent<HTMLInputElement>, input: keyof BudgetInfoFormData) => {
     setBudgetFormData({ ...budgetFormData, [input]: event.target.value });
   };
 
   const handleIconChange = (newIcon: BudgetIcon) => {
     setBudgetFormData({ ...budgetFormData, icon: newIcon });
+  };
+
+  const handleMembersChange = (newMemberIDs: string[]) => {
+    setBudgetFormData({ ...budgetFormData, memberIDs: newMemberIDs });
   };
 
   const handleClose = () => {
@@ -72,11 +65,10 @@ const CreateBudgetDialog = ({ isOpen, onClose }: CreateBudgetDialogProps) => {
   };
 
   return (
-    <Dialog onClose={handleClose} open={isOpen}>
+    <Dialog onClose={handleClose} open={isOpen} fullWidth>
       <form onSubmit={handleSubmit}>
         <DialogTitle>Utwórz nowy budżet</DialogTitle>
         <DialogContent>
-          <DialogContentText>Wypełnij dane:</DialogContentText>
           <TextField
             id="budgetNameInput"
             value={budgetName}
@@ -84,7 +76,7 @@ const CreateBudgetDialog = ({ isOpen, onClose }: CreateBudgetDialogProps) => {
             label="Nazwa"
             type="text"
             autoComplete="off"
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e, "budgetName")}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleTextInputChange(e, "budgetName")}
             error={Boolean(error)}
             helperText={error}
             required
@@ -101,17 +93,14 @@ const CreateBudgetDialog = ({ isOpen, onClose }: CreateBudgetDialogProps) => {
             autoComplete="off"
             multiline
             minRows={2}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e, "description")}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleTextInputChange(e, "description")}
             error={Boolean(error)}
             helperText={error}
             variant="outlined"
             margin="normal"
             fullWidth
           />
-          <Typography>Członkowie:</Typography>
-          <IconButton aria-label="Dodaj członka" size="large">
-            <AddCircle fontSize="inherit" />
-          </IconButton>
+          <MembersSelector value={memberIDs} onChange={(newMemberIDs) => handleMembersChange(newMemberIDs)} />
           {isDataSend ? (
             <Alert style={{ marginTop: 16 }} severity="success" variant="outlined">
               Sukces! Stworzyłeś nowy budżet {budgetName}

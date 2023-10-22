@@ -1,5 +1,5 @@
 //* MUI
-import { ToggleButton, Typography } from "@mui/material";
+import { Box, ToggleButton, Typography } from "@mui/material";
 //* Styled Components
 import StyledToggleButtonGroup from "../../styled/custom-toggle-button-group/custom-toggle-button-group.styled";
 //* Utils
@@ -30,7 +30,7 @@ const IconSelector = (props: IconSelectorProps) => {
         value={value}
         onChange={handleChange}
         exclusive
-        style={{ display: "flex", flexWrap: "wrap" }}
+        style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}
         aria-label="Budget icon"
       >
         {iconKeys.map((iconKey) => {

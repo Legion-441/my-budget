@@ -1,4 +1,5 @@
 import { createTheme } from "@mui/material/styles";
+import { plPL } from '@mui/material/locale';
 
 const themeComponents = createTheme({
   components: {
@@ -8,7 +9,7 @@ const themeComponents = createTheme({
       }
     }
   }
-});
+}, plPL);
 
 export const darkTheme = createTheme({
   ...themeComponents,
