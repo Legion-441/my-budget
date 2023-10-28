@@ -20,6 +20,12 @@ export type BudgetsListItem = {
   owner: Owner;
 };
 
+export type UserData = {
+  displayName: string;
+  userID: string;
+  photoURL: string;
+};
+
 export type BudgetIcon = keyof typeof iconMapping;
 
 export type BudgetInfoFormData = {

@@ -100,7 +100,8 @@ const CreateBudgetDialog = ({ isOpen, onClose }: CreateBudgetDialogProps) => {
             margin="normal"
             fullWidth
           />
-          <MembersSelector value={memberIDs} onChange={(newMemberIDs) => handleMembersChange(newMemberIDs)} />
+          {/* //TODO: Add this feature when ready. (create friends list, adding friends, sending ivitation to budget). consider moving this feature to budget managment page */}
+          {/* <MembersSelector value={memberIDs} onChange={(newMemberIDs) => handleMembersChange(newMemberIDs)} /> */}
           {isDataSend ? (
             <Alert style={{ marginTop: 16 }} severity="success" variant="outlined">
               Sukces! Stworzyłeś nowy budżet {budgetName}
