@@ -2,11 +2,11 @@
 import { collection, getDocs, or, query, where } from "firebase/firestore";
 import { auth, db } from "../firebase";
 //* Utils
-import transformBudgetFromFirebaseToApp from "../utils/transform-budget";
+import { transformFetchedBudgetsData } from "../utils/transform-fetched-data";
 //* Types
-import { BudgetsListItem } from "../types/AppTypes";
+import { BudgetMetaData, BudgetsListItem } from "../types/AppTypes";
 
-export const fetchUserBudgetsList = async (): Promise<BudgetsListItem[]> => {
+export const fetchUserBudgetsList = async (): Promise<BudgetMetaData[]> => {
   const userUid = auth.currentUser?.uid;
   if (!userUid) throw new Error("Authentication required");
 
@@ -16,10 +16,10 @@ export const fetchUserBudgetsList = async (): Promise<BudgetsListItem[]> => {
   );
 
   const querySnapshot = await getDocs(budgetsQuery);
-  const budgetsArray: BudgetsListItem[] = [];
+  const budgetsArray: BudgetMetaData[] = [];
 
   querySnapshot.forEach((documentSnapshot) => {
-    const budgetData = transformBudgetFromFirebaseToApp(documentSnapshot);
+    const budgetData = transformFetchedBudgetsData(documentSnapshot);
     budgetsArray.push(budgetData);
   });
 

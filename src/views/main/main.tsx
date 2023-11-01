@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { Outlet, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { selectPickedBudgetId, setPickedBudgetId } from "../../slices/app/app.slice";
-import { fetchUserData } from "../../slices/user/user.slice";
+import { fetchAndSetAccountData } from "../../slices/user/user.slice";
 //* MUI
 import { Container, Box, Toolbar } from "@mui/material";
 import { PageContainer } from "../../styled/page-container/page-container.styled";
@@ -17,7 +17,7 @@ const MainView: React.FC = () => {
 
   useEffect(() => {
     const controller = new AbortController();
-    dispatch(fetchUserData());
+    dispatch(fetchAndSetAccountData());
     return () => {
       controller.abort();
     };

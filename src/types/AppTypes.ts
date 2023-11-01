@@ -6,18 +6,33 @@ import { AlertColor } from "@mui/material";
 import { iconMapping } from "../utils/icon-utils";
 
 export type Owner = {
-  ownerID: string | null;
-  ownerUsername: string | null;
+  id: string;
+  username: string;
 };
 
 export type BudgetsListItem = {
-  budgetName: string | null;
-  createdAt: number | null;
+  icon: string;
+  id: string;
+  name: string;
+  owner: Owner;
+};
+
+export type BudgetMetaData = {
+  name: string;
+  createdAt: number;
   description: string;
   id: string;
-  icon: string | null;
+  icon: string;
   memberIDs: string[];
   owner: Owner;
+};
+
+export type AppTheme = "system" | "dark" | "light";
+
+export type AccountData = {
+  appTheme: AppTheme;
+  budgetsList: BudgetsListItem[];
+  friendsList: any[];
 };
 
 export type UserData = {
@@ -29,7 +44,7 @@ export type UserData = {
 export type BudgetIcon = keyof typeof iconMapping;
 
 export type BudgetInfoFormData = {
-  budgetName: string;
+  name: string;
   icon: BudgetIcon;
   memberIDs: string[];
   description: string;

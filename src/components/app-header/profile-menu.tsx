@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
-import { clearUserInfo } from "../../slices/user/user.slice";
+import { clearAccountData } from "../../slices/user/user.slice";
 import { useDispatch } from "react-redux";
 //* Firebase
 import { signOut } from "firebase/auth";
@@ -26,7 +26,7 @@ const AppProfileMenu: React.FC<AppMenuProps> = ({ anchorEl, handleToggleProfileM
     handleToggleProfileMenu();
     try {
       await signOut(auth);
-      dispatch(clearUserInfo());
+      dispatch(clearAccountData());
     } catch (error) {
       console.error(error);
     }

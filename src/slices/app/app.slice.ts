@@ -1,48 +1,50 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
+//* Types
+import { AppTheme, BudgetsListItem } from "../../types/AppTypes";
 
-export type AppColor = 'light' | "dark"
-
-export interface AppState {
-  appColorMode: AppColor;
+interface AppState {
+  appColorMode: AppTheme;
   isDrawerOpen: boolean;
   isTempDrawerOpen: boolean;
-  pickedBudgetId: string
+  pickedBudgetId: string;
+  budgetsList: BudgetsListItem[];
 }
 
-const initialState: AppState = {
-  appColorMode: 'dark',
+const INITIAL_APP_STATE: AppState = {
+  appColorMode: "dark",
   isDrawerOpen: true,
   isTempDrawerOpen: false,
   pickedBudgetId: "",
-}
+  budgetsList: [],
+};
 
 export const appSlice = createSlice({
-  name: 'app',
-  initialState,
+  name: "app",
+  initialState: INITIAL_APP_STATE,
   reducers: {
-    setAppColorMode: (state, action: PayloadAction<AppColor>) => {
-      state.appColorMode = action.payload
+    setAppColorMode: (state, action: PayloadAction<AppTheme>) => {
+      state.appColorMode = action.payload;
     },
     toggleDrawer: (state) => {
-      state.isDrawerOpen = !state.isDrawerOpen
+      state.isDrawerOpen = !state.isDrawerOpen;
     },
     toggleTempDrawer: (state) => {
-      state.isTempDrawerOpen = !state.isTempDrawerOpen
+      state.isTempDrawerOpen = !state.isTempDrawerOpen;
     },
     setPickedBudgetId: (state, action: PayloadAction<string>) => {
-      state.pickedBudgetId = action.payload
+      state.pickedBudgetId = action.payload;
     },
-  }
-})
+  },
+});
 
 //! Actions
 export const { setAppColorMode, toggleDrawer, toggleTempDrawer, setPickedBudgetId } = appSlice.actions;
 
 //! Selector
-export const selectAppColorMode = (state: RootState): AppColor => state.app.appColorMode;
-export const selectIsDrawerOpen = (state: RootState): boolean => state.app.isDrawerOpen
-export const selectIsTempDrawerOpen = (state: RootState): boolean => state.app.isTempDrawerOpen
-export const selectPickedBudgetId = (state: RootState): string => state.app.pickedBudgetId
+export const selectAppColorMode = (state: RootState): AppTheme => state.app.appColorMode;
+export const selectIsDrawerOpen = (state: RootState): boolean => state.app.isDrawerOpen;
+export const selectIsTempDrawerOpen = (state: RootState): boolean => state.app.isTempDrawerOpen;
+export const selectPickedBudgetId = (state: RootState): string => state.app.pickedBudgetId;
 
-export default appSlice.reducer
+export default appSlice.reducer;

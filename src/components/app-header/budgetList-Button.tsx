@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { fetchUserData, selectUserInfo } from "../../slices/user/user.slice";
+import { fetchAndSetAccountData, selectUserInfo } from "../../slices/user/user.slice";
 //* MUI
 import { ExpandLess, ExpandMore, Refresh } from "@mui/icons-material";
 import { Box, Button, IconButton, Typography } from "@mui/material";
@@ -43,18 +43,12 @@ const BudgetListButton: React.FC<BudgetListButtonProps> = ({ isOpen, handleToggl
             flexGrow: { sm: 0, xs: 1 },
           }}
           action={
-            <IconButton aria-label="refresh" size="small" onClick={() => dispatch(fetchUserData())}>
+            <IconButton aria-label="refresh" size="small" onClick={() => dispatch(fetchAndSetAccountData())}>
               <Refresh fontSize="small" />
             </IconButton>
           }
         >
-          <Typography
-            noWrap={true}
-            variant="body1"
-            fontSize={"medium"}
-            overflow="hidden"
-            textOverflow="ellipsis"
-          >
+          <Typography noWrap={true} variant="body1" fontSize={"medium"} overflow="hidden" textOverflow="ellipsis">
             {fetchError}
           </Typography>
         </CustomAlert>
@@ -88,7 +82,7 @@ const BudgetListButton: React.FC<BudgetListButtonProps> = ({ isOpen, handleToggl
         flexGrow={1}
         textAlign={"left"}
       >
-        {isFetching ? "Pobieram listę..." : selectedBudget?.budgetName || "Wybierz budżet..."}
+        {isFetching ? "Pobieram listę..." : selectedBudget?.name || "Wybierz budżet..."}
       </Typography>
     </Button>
   );

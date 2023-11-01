@@ -17,14 +17,14 @@ const BudgetsMenuList: React.FC<BudgetListProps> = ({ budgets, onClick }) => {
   if (budgets.length === 0) return null;
   const userUid = auth.currentUser?.uid;
 
-  const asOwnerBudgets = budgets.filter((item) => item.owner.ownerID === userUid);
-  const asMemberbudgets = budgets.filter((item) => item.owner.ownerID !== userUid);
+  const asOwnerBudgets = budgets.filter((item) => item.owner.id === userUid);
+  const asMemberbudgets = budgets.filter((item) => item.owner.id !== userUid);
 
   const renderBudgetItems = (budgets: BudgetsListItem[], isOwner: boolean): JSX.Element[] => {
     return budgets.map((item) => (
       <MenuItem key={item.id} onClick={() => onClick(item.id)}>
         <ListItemIcon>{getIconComponent(item.icon)}</ListItemIcon>
-        <ListItemText secondary={`(${isOwner ? "Własne" : item.owner.ownerUsername})`} primary={item.budgetName} />
+        <ListItemText secondary={`(${isOwner ? "Własne" : item.owner.username})`} primary={item.name} />
       </MenuItem>
     ));
   };

@@ -6,13 +6,13 @@ import { Alert, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextF
 //* Components
 import IconSelector from "./Icon-selector";
 import MembersSelector from "./members-selector";
-//* Utils
+//* Services
 import { createBudget } from "../../services/budget-list-operations";
 //* Types
-import { BudgetIcon, BudgetInfoFormData } from "../../types/AppTypes";
+import { BudgetsListItem, BudgetIcon, BudgetInfoFormData } from "../../types/AppTypes";
 
 const INITIAL_BUDGET_FORM_DATA: BudgetInfoFormData = {
-  budgetName: "",
+  name: "",
   icon: "None",
   memberIDs: [],
   description: "",
@@ -25,23 +25,23 @@ interface CreateBudgetDialogProps {
 
 const CreateBudgetDialog = ({ isOpen, onClose }: CreateBudgetDialogProps) => {
   const [budgetFormData, setBudgetFormData] = useState<BudgetInfoFormData>({ ...INITIAL_BUDGET_FORM_DATA });
-  const [error, setError] = useState<string>("");
+  const [sendingError, setSendingError] = useState<string>("");
   const [isDataSend, setIsDataSend] = useState<boolean>(false);
   const dispatch = useDispatch();
 
-  const { budgetName, icon, memberIDs, description } = budgetFormData;
+  const { name, icon, memberIDs, description } = budgetFormData;
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     createBudget(budgetFormData)
-      .then(({ docRef, budgetData }) => {
-        setError("");
+      .then((budgetData) => {
+        setSendingError("");
         setIsDataSend(true);
         dispatch(addBudgetToList(budgetData));
       })
       .catch((error) => {
-        setError(error);
+        setSendingError(error.code);
       });
   };
 
@@ -60,7 +60,7 @@ const CreateBudgetDialog = ({ isOpen, onClose }: CreateBudgetDialogProps) => {
   const handleClose = () => {
     onClose();
     setBudgetFormData({ ...INITIAL_BUDGET_FORM_DATA });
-    setError("");
+    setSendingError("");
     setIsDataSend(false);
   };
 
@@ -71,14 +71,14 @@ const CreateBudgetDialog = ({ isOpen, onClose }: CreateBudgetDialogProps) => {
         <DialogContent>
           <TextField
             id="budgetNameInput"
-            value={budgetName}
+            value={name}
             autoFocus
             label="Nazwa"
             type="text"
             autoComplete="off"
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleTextInputChange(e, "budgetName")}
-            error={Boolean(error)}
-            helperText={error}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleTextInputChange(e, "name")}
+            error={Boolean(sendingError)}
+            helperText={sendingError}
             required
             variant="outlined"
             margin="normal"
@@ -94,8 +94,8 @@ const CreateBudgetDialog = ({ isOpen, onClose }: CreateBudgetDialogProps) => {
             multiline
             minRows={2}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleTextInputChange(e, "description")}
-            error={Boolean(error)}
-            helperText={error}
+            error={Boolean(sendingError)}
+            helperText={sendingError}
             variant="outlined"
             margin="normal"
             fullWidth
@@ -104,7 +104,7 @@ const CreateBudgetDialog = ({ isOpen, onClose }: CreateBudgetDialogProps) => {
           {/* <MembersSelector value={memberIDs} onChange={(newMemberIDs) => handleMembersChange(newMemberIDs)} /> */}
           {isDataSend ? (
             <Alert style={{ marginTop: 16 }} severity="success" variant="outlined">
-              Sukces! Stworzyłeś nowy budżet {budgetName}
+              Sukces! Stworzyłeś nowy budżet {name}
             </Alert>
           ) : null}
         </DialogContent>
