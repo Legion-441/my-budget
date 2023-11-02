@@ -54,11 +54,7 @@ const AppBudgetsMenu: React.FC<AppMenuProps> = ({ anchorEl, handleToggleBudgetsM
         },
       }}
     >
-      {budgetsList.length === 0 ? (
-        <MenuItem disabled>Lista jest pusta</MenuItem>
-      ) : (
-          <BudgetsMenuList budgets={budgetsList} onClick={(itemID) => onBudgetListItemClick(itemID)} />
-      )}
+      <BudgetsMenuList budgets={budgetsList} onClick={(itemID) => onBudgetListItemClick(itemID)} />
       <Divider style={{ marginBottom: 0}} />
       <Button color="secondary" style={{ width: '100%'}} onClick={() => {handleToggleBudgetsMenu(); navigate(`/budget-management`)}}>Zarządzaj</Button>
     </Menu>

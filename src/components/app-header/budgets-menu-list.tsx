@@ -14,7 +14,7 @@ interface BudgetListProps {
 }
 
 const BudgetsMenuList: React.FC<BudgetListProps> = ({ budgets, onClick }) => {
-  if (budgets.length === 0) return null;
+  if (budgets.length === 0) return <MenuItem disabled>Lista jest pusta</MenuItem>
   const userUid = auth.currentUser?.uid;
 
   const asOwnerBudgets = budgets.filter((item) => item.owner.id === userUid);
