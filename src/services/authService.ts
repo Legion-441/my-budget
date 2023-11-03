@@ -11,10 +11,9 @@ import { AuthData, AuthErrors, FormType } from "../types/authTypes";
 
 const signupOperation = async (email: string, password: string, confirmPassword: string) => {
   if (password !== confirmPassword) throw new Error("passwords-is-not-identical");
-
-  const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    
+  
   try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const emailUsername = email.split("@")[0].split(".")[0];
     const initialUsername = emailUsername.charAt(0).toUpperCase() + emailUsername.slice(1);
     await updateProfile(userCredential.user, { displayName: initialUsername });

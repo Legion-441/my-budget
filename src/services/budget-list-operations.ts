@@ -6,9 +6,10 @@ import { auth, db } from "../firebase";
 import { BudgetInfoFormData, FirebaseBudgetInfo, BudgetsListItem } from "../types/AppTypes";
 
 export const createBudget = async (budgetFormData: BudgetInfoFormData): Promise<BudgetsListItem> => {
+  if (!auth.currentUser?.uid) throw new Error(""); // TODO: throw error
+  const currentUserUid = auth.currentUser?.uid;
   const { memberIDs } = budgetFormData;
-  const currentUserUid = auth.currentUser?.uid || "";
-  const currentUserUsername = auth.currentUser?.displayName || auth.currentUser?.email || "";
+  const currentUserUsername = auth.currentUser.displayName || auth.currentUser.email || ""; // TODO: make function to convert email into displayName
   const currentDate = new Date();
   const newBudgetInfo: FirebaseBudgetInfo = {
     ...budgetFormData,
@@ -29,7 +30,6 @@ export const createBudget = async (budgetFormData: BudgetInfoFormData): Promise<
     };
 
     console.log("Document written with ID: ", docRef.id);
-
     return budgetData;
   } catch (error) {
     throw error;
@@ -39,6 +39,7 @@ export const createBudget = async (budgetFormData: BudgetInfoFormData): Promise<
 const editBudget = async () => {};
 
 export const deleteBudget = async (budgetID: string): Promise<boolean> => {
+  if (!auth.currentUser?.uid) throw new Error(""); // TODO: throw error
   try {
     await deleteDoc(doc(db, FIREBASE_COLLECTIONS.budgets, budgetID));
     // TODO: delete also from budgetsList colection & redux

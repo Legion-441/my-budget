@@ -1,6 +1,6 @@
 import { FIREBASE_COLLECTIONS } from "../constants/constants";
 //* Firebase
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { auth, db } from "../firebase";
 //* Utils
 import { transformFetchedAccountData } from "../utils/transform-fetched-data";
@@ -14,6 +14,10 @@ export const fetchAccountData = async (): Promise<AccountData> => {
   const docRef = doc(db, FIREBASE_COLLECTIONS.accounts, userUid);
   const docSnapshot = await getDoc(docRef);
   const finalAccountData = transformFetchedAccountData(docSnapshot);
-
+  
+  if (!docSnapshot.exists()) {
+    await setDoc(docRef, {...finalAccountData})
+  }
+  
   return finalAccountData;
 };

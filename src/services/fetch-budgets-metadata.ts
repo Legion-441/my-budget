@@ -7,7 +7,7 @@ import { transformFetchedBudgetsData } from "../utils/transform-fetched-data";
 //* Types
 import { BudgetMetaData, BudgetsListItem } from "../types/AppTypes";
 
-export const fetchUserBudgetsList = async (): Promise<BudgetMetaData[]> => {
+export const fetchUserBudgetsMetadata = async (): Promise<BudgetMetaData[]> => {
   const userUid = auth.currentUser?.uid;
   if (!userUid) throw new Error("Authentication required");
 
