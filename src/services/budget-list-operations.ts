@@ -1,3 +1,4 @@
+import { FIREBASE_COLLECTIONS } from "../constants/constants";
 //* Firebase
 import { Timestamp, addDoc, collection, deleteDoc, doc } from "firebase/firestore";
 import { auth, db } from "../firebase";
@@ -17,7 +18,7 @@ export const createBudget = async (budgetFormData: BudgetInfoFormData): Promise<
   };
 
   try {
-    const docRef = await addDoc(collection(db, "budgets"), newBudgetInfo);
+    const docRef = await addDoc(collection(db, FIREBASE_COLLECTIONS.budgets), newBudgetInfo);
 
     const { icon, name, owner } = newBudgetInfo;
     const budgetData: BudgetsListItem = {
@@ -39,7 +40,7 @@ const editBudget = async () => {};
 
 export const deleteBudget = async (budgetID: string): Promise<boolean> => {
   try {
-    await deleteDoc(doc(db, "budgets", budgetID));
+    await deleteDoc(doc(db, FIREBASE_COLLECTIONS.budgets, budgetID));
     // TODO: delete also from budgetsList colection & redux
     console.log("Document with ID:", budgetID, "successfully deleted");
     return true;

@@ -1,3 +1,4 @@
+import { FIREBASE_COLLECTIONS } from "../constants/constants";
 //* Firebase
 import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "../firebase";
@@ -10,7 +11,7 @@ export const fetchAccountData = async (): Promise<AccountData> => {
   const userUid = auth.currentUser?.uid;
   if (!userUid) throw new Error("Authentication required");
 
-  const docRef = doc(db, "userSettings", userUid);
+  const docRef = doc(db, FIREBASE_COLLECTIONS.accounts, userUid);
   const docSnapshot = await getDoc(docRef);
   const finalAccountData = transformFetchedAccountData(docSnapshot);
 

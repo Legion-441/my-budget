@@ -1,3 +1,4 @@
+import { FIREBASE_COLLECTIONS } from "../constants/constants";
 //* Firebase
 import { collection, getDocs, or, query, where } from "firebase/firestore";
 import { auth, db } from "../firebase";
@@ -11,7 +12,7 @@ export const fetchUserBudgetsList = async (): Promise<BudgetMetaData[]> => {
   if (!userUid) throw new Error("Authentication required");
 
   const budgetsQuery = query(
-    collection(db, "budgets"),
+    collection(db, FIREBASE_COLLECTIONS.budgets),
     or(where("owner.ownerID", "==", userUid), where("memberIDs", "array-contains", userUid))
   );
 
