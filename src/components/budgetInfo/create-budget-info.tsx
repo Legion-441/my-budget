@@ -8,8 +8,10 @@ import IconSelector from "./Icon-selector";
 import MembersSelector from "./members-selector";
 //* Services
 import { createBudget } from "../../services/budget-list-operations";
+import { updateAccount } from "../../services/account-operations";
 //* Types
-import { BudgetsListItem, BudgetIcon, BudgetInfoFormData } from "../../types/AppTypes";
+import { BudgetIcon, BudgetInfoFormData } from "../../types/AppTypes";
+import { FirebaseError } from "firebase/app";
 
 const INITIAL_BUDGET_FORM_DATA: BudgetInfoFormData = {
   name: "",
@@ -25,24 +27,40 @@ interface CreateBudgetDialogProps {
 
 const CreateBudgetDialog = ({ isOpen, onClose }: CreateBudgetDialogProps) => {
   const [budgetFormData, setBudgetFormData] = useState<BudgetInfoFormData>({ ...INITIAL_BUDGET_FORM_DATA });
-  const [sendingError, setSendingError] = useState<string>("");
-  const [isDataSend, setIsDataSend] = useState<boolean>(false);
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [creatingErrors, setCreatingErrors] = useState<string>("");
+  const [updatingListError, setUpdatingListError] = useState<string>("");
   const dispatch = useDispatch();
 
   const { name, icon, memberIDs, description } = budgetFormData;
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
+    setCreatingErrors("");
+    setUpdatingListError("");
 
-    createBudget(budgetFormData)
-      .then((budgetData) => {
-        setSendingError("");
-        setIsDataSend(true);
-        dispatch(addBudgetToList(budgetData));
-      })
-      .catch((error) => {
-        setSendingError(error.code);
-      });
+    try {
+      const budgetData = await createBudget(budgetFormData);
+      setIsSuccess(true);
+      updateAccount(budgetData)
+        .then(() => {
+          dispatch(addBudgetToList(budgetData));
+        })
+        .catch((error) => {
+          setUpdatingListError(error.code);
+        });
+    } catch (error) {
+      if (error instanceof FirebaseError) {
+        setCreatingErrors(error.code);
+      } else if (error instanceof Error) {
+        setCreatingErrors(error.message);
+      }
+    } finally {
+      setIsLoading(false);
+      setBudgetFormData({ ...INITIAL_BUDGET_FORM_DATA });
+    }
   };
 
   const handleTextInputChange = (event: React.ChangeEvent<HTMLInputElement>, input: keyof BudgetInfoFormData) => {
@@ -60,8 +78,8 @@ const CreateBudgetDialog = ({ isOpen, onClose }: CreateBudgetDialogProps) => {
   const handleClose = () => {
     onClose();
     setBudgetFormData({ ...INITIAL_BUDGET_FORM_DATA });
-    setSendingError("");
-    setIsDataSend(false);
+    setCreatingErrors("");
+    setIsSuccess(false);
   };
 
   return (
@@ -77,8 +95,8 @@ const CreateBudgetDialog = ({ isOpen, onClose }: CreateBudgetDialogProps) => {
             type="text"
             autoComplete="off"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleTextInputChange(e, "name")}
-            error={Boolean(sendingError)}
-            helperText={sendingError}
+            error={Boolean(creatingErrors)}
+            helperText={creatingErrors}
             required
             variant="outlined"
             margin="normal"
@@ -94,26 +112,37 @@ const CreateBudgetDialog = ({ isOpen, onClose }: CreateBudgetDialogProps) => {
             multiline
             minRows={2}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleTextInputChange(e, "description")}
-            error={Boolean(sendingError)}
-            helperText={sendingError}
+            error={Boolean(creatingErrors)}
+            helperText={creatingErrors}
             variant="outlined"
             margin="normal"
             fullWidth
           />
           {/* //TODO: Add this feature when ready. (create friends list, adding friends, sending ivitation to budget). consider moving this feature to budget managment page */}
           {/* <MembersSelector value={memberIDs} onChange={(newMemberIDs) => handleMembersChange(newMemberIDs)} /> */}
-          {isDataSend ? (
+
+          {isSuccess ? (
             <Alert style={{ marginTop: 16 }} severity="success" variant="outlined">
               Sukces! Stworzyłeś nowy budżet {name}
             </Alert>
           ) : null}
+          {!isLoading && creatingErrors !== "" ? (
+            <Alert style={{ marginTop: 16 }} severity="error" variant="outlined">
+              Podczas tworzenia budżetu wystąpił błąd: {creatingErrors}
+            </Alert>
+          ) : null}
+          {!isLoading && updatingListError !== "" ? (
+            <Alert style={{ marginTop: 16 }} severity="error" variant="outlined">
+              Podczas dodawania do listy przypiętych budżetów wystąpił błąd: {updatingListError}
+            </Alert>
+          ) : null}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} type="button">
-            {isDataSend ? "Gotowe" : "Anuluj"}
+          <Button onClick={handleClose} type="button" disabled={isLoading}>
+            {isSuccess ? "Gotowe" : "Anuluj"}
           </Button>
-          {!isDataSend ? (
-            <Button type="submit" disabled={isDataSend}>
+          {!isSuccess ? (
+            <Button type="submit" disabled={isLoading}>
               Stwórz
             </Button>
           ) : null}
