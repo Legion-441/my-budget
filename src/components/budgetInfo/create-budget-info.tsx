@@ -12,6 +12,7 @@ import { updateAccount } from "../../services/account-operations";
 //* Types
 import { BudgetIcon, BudgetInfoFormData } from "../../types/AppTypes";
 import { FirebaseError } from "firebase/app";
+import { getFirestoreErrorText } from "../../utils/firestoreErrorHandling";
 
 const INITIAL_BUDGET_FORM_DATA: BudgetInfoFormData = {
   name: "",
@@ -49,14 +50,12 @@ const CreateBudgetDialog = ({ isOpen, onClose }: CreateBudgetDialogProps) => {
           dispatch(addBudgetToList(budgetData));
         })
         .catch((error) => {
-          setUpdatingListError(error.code);
+          const errorText = getFirestoreErrorText(error)
+          setUpdatingListError(errorText);
         });
     } catch (error) {
-      if (error instanceof FirebaseError) {
-        setCreatingErrors(error.code);
-      } else if (error instanceof Error) {
-        setCreatingErrors(error.message);
-      }
+      const errorText = getFirestoreErrorText(error)
+      setCreatingErrors(errorText)
     } finally {
       setIsLoading(false);
       setBudgetFormData({ ...INITIAL_BUDGET_FORM_DATA });
@@ -64,14 +63,20 @@ const CreateBudgetDialog = ({ isOpen, onClose }: CreateBudgetDialogProps) => {
   };
 
   const handleTextInputChange = (event: React.ChangeEvent<HTMLInputElement>, input: keyof BudgetInfoFormData) => {
+    setCreatingErrors("");
+    setUpdatingListError("");
     setBudgetFormData({ ...budgetFormData, [input]: event.target.value });
   };
 
   const handleIconChange = (newIcon: BudgetIcon) => {
+    setCreatingErrors("");
+    setUpdatingListError("");
     setBudgetFormData({ ...budgetFormData, icon: newIcon });
   };
 
   const handleMembersChange = (newMemberIDs: string[]) => {
+    setCreatingErrors("");
+    setUpdatingListError("");
     setBudgetFormData({ ...budgetFormData, memberIDs: newMemberIDs });
   };
 
@@ -79,6 +84,7 @@ const CreateBudgetDialog = ({ isOpen, onClose }: CreateBudgetDialogProps) => {
     onClose();
     setBudgetFormData({ ...INITIAL_BUDGET_FORM_DATA });
     setCreatingErrors("");
+    setUpdatingListError("");
     setIsSuccess(false);
   };
 
@@ -128,12 +134,14 @@ const CreateBudgetDialog = ({ isOpen, onClose }: CreateBudgetDialogProps) => {
           ) : null}
           {!isLoading && creatingErrors !== "" ? (
             <Alert style={{ marginTop: 16 }} severity="error" variant="outlined">
-              Podczas tworzenia budżetu wystąpił błąd: {creatingErrors}
+              Wystąpił błąd podczas tworzenia tego budżetu: <br/>
+              {creatingErrors}
             </Alert>
           ) : null}
           {!isLoading && updatingListError !== "" ? (
             <Alert style={{ marginTop: 16 }} severity="error" variant="outlined">
-              Podczas dodawania do listy przypiętych budżetów wystąpił błąd: {updatingListError}
+              Wystąpił błąd podczas dodawania tego budżetu do listy przypiętych: <br/>
+              {updatingListError}
             </Alert>
           ) : null}
         </DialogContent>

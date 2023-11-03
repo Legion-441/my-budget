@@ -6,7 +6,7 @@ import { auth, db } from "../firebase";
 import { BudgetsListItem } from "../types/AppTypes";
 
 export const updateAccount = async (budgetData: BudgetsListItem) => {
-  if (!auth.currentUser?.uid) throw new Error(""); // TODO: throw error
+  if (!auth.currentUser?.uid) throw new Error("unauthenticated");
   const currentUserUid = auth.currentUser?.uid;
   try {
     const accountDocRef = await updateDoc(doc(db, FIREBASE_COLLECTIONS.accounts, currentUserUid), { budgetsList: arrayUnion(budgetData) });
