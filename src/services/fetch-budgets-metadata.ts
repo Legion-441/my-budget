@@ -13,7 +13,7 @@ export const fetchUserBudgetsList = async (): Promise<BudgetMetaData[]> => {
 
   const budgetsQuery = query(
     collection(db, FIREBASE_COLLECTIONS.budgets),
-    or(where("owner.ownerID", "==", userUid), where("memberIDs", "array-contains", userUid))
+    or(where("owner.id", "==", userUid), where("memberIDs", "array-contains", userUid))
   );
 
   const querySnapshot = await getDocs(budgetsQuery);

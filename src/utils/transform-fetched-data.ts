@@ -46,15 +46,15 @@ export const transformFetchedBudgetsData = (documentSnapshot: QueryDocumentSnaps
   // Function to ensure owner is an object with specific properties
   const ownerProperties = (): Owner => {
     const owner = typeof documentData.owner === "object" ? documentData.owner : {};
-    const { ownerID, ownerUsername } = owner;
-    owner.ownerID = "ownerID" in owner ? String(ownerID) : null;
-    owner.ownerUsername = "ownerUsername" in owner ? String(ownerUsername) : null;
+    const { id, username } = owner;
+    owner.id = "id" in owner ? String(id) : "";
+    owner.username = "username" in owner ? String(username) : "";
     return owner;
   };
 
   // Transform Firestore data into the expected format
   const budgetData: BudgetMetaData = {
-    name: "budgetName" in documentData ? String(documentData.name) : "",
+    name: "name" in documentData ? String(documentData.name) : "",
     createdAt: documentData.createdAt instanceof Timestamp ? documentData.createdAt.toDate().getTime() : 0,
     description: "description" in documentData ? String(documentData.description) : "",
     id: budgetID,
