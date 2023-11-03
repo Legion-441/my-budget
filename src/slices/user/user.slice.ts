@@ -2,9 +2,11 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../../app/store";
 import { setAppColorMode } from "../app/app.slice";
 //* Services
-import { fetchAccountData } from "../../services/fetch-account-data";
+import { fetchAccountData } from "../../services/account-operations";
 //* Types
 import { BudgetsListItem } from "../../types/AppTypes";
+//* Utils
+import { getFirestoreErrorText } from "../../utils/firestoreErrorHandling";
 
 type BudgetsLists = {
   budgetsList: BudgetsListItem[];
@@ -60,7 +62,8 @@ export const fetchAndSetAccountData = (): AppThunk => async (dispatch) => {
       dispatch(setAppColorMode(data.appTheme));
     })
     .catch((error) => {
-      dispatch(setFetchError(error.message));
+      const errorText = getFirestoreErrorText(error);
+      dispatch(setFetchError(errorText));
     });
 };
 

@@ -1,9 +1,31 @@
 import { FIREBASE_COLLECTIONS } from "../constants/constants";
 //* Firebase
-import { Timestamp, addDoc, collection, deleteDoc, doc } from "firebase/firestore";
+import { Timestamp, addDoc, collection, deleteDoc, doc, getDocs, or, query, where } from "firebase/firestore";
 import { auth, db } from "../firebase";
+//* Utils
+import { transformFetchedBudgetsData } from "../utils/transform-fetched-data";
 //* Types
-import { BudgetInfoFormData, FirebaseBudgetInfo, BudgetsListItem } from "../types/AppTypes";
+import { BudgetInfoFormData, FirebaseBudgetInfo, BudgetsListItem, BudgetMetaData } from "../types/AppTypes";
+
+export const fetchUserBudgetsMetadata = async (): Promise<BudgetMetaData[]> => {
+  if (!auth.currentUser?.uid) throw new Error("unauthenticated");
+  const currentUserUid = auth.currentUser?.uid;
+
+  const budgetsQuery = query(
+    collection(db, FIREBASE_COLLECTIONS.budgets),
+    or(where("owner.id", "==", currentUserUid), where("memberIDs", "array-contains", currentUserUid))
+  );
+
+  const querySnapshot = await getDocs(budgetsQuery);
+  const budgetsArray: BudgetMetaData[] = [];
+
+  querySnapshot.forEach((documentSnapshot) => {
+    const budgetData = transformFetchedBudgetsData(documentSnapshot);
+    budgetsArray.push(budgetData);
+  });
+
+  return budgetsArray;
+};
 
 export const createBudget = async (budgetFormData: BudgetInfoFormData): Promise<BudgetsListItem> => {
   if (!auth.currentUser?.uid) throw new Error("unauthenticated");
