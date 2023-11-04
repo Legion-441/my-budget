@@ -12,13 +12,13 @@ type BudgetsLists = {
   budgetsList: BudgetsListItem[];
 };
 
-type UserState = {
+type AccountState = {
   data: BudgetsLists;
   isFetching: boolean;
   fetchError: string | null;
 };
 
-const INITIAL_USER_STATE: UserState = {
+const INITIAL_ACCOUNT_STATE: AccountState = {
   data: {
     budgetsList: [],
   },
@@ -26,9 +26,9 @@ const INITIAL_USER_STATE: UserState = {
   fetchError: null,
 };
 
-export const userSlice = createSlice({
-  name: "user",
-  initialState: INITIAL_USER_STATE,
+export const accountSlice = createSlice({
+  name: "account",
+  initialState: INITIAL_ACCOUNT_STATE,
   reducers: {
     startFetchingAccountData: (state) => {
       state.isFetching = true;
@@ -47,13 +47,13 @@ export const userSlice = createSlice({
       state.data.budgetsList.push(action.payload);
     },
     clearAccountData: (state) => {
-      state = INITIAL_USER_STATE;
+      state = INITIAL_ACCOUNT_STATE;
     },
   },
 });
 
 //! Actions
-export const { startFetchingAccountData, setFetchError, setBudgetsList, addBudgetToList, clearAccountData } = userSlice.actions;
+export const { startFetchingAccountData, setFetchError, setBudgetsList, addBudgetToList, clearAccountData } = accountSlice.actions;
 export const fetchAndSetAccountData = (): AppThunk => async (dispatch) => {
   dispatch(startFetchingAccountData());
   fetchAccountData()
@@ -68,6 +68,6 @@ export const fetchAndSetAccountData = (): AppThunk => async (dispatch) => {
 };
 
 //! Selector
-export const selectUserInfo = (state: RootState): UserState => state.user;
+export const selectAccountInfo = (state: RootState): AccountState => state.user;
 
-export default userSlice.reducer;
+export default accountSlice.reducer;

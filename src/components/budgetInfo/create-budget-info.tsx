@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addBudgetToList } from "../../slices/user/user.slice";
+import { addBudgetToList } from "../../slices/account/account.slice";
 //* MUI
 import { Alert, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
 //* Components

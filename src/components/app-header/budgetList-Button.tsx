@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { fetchAndSetAccountData, selectUserInfo } from "../../slices/user/user.slice";
+import { fetchAndSetAccountData, selectAccountInfo } from "../../slices/account/account.slice";
 //* MUI
 import { ExpandLess, ExpandMore, Refresh } from "@mui/icons-material";
 import { Box, Button, IconButton, Typography } from "@mui/material";
@@ -18,7 +18,7 @@ interface BudgetListButtonProps {
 }
 
 const BudgetListButton: React.FC<BudgetListButtonProps> = ({ isOpen, handleToggleBudgetsMenu, selectedBudget }) => {
-  const { isFetching, fetchError } = useAppSelector(selectUserInfo);
+  const { isFetching, fetchError } = useAppSelector(selectAccountInfo);
   const dispatch = useAppDispatch();
 
   useEffect(() => {

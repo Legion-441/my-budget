@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
-import { selectUserInfo } from "../../slices/user/user.slice";
+import { selectAccountInfo } from "../../slices/account/account.slice";
 //* MUI
 import { Button, Divider, Menu, MenuItem, Typography } from "@mui/material";
 //* Components
@@ -15,7 +15,7 @@ interface AppMenuProps {
 const AppBudgetsMenu: React.FC<AppMenuProps> = ({ anchorEl, handleToggleBudgetsMenu }) => {
   const isMenuOpen: boolean = Boolean(anchorEl);
   const navigate = useNavigate();
-  const { data } = useAppSelector(selectUserInfo);
+  const { data } = useAppSelector(selectAccountInfo);
   const { budgetsList } = data;
   const menuId = "primary-search-budget-menu";
 

@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { Outlet, useLocation, useParams } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { selectPickedBudgetId } from '../../slices/app/app.slice';
-import { selectUserInfo } from '../../slices/user/user.slice';
+import { selectAccountInfo } from '../../slices/account/account.slice';
 //* MUI & Icons
 import { Box, Chip, Skeleton, Typography } from '@mui/material';
 //* Styled Components
@@ -22,7 +22,7 @@ const BudgetView: React.FC = () => {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const budgetId = useAppSelector(selectPickedBudgetId);
-  const { data, isFetching } = useAppSelector(selectUserInfo)
+  const { data, isFetching } = useAppSelector(selectAccountInfo)
   const { budgetsList } = data
 
   

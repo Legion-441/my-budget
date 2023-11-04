@@ -2,7 +2,7 @@ import * as React from "react";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { selectPickedBudgetId, toggleDrawer, toggleTempDrawer } from "../../slices/app/app.slice";
-import { selectUserInfo } from "../../slices/user/user.slice";
+import { selectAccountInfo } from "../../slices/account/account.slice";
 //* MUI
 import { AppBar, Box, Toolbar, IconButton, Typography, Badge } from "@mui/material";
 import { useMediaQuery, useTheme } from "@mui/material";
@@ -21,7 +21,7 @@ const AppHeader: React.FC = () => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const budgetId = useAppSelector(selectPickedBudgetId);
-  const { data } = useAppSelector(selectUserInfo);
+  const { data } = useAppSelector(selectAccountInfo);
   const { budgetsList } = data;
 
   useEffect(() => {

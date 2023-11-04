@@ -1,5 +1,5 @@
 import { useAppSelector } from "../../app/hooks";
-import { selectUserInfo } from "../../slices/user/user.slice";
+import { selectAccountInfo } from "../../slices/account/account.slice";
 //* MUI
 import { Box } from "@mui/material"
 

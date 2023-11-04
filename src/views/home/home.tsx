@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAppSelector } from "../../app/hooks";
-import { selectUserInfo } from "../../slices/user/user.slice";
+import { selectAccountInfo } from "../../slices/account/account.slice";
 //* Firebase
 import { auth } from "../../firebase";
 //* MUI & Icons
@@ -13,7 +13,7 @@ import PaperCard from "../../styled/paper-card/paper-card.styled";
 
 const HomeView: React.FC = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const { data } = useAppSelector(selectUserInfo);
+  const { data } = useAppSelector(selectAccountInfo);
   const { budgetsList } = data;
   const user = auth.currentUser;
 
