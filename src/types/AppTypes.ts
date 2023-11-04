@@ -1,3 +1,4 @@
+import { APP_THEME_OPTIONS } from "../constants/constants";
 //* Firebase
 import { Timestamp } from "firebase/firestore";
 //* MUI type
@@ -27,7 +28,7 @@ export type BudgetMetaData = {
   owner: Owner;
 };
 
-export type AppTheme = "system" | "dark" | "light";
+export type AppTheme = typeof APP_THEME_OPTIONS[number];
 
 export type AccountData = {
   appTheme: AppTheme;
