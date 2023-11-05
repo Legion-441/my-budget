@@ -1,8 +1,6 @@
 import * as React from "react";
-import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { selectPickedBudgetId, toggleDrawer, toggleTempDrawer } from "../../slices/app/app.slice";
-import { selectAccountInfo } from "../../slices/account/account.slice";
+import { selectPickedBudget, toggleDrawer, toggleTempDrawer } from "../../slices/app/app.slice";
 //* MUI
 import { AppBar, Box, Toolbar, IconButton, Typography, Badge } from "@mui/material";
 import { useMediaQuery, useTheme } from "@mui/material";
@@ -11,24 +9,13 @@ import { Menu, Mail, Notifications, AccountCircle } from "@mui/icons-material";
 import AppProfileMenu from "./profile-menu";
 import AppBudgetsMenu from "./budgets-menu";
 import BudgetListButton from "./budgetList-Button";
-//* Types
-import { BudgetsListItem } from "../../types/AppTypes";
 
 const AppHeader: React.FC = () => {
   const [profileAnchorEl, setProfileAnchorEl] = React.useState<null | HTMLElement>(null);
   const [budgetAnchorEl, setBudgetAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [selectedBudget, setSelectedBudget] = React.useState<null | BudgetsListItem>(null);
+  const pickedBudget = useAppSelector(selectPickedBudget);
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  const budgetId = useAppSelector(selectPickedBudgetId);
-  const { data } = useAppSelector(selectAccountInfo);
-  const { budgetsList } = data;
-
-  useEffect(() => {
-    const selectedBudget = budgetsList.find((budget) => budget.id === budgetId) || null;
-    setSelectedBudget(selectedBudget);
-  }, [budgetsList, budgetId]);
-
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"));
 
   const handleDrawerToggle = () => {
@@ -55,7 +42,7 @@ const AppHeader: React.FC = () => {
               alignItems: "center",
             }}
           >
-            {budgetId && (
+            {pickedBudget && (
               <IconButton size="large" edge="start" color="inherit" aria-label="open drawer" onClick={handleDrawerToggle} sx={{ mr: 2 }}>
                 <Menu />
               </IconButton>
@@ -69,7 +56,6 @@ const AppHeader: React.FC = () => {
           <BudgetListButton
             isOpen={budgetAnchorEl !== null}
             handleToggleBudgetsMenu={handleToggleBudgetsMenu}
-            selectedBudget={selectedBudget}
           />
           <Box sx={{ display: "flex" }}>
             <IconButton size="large" aria-label="show 4 new mails" color="inherit">

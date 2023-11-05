@@ -9,16 +9,16 @@ import CustomAlert from "../../styled/budgetList-alert/budgetList-alert.styled";
 //* Utils
 import { getIconComponent } from "../../utils/icon-utils";
 //* Types
-import { BudgetsListItem } from "../../types/AppTypes";
+import { selectPickedBudget } from "../../slices/app/app.slice";
 
 interface BudgetListButtonProps {
   isOpen: boolean;
   handleToggleBudgetsMenu: () => void;
-  selectedBudget: null | BudgetsListItem;
 }
 
-const BudgetListButton: React.FC<BudgetListButtonProps> = ({ isOpen, handleToggleBudgetsMenu, selectedBudget }) => {
+const BudgetListButton: React.FC<BudgetListButtonProps> = ({ isOpen, handleToggleBudgetsMenu }) => {
   const { isFetching, fetchError } = useAppSelector(selectAccountInfo);
+  const pickedBudget = useAppSelector(selectPickedBudget);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -70,7 +70,7 @@ const BudgetListButton: React.FC<BudgetListButtonProps> = ({ isOpen, handleToggl
         flexGrow: { sm: 0, xs: 1 },
         minWidth: { sm: 200, xs: 80 },
       }}
-      startIcon={selectedBudget?.icon && getIconComponent(selectedBudget.icon)}
+      startIcon={pickedBudget?.icon && getIconComponent(pickedBudget.icon)}
       endIcon={isOpen ? <ExpandLess /> : <ExpandMore />}
     >
       <Typography
@@ -82,7 +82,7 @@ const BudgetListButton: React.FC<BudgetListButtonProps> = ({ isOpen, handleToggl
         flexGrow={1}
         textAlign={"left"}
       >
-        {isFetching ? "Pobieram listę..." : selectedBudget?.name || "Wybierz budżet..."}
+        {isFetching ? "Pobieram listę..." : pickedBudget?.name || "Wybierz budżet..."}
       </Typography>
     </Button>
   );

@@ -68,12 +68,10 @@ export const fetchAndSetSelectedBudget =
     dispatch(startFetchingBudgetMetadata());
     fetchBudgetMetadataByID(budgetID)
       .then((data) => {
-        console.log(data.name);
         dispatch(setPickedBudget(data));
       })
       .catch((error) => {
         const errorText = getFirestoreErrorText(error);
-        console.error(errorText);
         dispatch(setBudgetMetadataError(errorText));
       });
   };
