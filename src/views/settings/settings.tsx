@@ -3,11 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
 import { selectPickedBudget } from "../../slices/app/app.slice";
 //* MUI
-import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@mui/material";
+import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Stack, TextField } from "@mui/material";
 //* Styled Components
 import PaperCard from "../../styled/paper-card/paper-card.styled";
 //* Services
 import { deleteBudget } from "../../services/budget-list-operations";
+//* Utils
+import { getFirestoreErrorText } from "../../utils/firestoreErrorHandling";
 
 const SettingsView: React.FC = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -16,8 +18,7 @@ const SettingsView: React.FC = () => {
   const [error, setError] = useState<string>("");
   const [isBudgetDeleted, setIsBudgetDeleted] = useState<boolean>(false);
   const navigate = useNavigate();
-
-  const dummyName = "Dummy name";
+  
 
   useEffect(() => {}, []);
 
@@ -34,14 +35,17 @@ const SettingsView: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (inputValue === dummyName) {
-      deleteBudget(budgetId)
+    setError("");
+    if (pickedBudget && inputValue === pickedBudget?.name) {
+      deleteBudget(pickedBudget.id)
         .then((isDeleted) => {
-          setError("");
           setIsBudgetDeleted(isDeleted);
+          // todo: delete olso in budget list and redux
+          navigate("/");
         })
         .catch((error) => {
-          setError(error.message === "Missing or insufficient permissions." ? "Brak uprawnień do wykonania tej operacji" : error.message);
+          const errorText = getFirestoreErrorText(error);
+          setError(errorText);
         });
     } else {
       setError("Nazwa jest niezgodna");
@@ -56,19 +60,23 @@ const SettingsView: React.FC = () => {
   return (
     <>
       <PaperCard>
-        ID: {pickedBudget?.id}
-        <br />
-        {/* ikona: <br />
-        Nazwa: <br />
-        Opis: <br />
-        Właściciel: <br />
-        Data utworzenia: <br />
-        Członkowie: <br /> */}
+        ID: {pickedBudget?.id} <br />
+        Nazwa: {pickedBudget?.name} <br />
+        ikona: {pickedBudget?.icon} <br />
+        Opis: {pickedBudget?.description} <br />
+        Właściciel: {pickedBudget?.owner?.username} <br />
+        Data utworzenia: {pickedBudget ? new Date(pickedBudget.createdAt).toLocaleString() : ''} <br />
+        Członkowie: {pickedBudget?.memberIDs?.join(', ')} <br />
       </PaperCard>
       {/* //TODO: disable this button when user isnt owner of selected budget */}
-      <Button color="error" variant="outlined" size="small" onClick={handleOpenDialog}>
-        Usuń ten budżet
-      </Button>
+      <Stack spacing={1} direction="row">
+        <Button variant="outlined" size="small">
+          Archiwizuj ten budżet
+        </Button>
+        <Button color="error" variant="outlined" size="small" onClick={handleOpenDialog}>
+          Usuń ten budżet
+        </Button>
+      </Stack>
       <Dialog onClose={handleCloseDialog} open={isDialogOpen}>
         <form onSubmit={handleSubmit}>
           <DialogTitle>Usuwanie budżetu!</DialogTitle>
@@ -81,7 +89,7 @@ const SettingsView: React.FC = () => {
               value={inputValue}
               autoFocus
               id="name"
-              label={"Nazwa: " + dummyName}
+              label={"Nazwa: " + pickedBudget?.name}
               type="text"
               onChange={handleChange}
               error={Boolean(error)}
