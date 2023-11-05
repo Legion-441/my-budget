@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { selectPickedBudgetId } from '../../slices/app/app.slice';
+import { selectPickedBudget } from '../../slices/app/app.slice';
 //* PAGES
 import { navLinks } from './nav-pages';
 import { useAppSelector } from '../../app/hooks';
@@ -17,14 +17,14 @@ interface MobileNavBarProps {
 const MobileBottomNavigation: React.FC<MobileNavBarProps> = (selectedSubPage) => {
   const ref = React.useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-  const budgetId = useAppSelector(selectPickedBudgetId)
+  const pickedBudget = useAppSelector(selectPickedBudget)
   
   const NavActionButtons: JSX.Element[] = navLinks.map((item) => (
     <BottomNavigationAction 
       key={item.label}
       label={item.label}
       icon={item.icon}
-      onClick={() => item.subPath && navigate(`/budget/${budgetId}/${item.subPath}`)} />
+      onClick={() => item.subPath && navigate(`/budget/${pickedBudget?.id}/${item.subPath}`)} />
   ))
   
 // TODO: Implement elevation of bottom navbar in dark mode

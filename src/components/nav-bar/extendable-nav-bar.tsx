@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { selectIsDrawerOpen, selectIsTempDrawerOpen, selectPickedBudgetId, toggleTempDrawer } from "../../slices/app/app.slice";
+import { selectIsDrawerOpen, selectIsTempDrawerOpen, selectPickedBudget, toggleTempDrawer } from "../../slices/app/app.slice";
 //* MUI
 import { Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material";
 import { useMediaQuery, useTheme } from "@mui/material";
@@ -20,7 +20,7 @@ export const ExtendableNavBar: React.FC<ExtNavBarProps> = ({ selectedSubPage }) 
   const theme = useTheme();
   const navigate = useNavigate();
   const dispatch = useAppDispatch()
-  const budgetId = useAppSelector(selectPickedBudgetId)
+  const pickedBudget = useAppSelector(selectPickedBudget)
   const isDrawerOpen = useAppSelector(selectIsDrawerOpen)
   const isTempDrawerOpen = useAppSelector(selectIsTempDrawerOpen)
     
@@ -34,7 +34,7 @@ export const ExtendableNavBar: React.FC<ExtNavBarProps> = ({ selectedSubPage }) 
       <List component="ul" >
         {navLinks.map((item, index) => (
           <ListItem disablePadding key={item.label} onClick={() => {
-            navigate(item.subPath ? `/budget/${budgetId}/${item.subPath}` : "#");
+            navigate(item.subPath ? `/budget/${pickedBudget?.id}/${item.subPath}` : "#");
             isTempDrawerOpen && dispatch(toggleTempDrawer())
           }}>
             <ListItemButton

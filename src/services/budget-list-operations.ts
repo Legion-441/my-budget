@@ -1,11 +1,27 @@
 import { FIREBASE_COLLECTIONS } from "../constants/constants";
 //* Firebase
-import { Timestamp, addDoc, collection, deleteDoc, doc, getDocs, or, query, where } from "firebase/firestore";
+import { Timestamp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, or, query, where } from "firebase/firestore";
 import { auth, db } from "../firebase";
 //* Utils
 import { transformFetchedBudgetsData } from "../utils/transform-fetched-data";
 //* Types
 import { BudgetInfoFormData, FirebaseBudgetInfo, BudgetsListItem, BudgetMetaData } from "../types/AppTypes";
+
+export const fetchBudgetMetadataByID = async (budgetID: string): Promise<BudgetMetaData> => {
+  if (!auth.currentUser?.uid) throw new Error("unauthenticated");
+
+  try {
+    const docRef = doc(db, FIREBASE_COLLECTIONS.budgets, budgetID);
+    const docSnapshot = await getDoc(docRef);
+    const finalAccountData = transformFetchedBudgetsData(docSnapshot);
+
+    if (!docSnapshot.exists()) throw new Error("not-found");
+
+    return finalAccountData;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const fetchUserBudgetsMetadata = async (): Promise<BudgetMetaData[]> => {
   if (!auth.currentUser?.uid) throw new Error("unauthenticated");
@@ -19,8 +35,8 @@ export const fetchUserBudgetsMetadata = async (): Promise<BudgetMetaData[]> => {
   const querySnapshot = await getDocs(budgetsQuery);
   const budgetsArray: BudgetMetaData[] = [];
 
-  querySnapshot.forEach((documentSnapshot) => {
-    const budgetData = transformFetchedBudgetsData(documentSnapshot);
+  querySnapshot.forEach((docSnapshot) => {
+    const budgetData = transformFetchedBudgetsData(docSnapshot);
     budgetsArray.push(budgetData);
   });
 
@@ -53,7 +69,7 @@ export const createBudget = async (budgetFormData: BudgetInfoFormData): Promise<
 
     console.log("Document written with ID: ", docRef.id);
     return budgetData;
-
+    
   } catch (error) {
     throw error;
   }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
-import { selectPickedBudgetId } from "../../slices/app/app.slice";
+import { selectPickedBudget } from "../../slices/app/app.slice";
 //* MUI
 import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@mui/material";
 //* Styled Components
@@ -11,7 +11,7 @@ import { deleteBudget } from "../../services/budget-list-operations";
 
 const SettingsView: React.FC = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const budgetId = useAppSelector(selectPickedBudgetId);
+  const pickedBudget = useAppSelector(selectPickedBudget);
   const [inputValue, setInputValue] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [isBudgetDeleted, setIsBudgetDeleted] = useState<boolean>(false);
@@ -56,7 +56,7 @@ const SettingsView: React.FC = () => {
   return (
     <>
       <PaperCard>
-        ID: {budgetId}
+        ID: {pickedBudget?.id}
         <br />
         {/* ikona: <br />
         Nazwa: <br />
@@ -93,7 +93,7 @@ const SettingsView: React.FC = () => {
             />
             {isBudgetDeleted ? (
               <Alert style={{ marginTop: 16 }} severity="success" variant="outlined">
-                Budżet {budgetId} został pomyślnie usunięty
+                Budżet {pickedBudget?.id} został pomyślnie usunięty
               </Alert>
             ) : null}
           </DialogContent>

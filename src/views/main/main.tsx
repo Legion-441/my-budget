@@ -2,7 +2,7 @@ import * as React from "react";
 import { useEffect } from "react";
 import { Outlet, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { selectPickedBudgetId, setPickedBudgetId } from "../../slices/app/app.slice";
+import { fetchAndSetSelectedBudget, selectPickedBudget } from "../../slices/app/app.slice";
 import { fetchAndSetAccountData } from "../../slices/account/account.slice";
 //* MUI
 import { Container, Box, Toolbar } from "@mui/material";
@@ -13,7 +13,7 @@ import AppHeader from "../../components/app-header/app-header";
 const MainView: React.FC = () => {
   const dispatch = useAppDispatch();
   const { id } = useParams();
-  const budgetId = useAppSelector(selectPickedBudgetId);
+  const pickedBudget = useAppSelector(selectPickedBudget);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -24,11 +24,11 @@ const MainView: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (budgetId !== id) {
-      const paramBudgetId = !id || id === "undefined" ? "" : id;
-      dispatch(setPickedBudgetId(paramBudgetId));
+    if (id && pickedBudget?.id !== id) {
+      const paramBudgetId = id === "undefined" ? "" : id;
+      dispatch(fetchAndSetSelectedBudget(paramBudgetId));
     }
-  }, [budgetId, id, dispatch]);
+  }, [pickedBudget, id, dispatch]);
 
   return (
     <>

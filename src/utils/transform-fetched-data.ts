@@ -1,8 +1,8 @@
 import { APP_THEME_OPTIONS } from "../constants/constants";
 //* Firebase
-import { DocumentData, DocumentSnapshot, QueryDocumentSnapshot, Timestamp } from "firebase/firestore";
+import { DocumentData, DocumentSnapshot, Timestamp } from "firebase/firestore";
 //* Types
-import { AccountData, BudgetsListItem, AppTheme, BudgetMetaData, Owner } from "../types/AppTypes";
+import { AccountData, BudgetsListItem, BudgetMetaData, Owner } from "../types/AppTypes";
 
 export const transformFetchedAccountData = (documentSnapshot: DocumentSnapshot<DocumentData>): AccountData => {
   const docData = documentSnapshot.data();
@@ -35,20 +35,20 @@ export const transformFetchedAccountData = (documentSnapshot: DocumentSnapshot<D
   return accountData;
 };
 
-export const transformFetchedBudgetsData = (documentSnapshot: QueryDocumentSnapshot<DocumentData>): BudgetMetaData => {
+export const transformFetchedBudgetsData = (documentSnapshot: DocumentSnapshot<DocumentData>): BudgetMetaData => {
   const documentData = documentSnapshot.data();
   const budgetID = documentSnapshot.id;
 
   // Function to ensure memberIDs is an array of strings
   const validateMemberIDsArray = (): string[] => {
-    const memberIDs = documentData.memberIDs;
+    const memberIDs = documentData?.memberIDs;
     if (!Array.isArray(memberIDs)) return [];
     return memberIDs.map((item) => (typeof item === "string" ? item : String(item)));
   };
 
   // Function to ensure owner is an object with specific properties
   const validateOwnerProperties = (): Owner => {
-    const owner = typeof documentData.owner === "object" ? documentData.owner : {};
+    const owner = typeof documentData?.owner === "object" ? documentData.owner : {};
     const { id, username } = owner;
     owner.id = "id" in owner ? String(id) : "";
     owner.username = "username" in owner ? String(username) : "";
@@ -57,11 +57,11 @@ export const transformFetchedBudgetsData = (documentSnapshot: QueryDocumentSnaps
 
   // Transform Firestore data into the expected format
   const budgetData: BudgetMetaData = {
-    name: "name" in documentData ? String(documentData.name) : "",
-    createdAt: documentData.createdAt instanceof Timestamp ? documentData.createdAt.toDate().getTime() : 0,
-    description: "description" in documentData ? String(documentData.description) : "",
+    name: documentData && "name" in documentData ? String(documentData.name) : "",
+    createdAt: documentData && documentData.createdAt instanceof Timestamp ? documentData.createdAt.toDate().getTime() : 0,
+    description: documentData && "description" in documentData ? String(documentData.description) : "",
     id: budgetID,
-    icon: "icon" in documentData ? String(documentData.icon) : "None",
+    icon: documentData && "icon" in documentData ? String(documentData.icon) : "None",
     memberIDs: validateMemberIDsArray(),
     owner: validateOwnerProperties(),
   };
