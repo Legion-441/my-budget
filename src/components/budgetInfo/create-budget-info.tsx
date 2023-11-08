@@ -15,7 +15,7 @@ import { getFirestoreErrorText } from "../../utils/firestoreErrorHandling";
 
 const INITIAL_BUDGET_FORM_DATA: BudgetFormData = {
   name: "",
-  icon: "None",
+  icon: "none",
   memberIDs: [],
   description: "",
   state: "active",

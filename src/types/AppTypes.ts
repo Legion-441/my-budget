@@ -1,18 +1,15 @@
-import { APP_THEME_OPTIONS } from "../constants/constants";
+import { APP_THEME_OPTIONS, ICON_COMPONENT_DICTIONARY } from "../constants/constants";
 //* Firebase
 import { Timestamp } from "firebase/firestore";
 //* MUI type
 import { AlertColor } from "@mui/material";
 //* Utils
-import { iconComponentDictionary } from "../utils/icon-utils";
 
 //? Budget
 
-export type BudgetState = "active" | "archived"
+export type BudgetState = "active" | "archived";
 
-export type IconKey = keyof typeof iconComponentDictionary;
-
-export type BudgetIcon = keyof typeof iconComponentDictionary | "None";
+export type BudgetIcon = keyof typeof ICON_COMPONENT_DICTIONARY | "none";
 
 export type Owner = {
   id: string;
@@ -47,7 +44,7 @@ export type AppBudgetMetaData = BudgetFormData & {
 
 //? User & Account
 
-export type AppTheme = typeof APP_THEME_OPTIONS[number];
+export type AppTheme = (typeof APP_THEME_OPTIONS)[number];
 
 export type AccountData = {
   appTheme: AppTheme;
@@ -66,5 +63,3 @@ export type AlertState = {
   title?: string;
   message?: React.ReactNode;
 };
-
-
