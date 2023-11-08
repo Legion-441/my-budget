@@ -30,6 +30,7 @@ const DeleteBudgetButton: React.FC<DeleteBudgetButtonProps> = ({ pickedBudget, i
     setIsDialogOpen(false);
     setInputValue("");
     setError("");
+    setValidationError("");
     setIsSuccess(false);
   };
 
@@ -37,12 +38,12 @@ const DeleteBudgetButton: React.FC<DeleteBudgetButtonProps> = ({ pickedBudget, i
     e.preventDefault();
     setError("");
     setValidationError("");
-
-    if (inputValue === pickedBudget.name) {
+    
+    if (inputValue !== pickedBudget.name) {
       return setValidationError("Nazwa jest niezgodna");
     }
 
-    deleteBudget(pickedBudget.id + "aaa")
+    deleteBudget(pickedBudget.id)
       .then(() => {
         setIsSuccess(true);
         // todo: delete olso in budget list and redux
@@ -57,7 +58,7 @@ const DeleteBudgetButton: React.FC<DeleteBudgetButtonProps> = ({ pickedBudget, i
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
-    setError("");
+    setValidationError("");
   };
 
   return (
