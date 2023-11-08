@@ -4,7 +4,15 @@ import { Timestamp } from "firebase/firestore";
 //* MUI type
 import { AlertColor } from "@mui/material";
 //* Utils
-import { iconMapping } from "../utils/icon-utils";
+import { iconComponentDictionary } from "../utils/icon-utils";
+
+//? Budget
+
+export type BudgetState = "active" | "archived"
+
+export type IconKey = keyof typeof iconComponentDictionary;
+
+export type BudgetIcon = keyof typeof iconComponentDictionary | "None";
 
 export type Owner = {
   id: string;
@@ -12,21 +20,32 @@ export type Owner = {
 };
 
 export type BudgetsListItem = {
-  icon: string;
-  id: string;
   name: string;
+  icon: BudgetIcon;
   owner: Owner;
+  id: string;
 };
 
-export type BudgetMetaData = {
+export type BudgetFormData = {
   name: string;
-  createdAt: number;
-  description: string;
-  id: string;
-  icon: string;
+  icon: BudgetIcon;
   memberIDs: string[];
-  owner: Owner;
+  description: string;
+  state: BudgetState;
 };
+
+export type FirebaseBudgetMetaData = BudgetFormData & {
+  owner: Owner;
+  createdAt: Timestamp;
+};
+
+export type AppBudgetMetaData = BudgetFormData & {
+  owner: Owner;
+  createdAt: number;
+  id: string;
+};
+
+//? User & Account
 
 export type AppTheme = typeof APP_THEME_OPTIONS[number];
 
@@ -42,22 +61,10 @@ export type UserData = {
   photoURL: string;
 };
 
-export type BudgetIcon = keyof typeof iconMapping;
-
-export type BudgetInfoFormData = {
-  name: string;
-  icon: BudgetIcon;
-  memberIDs: string[];
-  description: string;
-};
-
-export type FirebaseBudgetInfo = BudgetInfoFormData & {
-  owner: Owner;
-  createdAt: Timestamp;
-};
-
 export type AlertState = {
   severity: AlertColor;
   title?: string;
   message?: React.ReactNode;
 };
+
+

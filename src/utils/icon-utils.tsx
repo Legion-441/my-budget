@@ -16,7 +16,7 @@ import {
   Work,
 } from "@mui/icons-material";
 
-export const iconMapping: Record<string, React.ElementType> = {
+export const iconComponentDictionary = {
   Person: Person,
   Cottage: Cottage,
   School: School,
@@ -29,10 +29,13 @@ export const iconMapping: Record<string, React.ElementType> = {
   SportsBasketball: SportsBasketball,
   Kayaking: Kayaking,
   Sailing: Sailing,
-};
+} as const;
+
+type IconMapping = Record<string, React.ElementType>;
+export const validatedIconMapping: IconMapping = iconComponentDictionary;
 
 export const getIconComponent = (iconName: string | null): React.ReactNode => {
-  const Icon = iconMapping[iconName || "None"];
+  const Icon = validatedIconMapping[iconName || "None"];
   const iconColor = Icon ? "inherit" : "disabled";
 
   const IconComponent: React.ElementType = Icon || ImageNotSupported;

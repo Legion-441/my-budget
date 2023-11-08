@@ -5,10 +5,10 @@ import { fetchBudgetMetadataByID } from "../../services/budget-list-operations";
 //* Utils
 import { getFirestoreErrorText } from "../../utils/firestoreErrorHandling";
 //* Types
-import { AppTheme, BudgetMetaData, BudgetsListItem } from "../../types/AppTypes";
+import { AppTheme, AppBudgetMetaData, BudgetsListItem } from "../../types/AppTypes";
 
 type SelectedBudget = {
-  data: BudgetMetaData | null;
+  data: AppBudgetMetaData | null;
   isFetching: boolean;
   fetchError: string | null;
 };
@@ -45,7 +45,7 @@ export const appSlice = createSlice({
     toggleTempDrawer: (state) => {
       state.isTempDrawerOpen = !state.isTempDrawerOpen;
     },
-    setPickedBudget: (state, action: PayloadAction<BudgetMetaData>) => {
+    setPickedBudget: (state, action: PayloadAction<AppBudgetMetaData>) => {
       state.pickedBudget.data = action.payload;
     },
     startFetchingBudgetMetadata: (state) => {
@@ -80,6 +80,6 @@ export const fetchAndSetSelectedBudget =
 export const selectAppColorMode = (state: RootState): AppTheme => state.app.appColorMode;
 export const selectIsDrawerOpen = (state: RootState): boolean => state.app.isDrawerOpen;
 export const selectIsTempDrawerOpen = (state: RootState): boolean => state.app.isTempDrawerOpen;
-export const selectPickedBudget = (state: RootState): BudgetMetaData | null => state.app.pickedBudget.data;
+export const selectPickedBudget = (state: RootState): AppBudgetMetaData | null => state.app.pickedBudget.data;
 
 export default appSlice.reducer;

@@ -2,7 +2,8 @@ import { APP_THEME_OPTIONS } from "../constants/constants";
 //* Firebase
 import { DocumentData, DocumentSnapshot, Timestamp } from "firebase/firestore";
 //* Types
-import { AccountData, BudgetsListItem, BudgetMetaData, Owner } from "../types/AppTypes";
+import { AccountData, BudgetsListItem, AppBudgetMetaData, Owner } from "../types/AppTypes";
+import { validatedIconMapping } from "./icon-utils";
 
 export const transformFetchedAccountData = (documentSnapshot: DocumentSnapshot<DocumentData>): AccountData => {
   const docData = documentSnapshot.data();
@@ -12,7 +13,7 @@ export const transformFetchedAccountData = (documentSnapshot: DocumentSnapshot<D
     if (docData && Array.isArray(docData.budgetsList)) {
       docData.budgetsList.forEach((budgetItem) => {
         const budget: BudgetsListItem = {
-          icon: "icon" in budgetItem ? String(budgetItem.icon) : "None",
+          icon: "icon" in budgetItem && budgetItem.icon in validatedIconMapping ? budgetItem.icon : "None",
           id: "id" in budgetItem ? String(budgetItem.id) : "",
           name: "name" in budgetItem ? String(budgetItem.name) : "",
           owner: {
@@ -35,7 +36,7 @@ export const transformFetchedAccountData = (documentSnapshot: DocumentSnapshot<D
   return accountData;
 };
 
-export const transformFetchedBudgetsData = (documentSnapshot: DocumentSnapshot<DocumentData>): BudgetMetaData => {
+export const transformFetchedBudgetsData = (documentSnapshot: DocumentSnapshot<DocumentData>): AppBudgetMetaData => {
   const documentData = documentSnapshot.data();
   const budgetID = documentSnapshot.id;
 
@@ -56,14 +57,15 @@ export const transformFetchedBudgetsData = (documentSnapshot: DocumentSnapshot<D
   };
 
   // Transform Firestore data into the expected format
-  const budgetData: BudgetMetaData = {
+  const budgetData: AppBudgetMetaData = {
     name: documentData && "name" in documentData ? String(documentData.name) : "",
     createdAt: documentData && documentData.createdAt instanceof Timestamp ? documentData.createdAt.toDate().getTime() : 0,
     description: documentData && "description" in documentData ? String(documentData.description) : "",
     id: budgetID,
-    icon: documentData && "icon" in documentData ? String(documentData.icon) : "None",
+    icon: documentData && "icon" in documentData && documentData.icon in validatedIconMapping ? documentData.icon : "None",
     memberIDs: validateMemberIDsArray(),
     owner: validateOwnerProperties(),
+    state: documentData && (documentData.state === "archived" || documentData.state === "active") ? documentData.state : "active",
   };
 
   return budgetData;

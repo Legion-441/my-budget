@@ -1,13 +1,13 @@
 import { FIREBASE_COLLECTIONS } from "../constants/constants";
 //* Firebase
-import { Timestamp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, or, query, where } from "firebase/firestore";
+import { Timestamp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, or, query, updateDoc, where } from "firebase/firestore";
 import { auth, db } from "../firebase";
 //* Utils
 import { transformFetchedBudgetsData } from "../utils/transform-fetched-data";
 //* Types
-import { BudgetInfoFormData, FirebaseBudgetInfo, BudgetsListItem, BudgetMetaData } from "../types/AppTypes";
+import { BudgetFormData, FirebaseBudgetMetaData, BudgetsListItem, AppBudgetMetaData, BudgetState } from "../types/AppTypes";
 
-export const fetchBudgetMetadataByID = async (budgetID: string): Promise<BudgetMetaData> => {
+export const fetchBudgetMetadataByID = async (budgetID: string): Promise<AppBudgetMetaData> => {
   if (!auth.currentUser?.uid) throw new Error("unauthenticated");
 
   try {
@@ -23,7 +23,7 @@ export const fetchBudgetMetadataByID = async (budgetID: string): Promise<BudgetM
   }
 };
 
-export const fetchUserBudgetsMetadata = async (): Promise<BudgetMetaData[]> => {
+export const fetchUserBudgetsMetadata = async (): Promise<AppBudgetMetaData[]> => {
   if (!auth.currentUser?.uid) throw new Error("unauthenticated");
   const currentUserUid = auth.currentUser?.uid;
 
@@ -33,7 +33,7 @@ export const fetchUserBudgetsMetadata = async (): Promise<BudgetMetaData[]> => {
   );
 
   const querySnapshot = await getDocs(budgetsQuery);
-  const budgetsArray: BudgetMetaData[] = [];
+  const budgetsArray: AppBudgetMetaData[] = [];
 
   querySnapshot.forEach((docSnapshot) => {
     const budgetData = transformFetchedBudgetsData(docSnapshot);
@@ -43,13 +43,13 @@ export const fetchUserBudgetsMetadata = async (): Promise<BudgetMetaData[]> => {
   return budgetsArray;
 };
 
-export const createBudget = async (budgetFormData: BudgetInfoFormData): Promise<BudgetsListItem> => {
+export const createBudget = async (budgetFormData: BudgetFormData): Promise<BudgetsListItem> => {
   if (!auth.currentUser?.uid) throw new Error("unauthenticated");
   const currentUserUid = auth.currentUser?.uid;
   const { memberIDs } = budgetFormData;
   const currentUserUsername = auth.currentUser.displayName || auth.currentUser.email || ""; // TODO: make function to convert email into displayName
   const currentDate = new Date();
-  const newBudgetInfo: FirebaseBudgetInfo = {
+  const newBudgetInfo: FirebaseBudgetMetaData = {
     ...budgetFormData,
     memberIDs: memberIDs, // TODO: add feature: sending invitations, add membersIDs when invitations are accepted by users
     owner: { username: currentUserUsername, id: currentUserUid },
@@ -69,7 +69,6 @@ export const createBudget = async (budgetFormData: BudgetInfoFormData): Promise<
 
     console.log("Document written with ID: ", docRef.id);
     return budgetData;
-    
   } catch (error) {
     throw error;
   }
@@ -77,13 +76,25 @@ export const createBudget = async (budgetFormData: BudgetInfoFormData): Promise<
 
 const editBudget = async () => {};
 
-export const deleteBudget = async (budgetID: string): Promise<boolean> => {
+export const archiveBudget = async (budget: AppBudgetMetaData) => {
+  if (!auth.currentUser?.uid) throw new Error("unauthenticated");
+  try {
+    const newData: { state: BudgetState } = { state: "archived" } as const;
+    await updateDoc(doc(db, FIREBASE_COLLECTIONS.budgets, budget.id), newData);
+    // TODO: delete also from budgetsList colection & redux
+    console.log("Document with ID:", budget.id, "successfully archived");
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const deleteBudget = async (budgetID: string) => {
   if (!auth.currentUser?.uid) throw new Error("unauthenticated");
   try {
     await deleteDoc(doc(db, FIREBASE_COLLECTIONS.budgets, budgetID));
     // TODO: delete also from budgetsList colection & redux
     console.log("Document with ID:", budgetID, "successfully deleted");
-    return true;
   } catch (error) {
     console.error(error);
     throw error;
