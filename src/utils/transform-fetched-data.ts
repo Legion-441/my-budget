@@ -1,9 +1,8 @@
-import { APP_THEME_OPTIONS } from "../constants/constants";
+import { APP_THEME_OPTIONS, VALIDATED_ICON_MAPPING } from "../constants/constants";
 //* Firebase
 import { DocumentData, DocumentSnapshot, Timestamp } from "firebase/firestore";
 //* Types
 import { AccountData, BudgetsListItem, AppBudgetMetaData, Owner, BudgetIcon } from "../types/AppTypes";
-import { validatedIconMapping } from "./icon-utils";
 
 export const transformFetchedAccountData = (documentSnapshot: DocumentSnapshot<DocumentData>): AccountData => {
   const docData = documentSnapshot.data();
@@ -13,7 +12,7 @@ export const transformFetchedAccountData = (documentSnapshot: DocumentSnapshot<D
     if (docData && Array.isArray(docData.budgetsList)) {
       docData.budgetsList.forEach((budgetItem) => {
         const budget: BudgetsListItem = {
-          icon: "icon" in budgetItem && budgetItem.icon in validatedIconMapping ? budgetItem.icon : "None",
+          icon: "icon" in budgetItem && budgetItem.icon in VALIDATED_ICON_MAPPING ? budgetItem.icon : "None",
           id: "id" in budgetItem ? String(budgetItem.id) : "",
           name: "name" in budgetItem ? String(budgetItem.name) : "",
           owner: {
@@ -62,7 +61,7 @@ export const transformFetchedBudgetsData = (documentSnapshot: DocumentSnapshot<D
     createdAt: documentData && documentData.createdAt instanceof Timestamp ? documentData.createdAt.toDate().getTime() : 0,
     description: documentData && "description" in documentData ? String(documentData.description) : "",
     id: budgetID,
-    icon: (documentData && "icon" in documentData && documentData.icon in validatedIconMapping) ? documentData.icon as BudgetIcon : "none",
+    icon: (documentData && "icon" in documentData && documentData.icon in VALIDATED_ICON_MAPPING) ? documentData.icon as BudgetIcon : "none",
     memberIDs: validateMemberIDsArray(),
     owner: validateOwnerProperties(),
     state: documentData && (documentData.state === "archived" || documentData.state === "active") ? documentData.state : "active",

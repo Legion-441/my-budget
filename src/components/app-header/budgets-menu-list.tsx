@@ -1,8 +1,8 @@
 import * as React from "react";
 //* Firebase
 import { auth } from "../../firebase";
-//* Utils
-import { getIconComponent } from "../../utils/icon-utils";
+//* Components
+import BudgetIcon from "../budgetInfo/budget-icon";
 //* MUI
 import { MenuItem, ListItemIcon, ListItemText, Divider } from "@mui/material";
 //* Types
@@ -14,7 +14,7 @@ interface BudgetListProps {
 }
 
 const BudgetsMenuList: React.FC<BudgetListProps> = ({ budgets, onClick }) => {
-  if (budgets.length === 0) return <MenuItem disabled>Lista jest pusta</MenuItem>
+  if (budgets.length === 0) return <MenuItem disabled>Lista jest pusta</MenuItem>;
   const userUid = auth.currentUser?.uid;
 
   const asOwnerBudgets = budgets.filter((item) => item.owner.id === userUid);
@@ -23,7 +23,9 @@ const BudgetsMenuList: React.FC<BudgetListProps> = ({ budgets, onClick }) => {
   const renderBudgetItems = (budgets: BudgetsListItem[], isOwner: boolean): JSX.Element[] => {
     return budgets.map((item) => (
       <MenuItem key={item.id} onClick={() => onClick(item.id)}>
-        <ListItemIcon>{getIconComponent(item.icon)}</ListItemIcon>
+        <ListItemIcon>
+          <BudgetIcon iconName={item.icon} />
+        </ListItemIcon>
         <ListItemText secondary={`(${isOwner ? "Własne" : item.owner.username})`} primary={item.name} />
       </MenuItem>
     ));

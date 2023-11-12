@@ -28,6 +28,8 @@ export const ICON_COMPONENT_DICTIONARY = {
   kayaking: Kayaking,
   sailing: Sailing,
 } as const;
+type IconMapping = Record<string, React.ElementType>;
+export const VALIDATED_ICON_MAPPING: IconMapping = ICON_COMPONENT_DICTIONARY;
 
 export const FIREBASE_COLLECTIONS = {
   accounts: "accounts",

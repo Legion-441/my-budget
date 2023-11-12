@@ -4,10 +4,10 @@ import { fetchAndSetAccountData, selectAccountInfo } from "../../slices/account/
 //* MUI
 import { ExpandLess, ExpandMore, Refresh } from "@mui/icons-material";
 import { Box, Button, IconButton, Typography } from "@mui/material";
+//* Components
+import BudgetIcon from "../budgetInfo/budget-icon";
 //* Styled Components
 import CustomAlert from "../../styled/budgetList-alert/budgetList-alert.styled";
-//* Utils
-import { getIconComponent } from "../../utils/icon-utils";
 //* Types
 import { selectPickedBudget } from "../../slices/app/app.slice";
 
@@ -70,7 +70,7 @@ const BudgetListButton: React.FC<BudgetListButtonProps> = ({ isOpen, handleToggl
         flexGrow: { sm: 0, xs: 1 },
         minWidth: { sm: 200, xs: 80 },
       }}
-      startIcon={pickedBudget?.icon && getIconComponent(pickedBudget.icon)}
+      startIcon={pickedBudget?.icon && <BudgetIcon iconName={pickedBudget.icon} />}
       endIcon={isOpen ? <ExpandLess /> : <ExpandMore />}
     >
       <Typography
