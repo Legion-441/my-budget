@@ -3,10 +3,10 @@ import { useState } from "react";
 import { Button, Dialog, ListItemIcon, MenuItem } from "@mui/material";
 import { Edit, Archive, Delete, ExitToApp, Unarchive } from "@mui/icons-material";
 //* Components
-import EditBudgetDialog from "./budget-edit-dialog";
 import ArchiveBudgetDialog from "./budget-archive-dialog";
 import DeleteBudgetDialog from "./budget-delete-dialog";
 import LeaveBudgetDialog from "./budget-leave-dialog";
+import CreateOrEditBudgetDialog from "./budget-create-or-edit-dialog";
 //* Types
 import { AppBudgetMetaData, BudgetActions } from "../../types/AppTypes";
 import { ButtonProps } from "@mui/material/Button";
@@ -43,7 +43,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({ budget, variant, action }) 
       text: "Edytuj",
       icon: <Edit color={"primary"} />,
       color: "primary",
-      dialog: <EditBudgetDialog budget={budget} onClose={handleCloseDialog} />,
+      dialog: <CreateOrEditBudgetDialog budget={budget} onClose={handleCloseDialog} />,
     },
     archive: {
       text: budget.state === "active" ? "Archiwizuj" : "Odarchiwizuj",

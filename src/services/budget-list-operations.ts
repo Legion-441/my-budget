@@ -5,6 +5,7 @@ import { db } from "../firebase";
 //* Utils
 import { transformFetchedBudgetsData } from "../utils/transform-fetched-data";
 import checkAuthentication from "../utils/checkAuthentication";
+import getChangedBudgetData from "../utils/get-budget-changes";
 //* Types
 import { BudgetFormData, FirebaseBudgetMetaData, BudgetsListItem, AppBudgetMetaData, BudgetState } from "../types/AppTypes";
 
@@ -65,7 +66,16 @@ export const createBudget = async (budgetFormData: BudgetFormData): Promise<Budg
   return budgetData;
 };
 
-const editBudget = async () => {};
+export const updateBudget = async (originalBudgetData: AppBudgetMetaData, newBudgetData: BudgetFormData) => {
+  const currentUser = checkAuthentication();
+  const updatedData = getChangedBudgetData(originalBudgetData, newBudgetData)
+  if (Object.keys(updatedData).length === 0) throw new Error("no-data-changed");
+  
+  const budgetID = originalBudgetData.id
+  
+  await updateDoc(doc(db, FIREBASE_COLLECTIONS.budgets, budgetID), updatedData);
+  // TODO: change also from budgetsList colection & redux
+};
 
 export const archiveBudget = async (budget: AppBudgetMetaData) => {
   checkAuthentication();

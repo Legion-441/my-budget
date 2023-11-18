@@ -29,6 +29,7 @@ export const getFirestoreErrorText = (error: FirebaseError | Error | unknown): s
     "unavailable": "Usługa jest obecnie niedostępna. Proszę spróbować później.",
     "data-loss": "Niestety, doszło do nieodwracalnej utraty lub uszkodzenia danych.",
     "unauthenticated": "Aby wykonać tę operację musisz być zalogowany.",
+    "no-data-changed": "Nie zmieniono żadnych danych",
     "unmatched-error": `Wystąpił nieoczekiwany błąd: ${errorIdentifier}.`,
   };
 
