@@ -7,10 +7,9 @@ import { auth } from "../../firebase";
 import { Box, Button, Dialog, Stack } from "@mui/material";
 import { Group, Person } from "@mui/icons-material";
 //* Components
-import CreateBudgetDialog from "../../components/budgetInfo/create-budget-info";
+import CreateOrEditBudgetDialog from "../../components/budget-settings/budget-create-or-edit-dialog";
 //* Styled Components
 import PaperCard from "../../styled/paper-card/paper-card.styled";
-import CreateOrEditBudgetDialog from "../../components/budget-settings/budget-create-or-edit-dialog";
 
 const HomeView: React.FC = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
