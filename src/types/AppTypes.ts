@@ -3,7 +3,6 @@ import { APP_THEME_OPTIONS, ICON_COMPONENT_DICTIONARY } from "../constants/const
 import { Timestamp } from "firebase/firestore";
 //* MUI type
 import { AlertColor } from "@mui/material";
-//* Utils
 
 //? Budget
 
@@ -63,3 +62,12 @@ export type AlertState = {
   title?: string;
   message?: React.ReactNode;
 };
+
+//? Budget Actions
+
+export interface BudgetDialogProps {
+  budget: AppBudgetMetaData;
+  onClose: () => void;
+}
+
+export type BudgetActions = "edit" | "archive" | "delete" | "leave";

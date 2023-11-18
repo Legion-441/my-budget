@@ -78,11 +78,14 @@ const editBudget = async () => {};
 
 export const archiveBudget = async (budget: AppBudgetMetaData) => {
   if (!auth.currentUser?.uid) throw new Error("unauthenticated");
+  const isArchived = budget.state === "archived";
+  const newBudgetState = isArchived ? "active" : "archived";
+
   try {
-    const newData: { state: BudgetState } = { state: "archived" } as const;
+    const newData: { state: BudgetState } = { state: newBudgetState } as const;
     await updateDoc(doc(db, FIREBASE_COLLECTIONS.budgets, budget.id), newData);
     // TODO: delete also from budgetsList colection & redux
-    console.log("Document with ID:", budget.id, "successfully archived");
+    console.log("Document with ID:", budget.id, `successfully ${isArchived && "un"}archived`);
   } catch (error) {
     console.error(error);
     throw error;
