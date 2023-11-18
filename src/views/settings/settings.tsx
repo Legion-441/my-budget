@@ -20,7 +20,7 @@ const SettingsView: React.FC = () => {
     <>
       <BudgetFullCard budget={pickedBudget} />
       {isOwner ? (
-        <Stack direction={"row"} margin={2} justifyContent={"space-between"}>
+        <Stack direction={"row"} margin={2} gap={2} rowGap={3} justifyContent={"space-between"} flexWrap={"wrap"}>
           <Stack direction={"row"} gap={1}>
             {!isArchived && <ActionButton variant={"button"} budget={pickedBudget} action={"edit"} />}
           </Stack>
@@ -30,7 +30,7 @@ const SettingsView: React.FC = () => {
           </Stack>
         </Stack>
       ) : (
-        <Stack>
+        <Stack direction={"row"} margin={2} justifyContent={"flex-end"}>
           <ActionButton variant={"button"} budget={pickedBudget} action={"leave"} />
         </Stack>
       )}
