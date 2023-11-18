@@ -1,31 +1,27 @@
 import { FIREBASE_COLLECTIONS } from "../constants/constants";
 //* Firebase
 import { Timestamp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, or, query, updateDoc, where } from "firebase/firestore";
-import { auth, db } from "../firebase";
+import { db } from "../firebase";
 //* Utils
 import { transformFetchedBudgetsData } from "../utils/transform-fetched-data";
+import checkAuthentication from "../utils/checkAuthentication";
 //* Types
 import { BudgetFormData, FirebaseBudgetMetaData, BudgetsListItem, AppBudgetMetaData, BudgetState } from "../types/AppTypes";
 
 export const fetchBudgetMetadataByID = async (budgetID: string): Promise<AppBudgetMetaData> => {
-  if (!auth.currentUser?.uid) throw new Error("unauthenticated");
+  checkAuthentication();
 
-  try {
-    const docRef = doc(db, FIREBASE_COLLECTIONS.budgets, budgetID);
-    const docSnapshot = await getDoc(docRef);
-    const finalAccountData = transformFetchedBudgetsData(docSnapshot);
+  const docRef = doc(db, FIREBASE_COLLECTIONS.budgets, budgetID);
+  const docSnapshot = await getDoc(docRef);
+  if (!docSnapshot.exists()) throw new Error("not-found");
+  const finalAccountData = transformFetchedBudgetsData(docSnapshot);
 
-    if (!docSnapshot.exists()) throw new Error("not-found");
-
-    return finalAccountData;
-  } catch (error) {
-    throw error;
-  }
+  return finalAccountData;
 };
 
 export const fetchUserBudgetsMetadata = async (): Promise<AppBudgetMetaData[]> => {
-  if (!auth.currentUser?.uid) throw new Error("unauthenticated");
-  const currentUserUid = auth.currentUser?.uid;
+  const currentUser = checkAuthentication();
+  const { uid: currentUserUid } = currentUser;
 
   const budgetsQuery = query(
     collection(db, FIREBASE_COLLECTIONS.budgets),
@@ -44,10 +40,10 @@ export const fetchUserBudgetsMetadata = async (): Promise<AppBudgetMetaData[]> =
 };
 
 export const createBudget = async (budgetFormData: BudgetFormData): Promise<BudgetsListItem> => {
-  if (!auth.currentUser?.uid) throw new Error("unauthenticated");
-  const currentUserUid = auth.currentUser?.uid;
+  const currentUser = checkAuthentication();
+  const { displayName: currentUserDisplayName, email: currentUserEmail, uid: currentUserUid } = currentUser;
   const { memberIDs } = budgetFormData;
-  const currentUserUsername = auth.currentUser.displayName || auth.currentUser.email || ""; // TODO: make function to convert email into displayName
+  const currentUserUsername = currentUserDisplayName || currentUserEmail || ""; // TODO: make function to convert email into displayName
   const currentDate = new Date();
   const newBudgetInfo: FirebaseBudgetMetaData = {
     ...budgetFormData,
@@ -55,51 +51,38 @@ export const createBudget = async (budgetFormData: BudgetFormData): Promise<Budg
     owner: { username: currentUserUsername, id: currentUserUid },
     createdAt: Timestamp.fromDate(currentDate),
   };
+  const docRef = await addDoc(collection(db, FIREBASE_COLLECTIONS.budgets), newBudgetInfo);
 
-  try {
-    const docRef = await addDoc(collection(db, FIREBASE_COLLECTIONS.budgets), newBudgetInfo);
+  const { icon, name, owner } = newBudgetInfo;
+  const budgetData: BudgetsListItem = {
+    icon,
+    id: docRef.id,
+    name,
+    owner,
+  };
 
-    const { icon, name, owner } = newBudgetInfo;
-    const budgetData: BudgetsListItem = {
-      icon,
-      id: docRef.id,
-      name,
-      owner,
-    };
-
-    console.log("Document written with ID: ", docRef.id);
-    return budgetData;
-  } catch (error) {
-    throw error;
-  }
+  console.log("Document written with ID: ", docRef.id);
+  return budgetData;
 };
 
 const editBudget = async () => {};
 
 export const archiveBudget = async (budget: AppBudgetMetaData) => {
-  if (!auth.currentUser?.uid) throw new Error("unauthenticated");
+  checkAuthentication();
+
   const isArchived = budget.state === "archived";
   const newBudgetState = isArchived ? "active" : "archived";
 
-  try {
-    const newData: { state: BudgetState } = { state: newBudgetState } as const;
-    await updateDoc(doc(db, FIREBASE_COLLECTIONS.budgets, budget.id), newData);
-    // TODO: delete also from budgetsList colection & redux
-    console.log("Document with ID:", budget.id, `successfully ${isArchived && "un"}archived`);
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
+  const newData: { state: BudgetState } = { state: newBudgetState } as const;
+  await updateDoc(doc(db, FIREBASE_COLLECTIONS.budgets, budget.id), newData);
+  // TODO: delete also from budgetsList colection & redux
+  console.log("Document with ID:", budget.id, `successfully ${isArchived && "un"}archived`);
 };
 
 export const deleteBudget = async (budgetID: string) => {
-  if (!auth.currentUser?.uid) throw new Error("unauthenticated");
-  try {
-    await deleteDoc(doc(db, FIREBASE_COLLECTIONS.budgets, budgetID));
-    // TODO: delete also from budgetsList colection & redux
-    console.log("Document with ID:", budgetID, "successfully deleted");
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
+  checkAuthentication();
+
+  await deleteDoc(doc(db, FIREBASE_COLLECTIONS.budgets, budgetID));
+  // TODO: delete also from budgetsList colection & redux
+  console.log("Document with ID:", budgetID, "successfully deleted");
 };
