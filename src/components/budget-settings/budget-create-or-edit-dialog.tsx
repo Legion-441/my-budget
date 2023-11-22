@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addBudgetToList } from "../../slices/account/account.slice";
 //* MUI
-import { Alert, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
+import { Alert, Button, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
 //* Components
 import IconSelector from "../budgetInfo/Icon-selector";
 import MembersSelector from "../budgetInfo/members-selector";
@@ -10,21 +10,21 @@ import MembersSelector from "../budgetInfo/members-selector";
 import { createBudget, updateBudget } from "../../services/budget-list-operations";
 import { updateAccount } from "../../services/account-operations";
 //* Types
-import { BudgetIcon, BudgetFormData, AppBudgetMetaData } from "../../types/AppTypes";
+import { BudgetIcon, BudgetFormData, AppBudgetMetaData, MemberOrOwner } from "../../types/AppTypes";
 import { getFirestoreErrorText } from "../../utils/firestoreErrorHandling";
 
 const INITIAL_BUDGET_FORM_DATA: BudgetFormData = {
   name: "",
   icon: "none",
-  memberIDs: [],
+  members: [],
   description: "",
   state: "active",
 };
 
 const extractBudgetFormData = (budget: AppBudgetMetaData | null): BudgetFormData => {
   if (budget) {
-    const { name, icon, memberIDs, description, state } = budget;
-    return { name, icon, memberIDs, description, state };
+    const { name, icon, members, description, state } = budget;
+    return { name, icon, members, description, state };
   }
   return { ...INITIAL_BUDGET_FORM_DATA };
 };
@@ -43,7 +43,7 @@ const CreateOrEditBudgetDialog: React.FC<CreateBudgetDialogProps> = ({ budget, o
   const dispatch = useDispatch();
   const isCreateForm = !budget;
 
-  const { name, icon, memberIDs, description } = budgetFormData;
+  const { name, icon, members, description } = budgetFormData;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -92,9 +92,9 @@ const CreateOrEditBudgetDialog: React.FC<CreateBudgetDialogProps> = ({ budget, o
     setBudgetFormData({ ...budgetFormData, icon: newIcon });
   };
 
-  const handleMembersChange = (newMemberIDs: string[]) => {
+  const handleMembersChange = (newMembers: MemberOrOwner[]) => {
     clearErrors();
-    setBudgetFormData({ ...budgetFormData, memberIDs: newMemberIDs });
+    setBudgetFormData({ ...budgetFormData, members: newMembers });
   };
 
   const handleClose = () => {

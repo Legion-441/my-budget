@@ -2,7 +2,7 @@ import { APP_THEME_OPTIONS, VALIDATED_ICON_MAPPING } from "../constants/constant
 //* Firebase
 import { DocumentData, DocumentSnapshot, Timestamp } from "firebase/firestore";
 //* Types
-import { AccountData, BudgetsListItem, AppBudgetMetaData, Owner, BudgetIcon } from "../types/AppTypes";
+import { AccountData, BudgetsListItem, AppBudgetMetaData, BudgetIcon, MemberOrOwner, FirebaseMember } from "../types/AppTypes";
 
 export const transformFetchedAccountData = (documentSnapshot: DocumentSnapshot<DocumentData>): AccountData => {
   const docData = documentSnapshot.data();
@@ -39,21 +39,20 @@ export const transformFetchedBudgetsData = (documentSnapshot: DocumentSnapshot<D
   const documentData = documentSnapshot.data();
   const budgetID = documentSnapshot.id;
 
-  // Function to ensure memberIDs is an array of strings
-  const validateMemberIDsArray = (): string[] => {
-    const memberIDs = documentData?.memberIDs;
-    if (!Array.isArray(memberIDs)) return [];
-    return memberIDs.map((item) => (typeof item === "string" ? item : String(item)));
+  const validateMembers = (membersObject: FirebaseMember): MemberOrOwner[] => {
+    if (typeof membersObject !== "object") return [];
+
+    const members = Object.keys(membersObject).map((memberID) => {
+      return {
+        id: memberID,
+        username: membersObject[memberID],
+      };
+    });
+
+    return members;
   };
 
-  // Function to ensure owner is an object with specific properties
-  const validateOwnerProperties = (): Owner => {
-    const owner = typeof documentData?.owner === "object" ? documentData.owner : {};
-    const { id, username } = owner;
-    owner.id = "id" in owner ? String(id) : "";
-    owner.username = "username" in owner ? String(username) : "";
-    return owner;
-  };
+  const validateOwnerProperties = (): MemberOrOwner => validateMembers(documentData?.owner)[0];
 
   // Transform Firestore data into the expected format
   const budgetData: AppBudgetMetaData = {
@@ -61,8 +60,8 @@ export const transformFetchedBudgetsData = (documentSnapshot: DocumentSnapshot<D
     createdAt: documentData && documentData.createdAt instanceof Timestamp ? documentData.createdAt.toDate().getTime() : 0,
     description: documentData && "description" in documentData ? String(documentData.description) : "",
     id: budgetID,
-    icon: (documentData && "icon" in documentData && documentData.icon in VALIDATED_ICON_MAPPING) ? documentData.icon as BudgetIcon : "none",
-    memberIDs: validateMemberIDsArray(),
+    icon: documentData && "icon" in documentData && documentData.icon in VALIDATED_ICON_MAPPING ? documentData.icon as BudgetIcon : "none",
+    members: validateMembers(documentData?.members),
     owner: validateOwnerProperties(),
     state: documentData && (documentData.state === "archived" || documentData.state === "active") ? documentData.state : "active",
   };

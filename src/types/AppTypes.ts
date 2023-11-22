@@ -10,7 +10,7 @@ export type BudgetState = "active" | "archived";
 
 export type BudgetIcon = keyof typeof ICON_COMPONENT_DICTIONARY | "none";
 
-export type Owner = {
+export type MemberOrOwner = {
   id: string;
   username: string;
 };
@@ -18,25 +18,34 @@ export type Owner = {
 export type BudgetsListItem = {
   name: string;
   icon: BudgetIcon;
-  owner: Owner;
+  owner: MemberOrOwner;
   id: string;
 };
 
 export type BudgetFormData = {
   name: string;
   icon: BudgetIcon;
-  memberIDs: string[];
+  members: MemberOrOwner[];
   description: string;
   state: BudgetState;
 };
 
-export type FirebaseBudgetMetaData = BudgetFormData & {
-  owner: Owner;
+export type FirebaseMember = {
+  [key: string]: string;
+};
+
+export type FirebaseBudgetMetaData = {
+  name: string;
+  icon: BudgetIcon;
+  members: FirebaseMember;
+  description: string;
+  state: BudgetState;
+  owner: FirebaseMember;
   createdAt: Timestamp;
 };
 
 export type AppBudgetMetaData = BudgetFormData & {
-  owner: Owner;
+  owner: MemberOrOwner;
   createdAt: number;
   id: string;
 };

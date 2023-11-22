@@ -46,14 +46,14 @@ const BudgetFullCard: React.FC<BudgetFullCardProps> = ({ budget }) => {
         <Typography variant="body1">{budget.description || "Brak opisu"}</Typography>
         <br />
         <List dense subheader={<Typography>Członkowie:</Typography>}>
-          {budget.memberIDs.length === 0 && (
+          {budget.members.length === 0 && (
             <Typography variant="body2" color={"text.disabled"}>
               Brak
             </Typography>
           )}
-          {budget.memberIDs.map((memberID) => (
-            <ListItem disableGutters key={memberID}>
-              <Chip avatar={<Avatar>{memberID[0].toUpperCase()}</Avatar>} label={memberID} variant="outlined" />
+          {budget.members.map((member) => (
+            <ListItem disableGutters key={member.id}>
+              <Chip avatar={<Avatar>{member.username[0].toUpperCase()}</Avatar>} label={member.username} variant="outlined" />
             </ListItem>
           ))}
         </List>
