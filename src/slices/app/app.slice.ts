@@ -82,7 +82,6 @@ export const fetchAndSetSelectedBudget =
 export const selectAppColorMode = (state: RootState): AppTheme => state.app.appColorMode;
 export const selectIsDrawerOpen = (state: RootState): boolean => state.app.isDrawerOpen;
 export const selectIsTempDrawerOpen = (state: RootState): boolean => state.app.isTempDrawerOpen;
-export const selectPickedBudgetData = (state: RootState): AppBudgetMetaData | null => state.app.pickedBudget.data;
 export const selectPickedBudget = (state: RootState): SelectedBudget => state.app.pickedBudget;
 
 export default appSlice.reducer;
