@@ -42,7 +42,7 @@ const AppHeader: React.FC = () => {
               alignItems: "center",
             }}
           >
-            {pickedBudget && (
+            {pickedBudget.data && (
               <IconButton size="large" edge="start" color="inherit" aria-label="open drawer" onClick={handleDrawerToggle} sx={{ mr: 2 }}>
                 <Menu />
               </IconButton>

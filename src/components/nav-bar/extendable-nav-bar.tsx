@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { selectIsDrawerOpen, selectIsTempDrawerOpen, selectPickedBudget, toggleTempDrawer } from "../../slices/app/app.slice";
+import { selectIsDrawerOpen, selectIsTempDrawerOpen, toggleTempDrawer } from "../../slices/app/app.slice";
 //* MUI
 import { Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material";
 import { useMediaQuery, useTheme } from "@mui/material";
@@ -13,14 +13,14 @@ import { navLinks } from "./nav-pages";
 const drawerWidth = [240, 60];
 
 interface ExtNavBarProps {
-  selectedSubPage: number | undefined
+  selectedSubPage: number | undefined,
+  pickedBudgetID: string
 }
 
-export const ExtendableNavBar: React.FC<ExtNavBarProps> = ({ selectedSubPage }) => {
+export const ExtendableNavBar: React.FC<ExtNavBarProps> = ({ selectedSubPage, pickedBudgetID }) => {
   const theme = useTheme();
   const navigate = useNavigate();
   const dispatch = useAppDispatch()
-  const pickedBudget = useAppSelector(selectPickedBudget)
   const isDrawerOpen = useAppSelector(selectIsDrawerOpen)
   const isTempDrawerOpen = useAppSelector(selectIsTempDrawerOpen)
     
@@ -34,7 +34,7 @@ export const ExtendableNavBar: React.FC<ExtNavBarProps> = ({ selectedSubPage }) 
       <List component="ul" >
         {navLinks.map((item, index) => (
           <ListItem disablePadding key={item.label} onClick={() => {
-            navigate(item.subPath ? `/budget/${pickedBudget?.id}/${item.subPath}` : "#");
+            navigate(item.subPath ? `/budget/${pickedBudgetID}/${item.subPath}` : "#");
             isTempDrawerOpen && dispatch(toggleTempDrawer())
           }}>
             <ListItemButton

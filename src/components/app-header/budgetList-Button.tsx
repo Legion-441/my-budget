@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { fetchAndSetAccountData, selectAccountInfo } from "../../slices/account/account.slice";
+import { selectPickedBudget } from "../../slices/app/app.slice";
 //* MUI
 import { ExpandLess, ExpandMore, Refresh } from "@mui/icons-material";
 import { Box, Button, IconButton, Typography } from "@mui/material";
@@ -8,8 +9,6 @@ import { Box, Button, IconButton, Typography } from "@mui/material";
 import BudgetIcon from "../budgetInfo/budget-icon";
 //* Styled Components
 import CustomAlert from "../../styled/budgetList-alert/budgetList-alert.styled";
-//* Types
-import { selectPickedBudget } from "../../slices/app/app.slice";
 
 interface BudgetListButtonProps {
   isOpen: boolean;
@@ -18,8 +17,10 @@ interface BudgetListButtonProps {
 
 const BudgetListButton: React.FC<BudgetListButtonProps> = ({ isOpen, handleToggleBudgetsMenu }) => {
   const { isFetching, fetchError } = useAppSelector(selectAccountInfo);
-  const pickedBudget = useAppSelector(selectPickedBudget);
   const dispatch = useAppDispatch();
+  const pickedBudget = useAppSelector(selectPickedBudget);
+  const pickedBudgetIcon = pickedBudget.data?.icon || null
+  const pickedBudgetName = pickedBudget.data?.name || null
 
   useEffect(() => {
     const controller = new AbortController();
@@ -70,7 +71,7 @@ const BudgetListButton: React.FC<BudgetListButtonProps> = ({ isOpen, handleToggl
         flexGrow: { sm: 0, xs: 1 },
         minWidth: { sm: 200, xs: 80 },
       }}
-      startIcon={pickedBudget?.icon && <BudgetIcon iconName={pickedBudget.icon} />}
+      startIcon={pickedBudgetIcon && <BudgetIcon iconName={pickedBudgetIcon} />}
       endIcon={isOpen ? <ExpandLess /> : <ExpandMore />}
     >
       <Typography
@@ -82,7 +83,7 @@ const BudgetListButton: React.FC<BudgetListButtonProps> = ({ isOpen, handleToggl
         flexGrow={1}
         textAlign={"left"}
       >
-        {isFetching ? "Pobieram listę..." : pickedBudget?.name || "Wybierz budżet..."}
+        {isFetching ? "Pobieram listę..." : pickedBudgetName || "Wybierz budżet..."}
       </Typography>
     </Button>
   );

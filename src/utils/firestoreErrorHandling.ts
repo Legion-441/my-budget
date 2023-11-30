@@ -19,7 +19,7 @@ export const getFirestoreErrorText = (error: FirebaseError | Error | unknown): s
     "deadline-exceeded": "Minął czas oczekiwania na zakończenie operacji.",
     "not-found": "Przepraszamy, nie znaleziono żądanego dokumentu.",
     "already-exists": "Ten element już istnieje.",
-    "permission-denied": "Niestety, nie masz uprawnień do wykonania tej operacji lub dokument nie istnieje.",
+    "permission-denied": "Niestety, nie masz wystarczajacych uprawnień lub dokument nie istnieje.",
     "resource-exhausted": "Osiągnięty limit operacji lub pojemności. Proszę spróbować później.",
     "failed-precondition": "Operacja została odrzucona. System nie znajduje się w wymaganym stanie do jej wykonania.",
     "aborted": "Operacja została przerwana. Proszę spróbować ponownie.",

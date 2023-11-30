@@ -10,28 +10,29 @@ import ActionButton from "../../components/budget-settings/budget-actions-button
 
 const SettingsView: React.FC = () => {
   const pickedBudget = useAppSelector(selectPickedBudget);
+  const { data: pickedBudgetData } = pickedBudget;
 
-  if (!pickedBudget) return <>Nie wybrano żadnego budżetu</>;
+  if (!pickedBudgetData) return <>Nie wybrano żadnego budżetu</>;
 
-  const isOwner = pickedBudget.owner.id === auth.currentUser?.uid;
-  const isArchived = pickedBudget.state === "archived";
+  const isOwner = pickedBudgetData.owner.id === auth.currentUser?.uid;
+  const isArchived = pickedBudgetData.state === "archived";
 
   return (
     <>
-      <BudgetFullCard budget={pickedBudget} />
+      <BudgetFullCard budget={pickedBudgetData} />
       {isOwner ? (
         <Stack direction={"row"} margin={2} gap={2} rowGap={3} justifyContent={"space-between"} flexWrap={"wrap"}>
           <Stack direction={"row"} gap={1}>
-            {!isArchived && <ActionButton variant={"button"} budget={pickedBudget} action={"edit"} />}
+            {!isArchived && <ActionButton variant={"button"} budget={pickedBudgetData} action={"edit"} />}
           </Stack>
           <Stack direction={"row"} gap={1}>
-            <ActionButton variant={"button"} budget={pickedBudget} action={"archive"} />
-            <ActionButton variant={"button"} budget={pickedBudget} action={"delete"} />
+            <ActionButton variant={"button"} budget={pickedBudgetData} action={"archive"} />
+            <ActionButton variant={"button"} budget={pickedBudgetData} action={"delete"} />
           </Stack>
         </Stack>
       ) : (
         <Stack direction={"row"} margin={2} justifyContent={"flex-end"}>
-          <ActionButton variant={"button"} budget={pickedBudget} action={"leave"} />
+          <ActionButton variant={"button"} budget={pickedBudgetData} action={"leave"} />
         </Stack>
       )}
     </>

@@ -14,6 +14,7 @@ const MainView: React.FC = () => {
   const dispatch = useAppDispatch();
   const { id } = useParams();
   const pickedBudget = useAppSelector(selectPickedBudget);
+  const { data: pickedBudgetData} = pickedBudget
 
   useEffect(() => {
     const controller = new AbortController();
@@ -24,9 +25,8 @@ const MainView: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (id && pickedBudget?.id !== id) {
-      const paramBudgetId = id === "undefined" ? "" : id;
-      dispatch(fetchAndSetSelectedBudget(paramBudgetId));
+    if (id && pickedBudgetData?.id !== id) {
+      dispatch(fetchAndSetSelectedBudget(id));
     }
   }, [pickedBudget, id, dispatch]);
 

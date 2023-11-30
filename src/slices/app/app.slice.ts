@@ -47,6 +47,8 @@ export const appSlice = createSlice({
     },
     setPickedBudget: (state, action: PayloadAction<AppBudgetMetaData>) => {
       state.pickedBudget.data = action.payload;
+      state.pickedBudget.isFetching = false;
+      state.pickedBudget.fetchError = null;
     },
     startFetchingBudgetMetadata: (state) => {
       state.pickedBudget.isFetching = true;
@@ -80,6 +82,7 @@ export const fetchAndSetSelectedBudget =
 export const selectAppColorMode = (state: RootState): AppTheme => state.app.appColorMode;
 export const selectIsDrawerOpen = (state: RootState): boolean => state.app.isDrawerOpen;
 export const selectIsTempDrawerOpen = (state: RootState): boolean => state.app.isTempDrawerOpen;
-export const selectPickedBudget = (state: RootState): AppBudgetMetaData | null => state.app.pickedBudget.data;
+export const selectPickedBudgetData = (state: RootState): AppBudgetMetaData | null => state.app.pickedBudget.data;
+export const selectPickedBudget = (state: RootState): SelectedBudget => state.app.pickedBudget;
 
 export default appSlice.reducer;
