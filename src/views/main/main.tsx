@@ -25,7 +25,7 @@ const MainView: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (id && !pickedBudget.fetchError && pickedBudgetData?.id !== id) {
+    if (id && pickedBudget.fetchError?.id !== id && pickedBudgetData?.id !== id) {
       dispatch(fetchAndSetSelectedBudget(id));      
     }
   }, [pickedBudget, id, dispatch]);

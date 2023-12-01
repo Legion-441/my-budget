@@ -45,7 +45,7 @@ const BudgetView: React.FC = () => {
           {pickedBudgetData && <MobileBottomNavigation selectedSubPage={selectedSubPage} pickedBudgetID={pickedBudgetData.id} />}
         </Box>
       ) : (
-        <DeniedAccessCard errorMessage={pickedBudgetFetchError} />
+        <DeniedAccessCard errorMessage={pickedBudgetFetchError?.message || null} />
       )}
     </>
   );

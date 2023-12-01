@@ -7,17 +7,20 @@ import { getFirestoreErrorText } from "../../utils/firestoreErrorHandling";
 //* Types
 import { AppTheme, AppBudgetMetaData, BudgetsListItem } from "../../types/AppTypes";
 
+type FetchError = {
+  message: string;
+  id: string;
+};
 type SelectedBudget = {
   data: AppBudgetMetaData | null;
   isFetching: boolean;
-  fetchError: string | null;
+  fetchError: FetchError | null;
 };
 interface AppState {
   appColorMode: AppTheme;
   isDrawerOpen: boolean;
   isTempDrawerOpen: boolean;
   pickedBudget: SelectedBudget;
-  budgetsList: BudgetsListItem[];
 }
 
 const INITIAL_APP_STATE: AppState = {
@@ -29,7 +32,6 @@ const INITIAL_APP_STATE: AppState = {
     isFetching: false,
     fetchError: null,
   },
-  budgetsList: [],
 };
 
 export const appSlice = createSlice({
@@ -54,7 +56,7 @@ export const appSlice = createSlice({
       state.pickedBudget.isFetching = true;
       state.pickedBudget.fetchError = null;
     },
-    setBudgetMetadataError: (state, action: PayloadAction<string>) => {
+    setBudgetMetadataError: (state, action: PayloadAction<FetchError>) => {
       state.pickedBudget.isFetching = false;
       state.pickedBudget.fetchError = action.payload;
     },
@@ -74,7 +76,7 @@ export const fetchAndSetSelectedBudget =
       })
       .catch((error) => {
         const errorText = getFirestoreErrorText(error);
-        dispatch(setBudgetMetadataError(errorText));
+        dispatch(setBudgetMetadataError({ message: errorText, id: budgetID }));
       });
   };
 
