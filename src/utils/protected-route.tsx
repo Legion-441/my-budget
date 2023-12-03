@@ -35,7 +35,6 @@ const ProtectedRoute: React.FC = () => {
     <Box
       display='flex'
       minHeight='100vh'
-      bgcolor='background.default'
     >
       {authLoading ? null : <Outlet />} 
     </Box>

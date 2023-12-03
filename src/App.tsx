@@ -1,7 +1,7 @@
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
-import { useAppSelector } from "./app/hooks";
-import { selectAppColorMode } from "./slices/app/app.slice";
 import "./App.css";
+//* Hooks
+import useAppTheme from "./hooks/useTheme";
 //* Views
 import AuthView from "./views/auth/auth";
 import BudgetView from "./views/budget/budget";
@@ -18,17 +18,14 @@ import UserProfileView from "./views/user-profile/user-profile";
 import BudgetManagementView from "./views/budget-management/budgetManagement";
 //* MUI & styles
 import { ThemeProvider } from "@mui/material/styles";
-import { darkTheme, lightTheme } from "./styled/theme";
 //* Utils
 import ProtectedRoute from "./utils/protected-route";
-//* Types
-import { AppTheme } from "./types/AppTypes";
 
 const App: React.FC = () => {
-  const appColorMode: AppTheme = useAppSelector(selectAppColorMode);
+  const theme = useAppTheme();
 
   return (
-    <ThemeProvider theme={appColorMode === "light" ? lightTheme : darkTheme}>
+    <ThemeProvider theme={theme}>
       <BrowserRouter>
         <Routes>
           <Route element={<ProtectedRoute />}>
