@@ -4,7 +4,7 @@ import { selectAccountInfo } from "../../slices/account/account.slice";
 //* Firebase
 import { auth } from "../../firebase";
 //* MUI & Icons
-import { Box, Button, Dialog, Stack } from "@mui/material";
+import { Box, Button, Dialog, Stack, useMediaQuery, useTheme } from "@mui/material";
 import { Group, Person } from "@mui/icons-material";
 //* Components
 import CreateOrEditBudgetDialog from "../../components/budget-settings/budget-create-or-edit-dialog";
@@ -16,6 +16,9 @@ const HomeView: React.FC = () => {
   const { data } = useAppSelector(selectAccountInfo);
   const { budgetsList } = data;
   const user = auth.currentUser;
+
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleOpenDialog = () => {
     setIsDialogOpen(true);
@@ -59,7 +62,7 @@ const HomeView: React.FC = () => {
         <p>Dziękujemy za korzystanie z naszej strony do śledzenia budżetu i życzymy Ci sukcesów w zarządzaniu finansami!</p>
       </PaperCard>
       {isDialogOpen && (
-        <Dialog onClose={handleCloseDialog} open={isDialogOpen}>
+        <Dialog onClose={handleCloseDialog} open={isDialogOpen} fullScreen={fullScreen}>
           <CreateOrEditBudgetDialog budget={null} onClose={handleCloseDialog} />
         </Dialog>
       )}

@@ -2,16 +2,16 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addBudgetToList } from "../../slices/account/account.slice";
 //* MUI
-import { Alert, Button, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
+import { Alert, Box, Button, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
 //* Components
 import IconSelector from "../budgetInfo/Icon-selector";
-import MembersSelector from "../budgetInfo/members-selector";
 //* Services
 import { createBudget, updateBudget } from "../../services/budget-list-operations";
 import { updateAccount } from "../../services/account-operations";
+//* Utils
+import { getFirestoreErrorText } from "../../utils/firestoreErrorHandling";
 //* Types
 import { BudgetIconName, BudgetFormData, AppBudgetMetaData, MemberOrOwner } from "../../types/AppTypes";
-import { getFirestoreErrorText } from "../../utils/firestoreErrorHandling";
 
 const INITIAL_BUDGET_FORM_DATA: BudgetFormData = {
   name: "",
@@ -108,22 +108,24 @@ const CreateOrEditBudgetDialog: React.FC<CreateBudgetDialogProps> = ({ budget, o
     <form onSubmit={handleSubmit}>
       <DialogTitle>{isCreateForm ? "Utwórz nowy budżet" : "Edycja budżetu!"}</DialogTitle>
       <DialogContent>
-        <TextField
-          id="budgetNameInput"
-          value={name}
-          autoFocus
-          label="Nazwa"
-          type="text"
-          autoComplete="off"
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleTextInputChange(e, "name")}
-          // error={Boolean(creatingErrors)}
-          // helperText={creatingErrors}
-          required
-          variant="outlined"
-          margin="normal"
-          fullWidth
-        />
-        <IconSelector value={icon} onChange={(newIcon) => handleIconChange(newIcon)} />
+        <Box display={"flex"} gap={1}>
+          <IconSelector value={icon} onChange={(newIcon) => handleIconChange(newIcon)} />
+          <TextField
+            id="budgetNameInput"
+            value={name}
+            autoFocus
+            label="Nazwa"
+            type="text"
+            autoComplete="off"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleTextInputChange(e, "name")}
+            // error={Boolean(creatingErrors)}
+            // helperText={creatingErrors}
+            required
+            variant="outlined"
+            margin="normal"
+            fullWidth
+          />
+        </Box>
         <TextField
           value={description}
           autoFocus
