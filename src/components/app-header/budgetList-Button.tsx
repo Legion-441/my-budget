@@ -6,7 +6,7 @@ import { selectPickedBudget } from "../../slices/app/app.slice";
 import { ExpandLess, ExpandMore, Refresh } from "@mui/icons-material";
 import { Box, Button, IconButton, Typography } from "@mui/material";
 //* Components
-import BudgetIcon from "../budgetInfo/budget-icon";
+import BudgetIconComponent from "../budgetInfo/budget-icon";
 //* Styled Components
 import CustomAlert from "../../styled/budgetList-alert/budgetList-alert.styled";
 
