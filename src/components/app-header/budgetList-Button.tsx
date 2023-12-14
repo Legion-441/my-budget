@@ -4,7 +4,7 @@ import { fetchAndSetAccountData, selectAccountInfo } from "../../slices/account/
 import { selectPickedBudget } from "../../slices/app/app.slice";
 //* MUI
 import { ExpandLess, ExpandMore, Refresh } from "@mui/icons-material";
-import { Box, Button, IconButton, Typography } from "@mui/material";
+import { Box, Button, IconButton, Tooltip, Typography } from "@mui/material";
 //* Components
 import BudgetIconComponent from "../budgetInfo/budget-icon";
 //* Styled Components
@@ -19,8 +19,8 @@ const BudgetListButton: React.FC<BudgetListButtonProps> = ({ isOpen, handleToggl
   const { isFetching, fetchError } = useAppSelector(selectAccountInfo);
   const dispatch = useAppDispatch();
   const pickedBudget = useAppSelector(selectPickedBudget);
-  const pickedBudgetIcon = pickedBudget.data?.icon || null
-  const pickedBudgetName = pickedBudget.data?.name || null
+  const pickedBudgetIcon = pickedBudget.data?.icon || null;
+  const pickedBudgetName = pickedBudget.data?.name || null;
 
   useEffect(() => {
     const controller = new AbortController();
@@ -31,29 +31,31 @@ const BudgetListButton: React.FC<BudgetListButtonProps> = ({ isOpen, handleToggl
 
   if (fetchError) {
     return (
-      <Box
-        sx={{
-          flexGrow: { sm: 0, xs: 1 },
-          minWidth: { sm: 200, xs: 80 },
-        }}
-      >
-        <CustomAlert
-          variant="outlined"
-          severity="error"
+      <Tooltip title={fetchError} enterTouchDelay={0}>
+        <Box
           sx={{
             flexGrow: { sm: 0, xs: 1 },
+            minWidth: { sm: 200, xs: 80 },
           }}
-          action={
-            <IconButton aria-label="refresh" size="small" onClick={() => dispatch(fetchAndSetAccountData())}>
-              <Refresh fontSize="small" />
-            </IconButton>
-          }
         >
-          <Typography noWrap={true} variant="body1" fontSize={"medium"} overflow="hidden" textOverflow="ellipsis">
-            {fetchError}
-          </Typography>
-        </CustomAlert>
-      </Box>
+          <CustomAlert
+            variant="outlined"
+            severity="error"
+            sx={{
+              flexGrow: { sm: 0, xs: 1 },
+            }}
+            action={
+              <IconButton aria-label="refresh" size="small" onClick={() => dispatch(fetchAndSetAccountData())}>
+                <Refresh fontSize="small" />
+              </IconButton>
+            }
+          >
+            <Typography noWrap={true} variant="body1" fontSize={"medium"} overflow="hidden" textOverflow="ellipsis">
+              {fetchError}
+            </Typography>
+          </CustomAlert>
+        </Box>
+      </Tooltip>
     );
   }
 
