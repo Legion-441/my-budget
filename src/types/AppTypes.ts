@@ -8,7 +8,7 @@ import { AlertColor } from "@mui/material";
 
 export type BudgetState = "active" | "archived";
 
-export type BudgetIcon = keyof typeof ICON_COMPONENT_DICTIONARY | "none";
+export type BudgetIconName = keyof typeof ICON_COMPONENT_DICTIONARY | "none";
 
 export type MemberOrOwner = {
   id: string;
@@ -17,14 +17,14 @@ export type MemberOrOwner = {
 
 export type BudgetsListItem = {
   name: string;
-  icon: BudgetIcon;
+  icon: BudgetIconName;
   owner: MemberOrOwner;
   id: string;
 };
 
 export type BudgetFormData = {
   name: string;
-  icon: BudgetIcon;
+  icon: BudgetIconName;
   members: MemberOrOwner[];
   description: string;
   state: BudgetState;
@@ -36,7 +36,7 @@ export type FirebaseMember = {
 
 export type FirebaseBudgetMetaData = {
   name: string;
-  icon: BudgetIcon;
+  icon: BudgetIconName;
   members: FirebaseMember;
   description: string;
   state: BudgetState;

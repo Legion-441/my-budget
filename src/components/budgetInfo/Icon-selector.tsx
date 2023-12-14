@@ -5,11 +5,11 @@ import { Box, ToggleButton, Typography } from "@mui/material";
 //* Styled Components
 import StyledToggleButtonGroup from "../../styled/custom-toggle-button-group/custom-toggle-button-group.styled";
 //* Types
-import { BudgetIcon } from "../../types/AppTypes";
+import { BudgetIconName } from "../../types/AppTypes";
 
 interface IconSelectorProps {
-  value: BudgetIcon;
-  onChange: (newIcon: BudgetIcon) => void;
+  value: BudgetIconName;
+  onChange: (newIcon: BudgetIconName) => void;
 }
 
 const IconSelector = (props: IconSelectorProps) => {

@@ -10,7 +10,7 @@ import MembersSelector from "../budgetInfo/members-selector";
 import { createBudget, updateBudget } from "../../services/budget-list-operations";
 import { updateAccount } from "../../services/account-operations";
 //* Types
-import { BudgetIcon, BudgetFormData, AppBudgetMetaData, MemberOrOwner } from "../../types/AppTypes";
+import { BudgetIconName, BudgetFormData, AppBudgetMetaData, MemberOrOwner } from "../../types/AppTypes";
 import { getFirestoreErrorText } from "../../utils/firestoreErrorHandling";
 
 const INITIAL_BUDGET_FORM_DATA: BudgetFormData = {
@@ -87,7 +87,7 @@ const CreateOrEditBudgetDialog: React.FC<CreateBudgetDialogProps> = ({ budget, o
     setBudgetFormData({ ...budgetFormData, [input]: event.target.value });
   };
 
-  const handleIconChange = (newIcon: BudgetIcon) => {
+  const handleIconChange = (newIcon: BudgetIconName) => {
     clearErrors();
     setBudgetFormData({ ...budgetFormData, icon: newIcon });
   };

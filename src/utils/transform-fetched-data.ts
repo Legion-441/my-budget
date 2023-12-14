@@ -2,7 +2,7 @@ import { APP_THEME_OPTIONS, VALIDATED_ICON_MAPPING } from "../constants/constant
 //* Firebase
 import { DocumentData, DocumentSnapshot, Timestamp } from "firebase/firestore";
 //* Types
-import { AccountData, BudgetsListItem, AppBudgetMetaData, BudgetIcon, MemberOrOwner, FirebaseMember } from "../types/AppTypes";
+import { AccountData, BudgetsListItem, AppBudgetMetaData, BudgetIconName, MemberOrOwner, FirebaseMember } from "../types/AppTypes";
 
 export const transformFetchedAccountData = (documentSnapshot: DocumentSnapshot<DocumentData>): AccountData => {
   const docData = documentSnapshot.data();
@@ -60,7 +60,7 @@ export const transformFetchedBudgetsData = (documentSnapshot: DocumentSnapshot<D
     createdAt: documentData && documentData.createdAt instanceof Timestamp ? documentData.createdAt.toDate().getTime() : 0,
     description: documentData && "description" in documentData ? String(documentData.description) : "",
     id: budgetID,
-    icon: documentData && "icon" in documentData && documentData.icon in VALIDATED_ICON_MAPPING ? documentData.icon as BudgetIcon : "none",
+    icon: documentData && "icon" in documentData && documentData.icon in VALIDATED_ICON_MAPPING ? documentData.icon as BudgetIconName : "none",
     members: validateMembers(documentData?.members),
     owner: validateOwnerProperties(),
     state: documentData && (documentData.state === "archived" || documentData.state === "active") ? documentData.state : "active",
