@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Avatar, Box, Card, CardActions, CardContent, CardHeader, Divider, IconButton, Typography, styled, useTheme } from "@mui/material";
 import { Group, MoreVert } from "@mui/icons-material";
 //* Components
-import BudgetIcon from "../budgetInfo/budget-icon";
+import BudgetIconComponent from "../budgetInfo/budget-icon";
 //* Types
 import { AppBudgetMetaData } from "../../types/AppTypes";
 
@@ -68,7 +68,7 @@ const BudgetCompactCard: React.FC<BudgetCompactCardProps> = ({ budget, handleMen
       <CardHeader
         avatar={
           <Avatar aria-label="icon" variant="rounded" sx={{ bgcolor: theme.palette.secondary.main }}>
-            <BudgetIcon iconName={budget.icon} />
+            <BudgetIconComponent iconName={budget.icon} />
           </Avatar>
         }
         action={actionButton}

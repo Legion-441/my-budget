@@ -2,7 +2,7 @@ import * as React from "react";
 //* Firebase
 import { auth } from "../../firebase";
 //* Components
-import BudgetIcon from "../budgetInfo/budget-icon";
+import BudgetIconComponent from "../budgetInfo/budget-icon";
 //* MUI
 import { MenuItem, ListItemIcon, ListItemText, Divider } from "@mui/material";
 //* Types
@@ -24,7 +24,7 @@ const BudgetsMenuList: React.FC<BudgetListProps> = ({ budgets, onClick }) => {
     return budgets.map((item) => (
       <MenuItem key={item.id} onClick={() => onClick(item.id)}>
         <ListItemIcon>
-          <BudgetIcon iconName={item.icon} />
+          <BudgetIconComponent iconName={item.icon} />
         </ListItemIcon>
         <ListItemText secondary={`(${isOwner ? "Własne" : item.owner.username})`} primary={item.name} />
       </MenuItem>

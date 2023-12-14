@@ -9,7 +9,7 @@ interface BudgetIconProps extends SvgIconProps {
   iconName: string;
 }
 
-const BudgetIcon: React.FC<BudgetIconProps> = ({ iconName, color, ...props }) => {
+const BudgetIconComponent: React.FC<BudgetIconProps> = ({ iconName, color, ...props }) => {
   const Icon = VALIDATED_ICON_MAPPING[iconName || "none"];
   const iconColor: SvgIconProps["color"] = Icon ? color || "inherit" : "disabled";
 
@@ -17,4 +17,4 @@ const BudgetIcon: React.FC<BudgetIconProps> = ({ iconName, color, ...props }) =>
   return <IconComponent color={iconColor} {...props} />;
 };
 
-export default BudgetIcon;
+export default BudgetIconComponent;

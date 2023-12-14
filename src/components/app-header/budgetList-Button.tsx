@@ -71,7 +71,7 @@ const BudgetListButton: React.FC<BudgetListButtonProps> = ({ isOpen, handleToggl
         flexGrow: { sm: 0, xs: 1 },
         minWidth: { sm: 200, xs: 80 },
       }}
-      startIcon={pickedBudgetIcon && <BudgetIcon iconName={pickedBudgetIcon} />}
+      startIcon={pickedBudgetIcon && <BudgetIconComponent iconName={pickedBudgetIcon} />}
       endIcon={isOpen ? <ExpandLess /> : <ExpandMore />}
     >
       <Typography

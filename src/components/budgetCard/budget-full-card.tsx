@@ -14,7 +14,7 @@ import {
   useTheme,
 } from "@mui/material";
 //* Components
-import BudgetIcon from "../budgetInfo/budget-icon";
+import BudgetIconComponent from "../budgetInfo/budget-icon";
 //* Types
 import { AppBudgetMetaData } from "../../types/AppTypes";
 
@@ -30,7 +30,7 @@ const BudgetFullCard: React.FC<BudgetFullCardProps> = ({ budget }) => {
       <CardHeader
         avatar={
           <Avatar aria-label="icon" variant="rounded" sx={{ bgcolor: theme.palette.secondary.main }}>
-            <BudgetIcon iconName={budget.icon} />
+            <BudgetIconComponent iconName={budget.icon} />
           </Avatar>
         }
         title={budget.name}
