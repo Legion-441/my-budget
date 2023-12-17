@@ -10,6 +10,7 @@ import { createBudget, updateBudget } from "../../services/budget-list-operation
 import { updateAccount } from "../../services/account-operations";
 //* Utils
 import { getFirestoreErrorText } from "../../utils/firestoreErrorHandling";
+import getChangedBudgetData from "../../utils/get-budget-changes";
 //* Types
 import { BudgetIconName, BudgetFormData, AppBudgetMetaData, MemberOrOwner } from "../../types/AppTypes";
 
@@ -42,8 +43,10 @@ const CreateOrEditBudgetDialog: React.FC<CreateBudgetDialogProps> = ({ budget, o
   const [updatingListError, setUpdatingListError] = useState<string>("");
   const dispatch = useDispatch();
   const isCreateForm = !budget;
+  const changedFields: Partial<BudgetFormData> = !isCreateForm ? getChangedBudgetData(budget, budgetFormData) : {};
+  const isChanged: boolean = Object.keys(changedFields).length > 0;
 
-  const { name, icon, members, description } = budgetFormData;
+  const { name, icon, description } = budgetFormData;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -64,7 +67,7 @@ const CreateOrEditBudgetDialog: React.FC<CreateBudgetDialogProps> = ({ budget, o
             setUpdatingListError(errorText);
           });
       } else {
-        await updateBudget(budget, budgetFormData);
+        await updateBudget(budget.id, changedFields);
         setIsSuccess(true);
         // todo: delete olso in budget list and redux
       }
@@ -118,8 +121,6 @@ const CreateOrEditBudgetDialog: React.FC<CreateBudgetDialogProps> = ({ budget, o
             type="text"
             autoComplete="off"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleTextInputChange(e, "name")}
-            // error={Boolean(creatingErrors)}
-            // helperText={creatingErrors}
             required
             variant="outlined"
             margin="normal"
@@ -128,22 +129,18 @@ const CreateOrEditBudgetDialog: React.FC<CreateBudgetDialogProps> = ({ budget, o
         </Box>
         <TextField
           value={description}
-          autoFocus
           label="Opis"
           type="text"
           autoComplete="off"
           multiline
           minRows={2}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleTextInputChange(e, "description")}
-          // error={Boolean(creatingErrors)}
-          // helperText={creatingErrors}
           variant="outlined"
           margin="normal"
           fullWidth
         />
         {/* //TODO: Add this feature when ready. (create friends list, adding friends, sending ivitation to budget). consider moving this feature to budget managment page */}
         {/* <MembersSelector value={memberIDs} onChange={(newMemberIDs) => handleMembersChange(newMemberIDs)} /> */}
-
         {isSuccess ? (
           <Alert style={{ marginTop: 16 }} severity="success" variant="outlined">
             Sukces! {isCreateForm ? "Stworzyłeś nowy" : "Zaktualizowałeś"} budżet {name}
@@ -172,7 +169,7 @@ const CreateOrEditBudgetDialog: React.FC<CreateBudgetDialogProps> = ({ budget, o
             <Button onClick={handleClose} disabled={isLoading} type="button">
               Anuluj
             </Button>
-            <Button type="submit" disabled={isLoading} variant="contained">
+            <Button type="submit" disabled={isLoading || (!isCreateForm && !isChanged)} variant="contained">
               {isCreateForm ? "Stwórz" : "Zaktualizuj"}
             </Button>
           </>

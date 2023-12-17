@@ -22,8 +22,6 @@ const getChangedBudgetData = (originalBudgetData: AppBudgetMetaData, newBudgetDa
     } else if (newField !== originalField) {
       updatedData = { ...updatedData, [keyOfBudgetFormData]: newField };
     }
-    if (newField !== originalField) {
-    }
   });
   return updatedData;
 };
