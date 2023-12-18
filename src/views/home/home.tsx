@@ -18,7 +18,7 @@ const HomeView: React.FC = () => {
   const user = auth.currentUser;
 
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleOpenDialog = () => {
     setIsDialogOpen(true);
@@ -61,12 +61,9 @@ const HomeView: React.FC = () => {
         <br />
         <p>Dziękujemy za korzystanie z naszej strony do śledzenia budżetu i życzymy Ci sukcesów w zarządzaniu finansami!</p>
       </PaperCard>
-      {isDialogOpen && (
-        <Dialog onClose={handleCloseDialog} open={isDialogOpen} fullScreen={fullScreen}>
-          <CreateOrEditBudgetDialog budget={null} onClose={handleCloseDialog} />
-        </Dialog>
-      )}
-      {/* <CreateBudgetDialog isOpen={isDialogOpen} onClose={handleCloseDialog} /> */}
+      <Dialog onClose={handleCloseDialog} open={isDialogOpen} fullScreen={fullScreen}>
+        <CreateOrEditBudgetDialog budget={null} onClose={handleCloseDialog} />
+      </Dialog>
     </Box>
   );
 };

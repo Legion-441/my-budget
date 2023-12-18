@@ -17,14 +17,14 @@ const ArchiveBudgetDialog: React.FC<BudgetDialogProps> = ({ budget, onClose }) =
   const archiveConfig = {
     archived: {
       titleText: `Przywracanie budżetu!`,
-      questionText: `Jesteś pewien, że chcesz przywrócić ten budżet z archiwum?`,
+      questionText: `Jesteś pewien, że chcesz przywrócić budżet "${budget.name}" z archiwum?`,
       errorText: `Przywracanie budżetu "${budget.name}" nieudane. ${error}.`,
       successText: `Budżet "${budget.name}" został pomyślnie przywrócony.`,
       buttonText: `Przywróć`,
     },
     active: {
       titleText: `Archiwizacja budżetu!`,
-      questionText: `Jesteś pewien, że chcesz przenieść ten budżet do archiwum?`,
+      questionText: `Jesteś pewien, że chcesz przenieść budżet "${budget.name}" do archiwum?`,
       errorText: `Archiwizacja budżetu "${budget.name}" nieudana. ${error}.`,
       successText: `Budżet "${budget.name}" został pomyślnie zarchiwizowany.`,
       buttonText: "Zarchiwizuj",
