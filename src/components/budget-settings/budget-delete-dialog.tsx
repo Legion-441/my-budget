@@ -9,7 +9,7 @@ import { getFirestoreErrorText } from "../../utils/firestoreErrorHandling";
 //* Types
 import { BudgetDialogProps } from "../../types/AppTypes";
 
-const DeleteBudgetButton: React.FC<BudgetDialogProps> = ({ budget, onClose }) => {
+const DeleteBudgetDialog: React.FC<BudgetDialogProps> = ({ budget, onClose }) => {
   const [inputValue, setInputValue] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [validationError, setValidationError] = useState<string>("");
@@ -109,4 +109,4 @@ const DeleteBudgetButton: React.FC<BudgetDialogProps> = ({ budget, onClose }) =>
   );
 };
 
-export default DeleteBudgetButton;
+export default DeleteBudgetDialog;
