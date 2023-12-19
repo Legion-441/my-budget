@@ -2,10 +2,10 @@ import * as React from "react";
 //* MUI & Icons
 import { Dialog, useMediaQuery, useTheme } from "@mui/material";
 //* Components
-import CreateOrEditBudgetDialog from "../budget-settings/budget-create-or-edit-dialog";
-import ArchiveBudgetDialog from "../budget-settings/budget-archive-dialog";
-import DeleteBudgetDialog from "../budget-settings/budget-delete-dialog";
-import LeaveBudgetDialog from "../budget-settings/budget-leave-dialog";
+import CreateOrEditBudgetDialog from "./budget-create-or-edit-dialog";
+import ArchiveBudgetDialog from "./budget-archive-dialog";
+import DeleteBudgetDialog from "./budget-delete-dialog";
+import LeaveBudgetDialog from "./budget-leave-dialog";
 //* Types
 import { AppBudgetMetaData, BudgetActions } from "../../types/AppTypes";
 
