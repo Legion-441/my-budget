@@ -46,6 +46,9 @@ export const accountSlice = createSlice({
     addBudgetToList: (state, action: PayloadAction<BudgetsListItem>) => {
       state.data.budgetsList.push(action.payload);
     },
+    removeBudgetFromList: (state, action: PayloadAction<string>) => {
+      state.data.budgetsList = state.data.budgetsList.filter((budget) => budget.id !== action.payload);
+    },
     clearAccountData: (state) => {
       state = INITIAL_ACCOUNT_STATE;
     },
@@ -53,7 +56,8 @@ export const accountSlice = createSlice({
 });
 
 //! Actions
-export const { startFetchingAccountData, setFetchError, setBudgetsList, addBudgetToList, clearAccountData } = accountSlice.actions;
+export const { startFetchingAccountData, setFetchError, setBudgetsList, addBudgetToList, removeBudgetFromList, clearAccountData } =
+  accountSlice.actions;
 export const fetchAndSetAccountData = (): AppThunk => async (dispatch) => {
   dispatch(startFetchingAccountData());
   fetchAccountData()

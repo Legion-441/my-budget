@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { removeBudgetFromList } from "../../slices/account/account.slice";
 //* MUI
 import { Alert, Button, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, useTheme } from "@mui/material";
 //* Services
@@ -16,6 +18,7 @@ const DeleteBudgetDialog: React.FC<BudgetDialogProps> = ({ budget, onClose }) =>
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const navigate = useNavigate();
   const theme = useTheme();
+  const dispatch = useDispatch();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -29,7 +32,8 @@ const DeleteBudgetDialog: React.FC<BudgetDialogProps> = ({ budget, onClose }) =>
     deleteBudget(budget.id)
       .then(() => {
         setIsSuccess(true);
-        // todo: delete olso in budget list and redux
+        // todo: delete olso in firestore budget list
+        dispatch(removeBudgetFromList(budget.id));
         navigate("/");
       })
       .catch((error) => {

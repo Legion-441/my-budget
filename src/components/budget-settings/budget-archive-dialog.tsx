@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { removeBudgetFromList } from "../../slices/account/account.slice";
 //* MUI
 import { Alert, Button, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 //* Services
@@ -13,6 +15,7 @@ const ArchiveBudgetDialog: React.FC<BudgetDialogProps> = ({ budget, onClose }) =
   const [error, setError] = useState<string>("");
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const archiveConfig = {
     archived: {
@@ -45,7 +48,8 @@ const ArchiveBudgetDialog: React.FC<BudgetDialogProps> = ({ budget, onClose }) =
     archiveBudget(budget)
       .then(() => {
         setIsSuccess(true);
-        // todo: delete in budget list and redux
+        // todo: delete in firestore budget list
+        dispatch(removeBudgetFromList(budget.id));
         navigate("/");
       })
       .catch((error) => {
