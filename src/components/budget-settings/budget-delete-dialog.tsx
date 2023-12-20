@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { removeBudgetFromList } from "../../slices/account/account.slice";
 //* MUI
@@ -17,6 +17,7 @@ const DeleteBudgetDialog: React.FC<BudgetDialogProps> = ({ budget, onClose }) =>
   const [validationError, setValidationError] = useState<string>("");
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const theme = useTheme();
   const dispatch = useDispatch();
 
@@ -34,13 +35,20 @@ const DeleteBudgetDialog: React.FC<BudgetDialogProps> = ({ budget, onClose }) =>
         setIsSuccess(true);
         // todo: delete olso in firestore budget list
         dispatch(removeBudgetFromList(budget.id));
-        navigate("/");
       })
       .catch((error) => {
         setIsSuccess(false);
         const errorText = getFirestoreErrorText(error);
         setError(errorText);
       });
+  };
+
+  const handleUserConfirmation = () => {
+    handleCloseDialog();
+    const isBudgetPage = location.pathname.startsWith(`/budget/${budget.id}`);
+    if (isBudgetPage) {
+      navigate("/");
+    }
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,7 +103,7 @@ const DeleteBudgetDialog: React.FC<BudgetDialogProps> = ({ budget, onClose }) =>
       </DialogContent>
       <DialogActions>
         {isSuccess ? (
-          <Button onClick={() => navigate("/")} type="button" variant="contained">
+          <Button onClick={handleUserConfirmation} type="button" variant="contained">
             Gotowe
           </Button>
         ) : (
