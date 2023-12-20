@@ -19,13 +19,15 @@ const LeaveBudgetDialog: React.FC<BudgetDialogProps> = ({ budget, onClose }) => 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
+    alert("W tym momencie opuściłbyś budżet. Ta funkcjonalność nie została jeszcze wprowadzona");
     console.log("bum, stuku, puk...");
     console.log("Pomyślnie opuściłeś budżet ", budget.name);
 
     // deleteBudget(budget.id)
     //   .then(() => {
     //     setIsSuccess(true);
-    //     // todo: delete olso in budget list and redux
+    //     dispatch(removeBudgetFromList(budget.id));
+    //     // todo: delete olso in firestore budget list
     //     navigate("/");
     //   })
     //   .catch((error) => {
@@ -40,6 +42,9 @@ const LeaveBudgetDialog: React.FC<BudgetDialogProps> = ({ budget, onClose }) => 
       <DialogTitle>Opuszczanie budżetu!</DialogTitle>
       <DialogContent>
         <DialogContentText>Czy napewno chcesz opuścić ten budżet?</DialogContentText>
+        <Alert style={{ marginTop: 16 }} severity="warning" variant="outlined">
+          Ta funkcjonalność nie została jeszcze wprowadzona
+        </Alert>
         {error ? (
           <Alert style={{ marginTop: 16 }} severity="error" variant="outlined">
             Opuszczanie budżetu "{budget.name}" nieudane. {error}
