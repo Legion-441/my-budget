@@ -6,6 +6,7 @@ import { selectPickedBudget } from "../../slices/app/app.slice";
 import { ExpandLess, ExpandMore, Refresh } from "@mui/icons-material";
 import { Box, Button, IconButton, Tooltip, Typography } from "@mui/material";
 //* Components
+import BudgetListAlert from "./budgetList-Alert";
 import BudgetIconComponent from "../budgetInfo/budget-icon";
 import AppBudgetsMenu from "./budgets-menu";
 //* Styled Components
@@ -42,33 +43,7 @@ const BudgetListButton: React.FC = () => {
   };
 
   if (fetchError) {
-    return (
-      <Tooltip title={fetchError} enterTouchDelay={0}>
-        <Box
-          sx={{
-            flexGrow: { sm: 0, xs: 1 },
-            minWidth: { sm: 200, xs: 80 },
-          }}
-        >
-          <CustomAlert
-            variant="outlined"
-            severity="error"
-            sx={{
-              flexGrow: { sm: 0, xs: 1 },
-            }}
-            action={
-              <IconButton aria-label="refresh" size="small" onClick={subscribe}>
-                <Refresh fontSize="small" />
-              </IconButton>
-            }
-          >
-            <Typography noWrap={true} variant="body1" fontSize={"medium"} overflow="hidden" textOverflow="ellipsis">
-              {fetchError}
-            </Typography>
-          </CustomAlert>
-        </Box>
-      </Tooltip>
-    );
+    return <BudgetListAlert error={fetchError} handleRetry={subscribe}/>
   }
 
   return (
