@@ -1,12 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppThunk, RootState } from "../../app/store";
-import { setAppColorMode } from "../app/app.slice";
-//* Services
-import { fetchAccountData } from "../../services/account-operations";
+import { RootState } from "../../app/store";
 //* Types
 import { BudgetsListItem } from "../../types/AppTypes";
 //* Utils
-import { getFirestoreErrorText } from "../../utils/firestoreErrorHandling";
 
 type BudgetsLists = {
   budgetsList: BudgetsListItem[];
@@ -58,18 +54,6 @@ export const accountSlice = createSlice({
 //! Actions
 export const { startFetchingAccountData, setFetchError, setBudgetsList, addBudgetToList, removeBudgetFromList, clearAccountData } =
   accountSlice.actions;
-export const fetchAndSetAccountData = (): AppThunk => async (dispatch) => {
-  dispatch(startFetchingAccountData());
-  fetchAccountData()
-    .then((data) => {
-      dispatch(setBudgetsList(data.budgetsList));
-      dispatch(setAppColorMode(data.appTheme));
-    })
-    .catch((error) => {
-      const errorText = getFirestoreErrorText(error);
-      dispatch(setFetchError(errorText));
-    });
-};
 
 //! Selector
 export const selectAccountInfo = (state: RootState): AccountState => state.user;

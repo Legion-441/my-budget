@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { fetchAndSetAccountData, selectAccountInfo } from "../../slices/account/account.slice";
+import { selectAccountInfo } from "../../slices/account/account.slice";
 import { selectPickedBudget } from "../../slices/app/app.slice";
 //* MUI
 import { ExpandLess, ExpandMore, Refresh } from "@mui/icons-material";
@@ -10,6 +10,8 @@ import BudgetIconComponent from "../budgetInfo/budget-icon";
 import AppBudgetsMenu from "./budgets-menu";
 //* Styled Components
 import CustomAlert from "../../styled/budgetList-alert/budgetList-alert.styled";
+//* Services
+import { subscribeToAccountData } from "../../services/account-operations";
 
 const BudgetListButton: React.FC = () => {
   const [budgetAnchorEl, setBudgetAnchorEl] = useState<null | HTMLElement>(null);
@@ -21,12 +23,19 @@ const BudgetListButton: React.FC = () => {
 
   const isOpen = budgetAnchorEl !== null;
 
-  useEffect(() => {
-    const controller = new AbortController();
+  const subscribe = useCallback(() => {
+    const unsubscribe = subscribeToAccountData(dispatch);
     return () => {
-      controller.abort();
+      unsubscribe();
     };
-  }, []);
+  }, [dispatch]);
+
+  useEffect(() => {
+    const unsubscribe = subscribe();
+    return () => {
+      unsubscribe();
+    };
+  }, [subscribe]);
 
   const handleToggleBudgetsMenu = (event?: React.MouseEvent<HTMLElement>) => {
     setBudgetAnchorEl(!budgetAnchorEl && event ? event.currentTarget : null);
@@ -48,7 +57,7 @@ const BudgetListButton: React.FC = () => {
               flexGrow: { sm: 0, xs: 1 },
             }}
             action={
-              <IconButton aria-label="refresh" size="small" onClick={() => dispatch(fetchAndSetAccountData())}>
+              <IconButton aria-label="refresh" size="small" onClick={subscribe}>
                 <Refresh fontSize="small" />
               </IconButton>
             }

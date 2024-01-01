@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { Outlet, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { fetchAndSetSelectedBudget, selectPickedBudget } from "../../slices/app/app.slice";
-import { fetchAndSetAccountData } from "../../slices/account/account.slice";
 //* MUI
 import { Container, Box, Toolbar } from "@mui/material";
 import { PageContainer } from "../../styled/page-container/page-container.styled";
@@ -14,19 +13,11 @@ const MainView: React.FC = () => {
   const dispatch = useAppDispatch();
   const { id } = useParams();
   const pickedBudget = useAppSelector(selectPickedBudget);
-  const { data: pickedBudgetData} = pickedBudget
 
   useEffect(() => {
-    const controller = new AbortController();
-    dispatch(fetchAndSetAccountData());
-    return () => {
-      controller.abort();
-    };
-  }, [dispatch]);
-
-  useEffect(() => {
+    const { data: pickedBudgetData } = pickedBudget;
     if (id && pickedBudget.fetchError?.id !== id && pickedBudgetData?.id !== id) {
-      dispatch(fetchAndSetSelectedBudget(id));      
+      dispatch(fetchAndSetSelectedBudget(id));
     }
   }, [pickedBudget, id, dispatch]);
 
