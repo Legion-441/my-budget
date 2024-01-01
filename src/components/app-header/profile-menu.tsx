@@ -65,7 +65,7 @@ const AppProfileMenu: React.FC<AppMenuProps> = ({ anchorEl, handleToggleProfileM
         <ListItemIcon>
           <AccountCircle />
         </ListItemIcon>
-        Profile
+        Profil
       </MenuItem>
       <DarkModeSwitch />
       <Divider />
@@ -73,13 +73,13 @@ const AppProfileMenu: React.FC<AppMenuProps> = ({ anchorEl, handleToggleProfileM
         <ListItemIcon>
           <Settings fontSize="small" />
         </ListItemIcon>
-        App settings
+        Ustawienia
       </MenuItem>
       <MenuItem onClick={handleLogout}>
         <ListItemIcon>
           <Logout fontSize="small" />
         </ListItemIcon>
-        Logout
+        Wyloguj
       </MenuItem>
     </Menu>
   );
