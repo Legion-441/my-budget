@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { addBudgetToList } from "../../slices/account/account.slice";
 //* MUI
 import { Alert, Box, Button, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
 //* Components
@@ -12,7 +10,7 @@ import { updateAccount } from "../../services/account-operations";
 import { getFirestoreErrorText } from "../../utils/firestoreErrorHandling";
 import getChangedBudgetData from "../../utils/get-budget-changes";
 //* Types
-import { BudgetIconName, BudgetFormData, AppBudgetMetaData, MemberOrOwner } from "../../types/AppTypes";
+import { BudgetIconName, BudgetFormData, AppBudgetMetaData } from "../../types/AppTypes";
 
 const INITIAL_BUDGET_FORM_DATA: BudgetFormData = {
   name: "",
@@ -41,7 +39,6 @@ const CreateOrEditBudgetDialog: React.FC<CreateBudgetDialogProps> = ({ budget, o
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [creatingErrors, setCreatingErrors] = useState<string>("");
   const [updatingListError, setUpdatingListError] = useState<string>("");
-  const dispatch = useDispatch();
   const isCreateForm = !budget;
   const changedFields: Partial<BudgetFormData> = !isCreateForm ? getChangedBudgetData(budget, budgetFormData) : {};
   const isChanged: boolean = Object.keys(changedFields).length > 0;
@@ -59,9 +56,6 @@ const CreateOrEditBudgetDialog: React.FC<CreateBudgetDialogProps> = ({ budget, o
         const budgetData = await createBudget(budgetFormData);
         setIsSuccess(true);
         updateAccount(budgetData)
-          .then(() => {
-            dispatch(addBudgetToList(budgetData));
-          })
           .catch((error) => {
             const errorText = getFirestoreErrorText(error);
             setUpdatingListError(errorText);
@@ -69,7 +63,7 @@ const CreateOrEditBudgetDialog: React.FC<CreateBudgetDialogProps> = ({ budget, o
       } else {
         await updateBudget(budget.id, changedFields);
         setIsSuccess(true);
-        // todo: delete olso in budget list and redux
+        // todo: change also in budget list and redux
       }
     } catch (error) {
       setIsSuccess(false);
@@ -93,11 +87,6 @@ const CreateOrEditBudgetDialog: React.FC<CreateBudgetDialogProps> = ({ budget, o
   const handleIconChange = (newIcon: BudgetIconName) => {
     clearErrors();
     setBudgetFormData({ ...budgetFormData, icon: newIcon });
-  };
-
-  const handleMembersChange = (newMembers: MemberOrOwner[]) => {
-    clearErrors();
-    setBudgetFormData({ ...budgetFormData, members: newMembers });
   };
 
   const handleClose = () => {

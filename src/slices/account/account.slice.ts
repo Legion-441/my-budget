@@ -2,7 +2,6 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 //* Types
 import { BudgetsListItem } from "../../types/AppTypes";
-//* Utils
 
 type BudgetsLists = {
   budgetsList: BudgetsListItem[];
@@ -39,12 +38,6 @@ export const accountSlice = createSlice({
       state.fetchError = null;
       state.data.budgetsList = action.payload;
     },
-    addBudgetToList: (state, action: PayloadAction<BudgetsListItem>) => {
-      state.data.budgetsList.push(action.payload);
-    },
-    removeBudgetFromList: (state, action: PayloadAction<string>) => {
-      state.data.budgetsList = state.data.budgetsList.filter((budget) => budget.id !== action.payload);
-    },
     clearAccountData: (state) => {
       state = INITIAL_ACCOUNT_STATE;
     },
@@ -52,8 +45,7 @@ export const accountSlice = createSlice({
 });
 
 //! Actions
-export const { startFetchingAccountData, setFetchError, setBudgetsList, addBudgetToList, removeBudgetFromList, clearAccountData } =
-  accountSlice.actions;
+export const { startFetchingAccountData, setFetchError, setBudgetsList, clearAccountData } = accountSlice.actions;
 
 //! Selector
 export const selectAccountInfo = (state: RootState): AccountState => state.user;
