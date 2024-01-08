@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 //* MUI
 import { Alert, Button, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 //* Services
-import { archiveBudget } from "../../services/budget-list-operations";
+import { toggleArchiveBudget } from "../../services/budget-meta-operations";
 //* Utils
 import { getFirestoreErrorText } from "../../utils/firestoreErrorHandling";
 //* Types
@@ -42,11 +42,9 @@ const ArchiveBudgetDialog: React.FC<BudgetDialogProps> = ({ budget, onClose }) =
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
-    archiveBudget(budget)
+    toggleArchiveBudget(budget)
       .then(() => {
         setIsSuccess(true);
-        // todo: delete in firestore budget list
-        navigate("/");
       })
       .catch((error) => {
         setIsSuccess(false);

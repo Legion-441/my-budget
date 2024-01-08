@@ -1,8 +1,18 @@
 import { APP_THEME_OPTIONS, VALIDATED_ICON_MAPPING } from "../constants/constants";
 //* Firebase
+import { User } from "firebase/auth";
 import { DocumentData, DocumentSnapshot, Timestamp } from "firebase/firestore";
 //* Types
-import { AccountData, BudgetsListItem, AppBudgetMetaData, BudgetIconName, MemberOrOwner, FirebaseMember } from "../types/AppTypes";
+import {
+  AccountData,
+  BudgetsListItem,
+  AppBudgetMetaData,
+  BudgetIconName,
+  MemberOrOwner,
+  FirebaseMember,
+  BudgetFormData,
+  FirebaseBudgetMetaData,
+} from "../types/AppTypes";
 
 export const transformFetchedAccountData = (documentSnapshot: DocumentSnapshot<DocumentData>): AccountData => {
   const docData = documentSnapshot.data();
@@ -67,4 +77,21 @@ export const transformFetchedBudgetsData = (documentSnapshot: DocumentSnapshot<D
   };
 
   return budgetData;
+};
+
+export const transformBudgetFormDataToFirebaseMetaData = (budgetFormData: BudgetFormData, currentUser: User): FirebaseBudgetMetaData => {
+  const { displayName: currentUserDisplayName, email: currentUserEmail, uid: currentUserUid } = currentUser;
+  const members = budgetFormData.members.reduce((acc, member) => {
+    return { ...acc, [member.id]: member.username };
+  }, {});
+  const currentUserUsername = currentUserDisplayName || currentUserEmail?.split("@")[0].split(".")[0] || "";
+  const currentDate = new Date();
+  const newBudgetInfo: FirebaseBudgetMetaData = {
+    ...budgetFormData,
+    members, // TODO: add feature: sending invitations, add members when invitations are accepted by users
+    owner: { [currentUserUid]: currentUserUsername },
+    createdAt: Timestamp.fromDate(currentDate),
+  };
+
+  return newBudgetInfo;
 };

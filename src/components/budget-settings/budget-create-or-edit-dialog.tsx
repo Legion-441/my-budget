@@ -1,11 +1,10 @@
 import { useState } from "react";
 //* MUI
-import { Alert, Box, Button, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
+import { Alert, Box, Button, Checkbox, DialogActions, DialogContent, DialogTitle, FormControlLabel, TextField } from "@mui/material";
 //* Components
 import IconSelector from "../budgetInfo/Icon-selector";
 //* Services
-import { createBudget, updateBudget } from "../../services/budget-list-operations";
-import { updateAccount } from "../../services/account-operations";
+import { createBudget, updateBudget } from "../../services/budget-meta-operations";
 //* Utils
 import { getFirestoreErrorText } from "../../utils/firestoreErrorHandling";
 import getChangedBudgetData from "../../utils/get-budget-changes";
@@ -34,49 +33,41 @@ interface CreateBudgetDialogProps {
 }
 
 const CreateOrEditBudgetDialog: React.FC<CreateBudgetDialogProps> = ({ budget, onClose }) => {
+  const isCreateForm = !budget;
   const [budgetFormData, setBudgetFormData] = useState<BudgetFormData>(extractBudgetFormData(budget));
+  const [pinItCheckbox, setPinItCheckbox] = useState<boolean>(isCreateForm);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [creatingErrors, setCreatingErrors] = useState<string>("");
-  const [updatingListError, setUpdatingListError] = useState<string>("");
-  const isCreateForm = !budget;
-  const changedFields: Partial<BudgetFormData> = !isCreateForm ? getChangedBudgetData(budget, budgetFormData) : {};
-  const isChanged: boolean = Object.keys(changedFields).length > 0;
+  const [errorAlertText, setErrorAlertText] = useState<string>("");
 
   const { name, icon, description } = budgetFormData;
+  const changedFields: Partial<BudgetFormData> = !isCreateForm ? getChangedBudgetData(budget, budgetFormData) : {};
+  const isChanged: boolean = Object.keys(changedFields).length > 0;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
-    setCreatingErrors("");
-    setUpdatingListError("");
+    setErrorAlertText("");
 
     try {
       if (isCreateForm) {
-        const budgetData = await createBudget(budgetFormData);
-        setIsSuccess(true);
-        updateAccount(budgetData)
-          .catch((error) => {
-            const errorText = getFirestoreErrorText(error);
-            setUpdatingListError(errorText);
-          });
+        await createBudget(budgetFormData, pinItCheckbox);
       } else {
-        await updateBudget(budget.id, changedFields);
-        setIsSuccess(true);
-        // todo: change also in budget list and redux
+        await updateBudget(budget, changedFields);
       }
+      setIsSuccess(true);
     } catch (error) {
       setIsSuccess(false);
       const errorText = getFirestoreErrorText(error);
-      setCreatingErrors(errorText);
+      setErrorAlertText(errorText);
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
   };
 
   const clearErrors = () => {
-    setCreatingErrors("");
-    setUpdatingListError("");
+    setErrorAlertText("");
   };
 
   const handleTextInputChange = (event: React.ChangeEvent<HTMLInputElement>, input: keyof BudgetFormData) => {
@@ -94,6 +85,10 @@ const CreateOrEditBudgetDialog: React.FC<CreateBudgetDialogProps> = ({ budget, o
     setBudgetFormData({ ...INITIAL_BUDGET_FORM_DATA });
     clearErrors();
     setIsSuccess(false);
+  };
+
+  const handlePin = () => {
+    setPinItCheckbox(!pinItCheckbox);
   };
 
   return (
@@ -128,23 +123,18 @@ const CreateOrEditBudgetDialog: React.FC<CreateBudgetDialogProps> = ({ budget, o
           margin="normal"
           fullWidth
         />
-        {/* //TODO: Add this feature when ready. (create friends list, adding friends, sending ivitation to budget). consider moving this feature to budget managment page */}
-        {/* <MembersSelector value={memberIDs} onChange={(newMemberIDs) => handleMembersChange(newMemberIDs)} /> */}
+        {isCreateForm ? (
+          <FormControlLabel control={<Checkbox />} checked={pinItCheckbox} onChange={handlePin} label="Przypnij do szybkiego wyboru" />
+        ) : null}
         {isSuccess ? (
           <Alert style={{ marginTop: 16 }} severity="success" variant="outlined">
             Sukces! {isCreateForm ? "Stworzyłeś nowy" : "Zaktualizowałeś"} budżet {name}
           </Alert>
         ) : null}
-        {!isLoading && creatingErrors !== "" ? (
+        {!isLoading && errorAlertText !== "" ? (
           <Alert style={{ marginTop: 16 }} severity="error" variant="outlined">
             Wystąpił błąd podczas zapisywania tego budżetu: <br />
-            {creatingErrors}
-          </Alert>
-        ) : null}
-        {!isLoading && updatingListError !== "" ? (
-          <Alert style={{ marginTop: 16 }} severity="error" variant="outlined">
-            Wystąpił błąd podczas dodawania tego budżetu do listy przypiętych: <br />
-            {updatingListError}
+            {errorAlertText}
           </Alert>
         ) : null}
       </DialogContent>

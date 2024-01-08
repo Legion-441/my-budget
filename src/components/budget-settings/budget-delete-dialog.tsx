@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 //* MUI
 import { Alert, Button, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, useTheme } from "@mui/material";
 //* Services
-import { deleteBudget } from "../../services/budget-list-operations";
+import { deleteBudget } from "../../services/budget-meta-operations";
 //* Utils
 import { getFirestoreErrorText } from "../../utils/firestoreErrorHandling";
 //* Types
@@ -30,7 +30,6 @@ const DeleteBudgetDialog: React.FC<BudgetDialogProps> = ({ budget, onClose }) =>
     deleteBudget(budget.id)
       .then(() => {
         setIsSuccess(true);
-        // todo: delete olso in firestore budget list
       })
       .catch((error) => {
         setIsSuccess(false);
