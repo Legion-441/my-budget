@@ -38,7 +38,7 @@ const DeleteBudgetDialog: React.FC<BudgetDialogProps> = ({ budget, onClose }) =>
       });
   };
 
-  const handleUserConfirmation = () => {
+  const handleConfirm = () => {
     handleCloseDialog();
     const isBudgetPage = location.pathname.startsWith(`/budget/${budget.id}`);
     if (isBudgetPage) {
@@ -98,7 +98,7 @@ const DeleteBudgetDialog: React.FC<BudgetDialogProps> = ({ budget, onClose }) =>
       </DialogContent>
       <DialogActions>
         {isSuccess ? (
-          <Button onClick={handleUserConfirmation} type="button" variant="contained">
+          <Button onClick={handleConfirm} type="button" variant="contained">
             Gotowe
           </Button>
         ) : (

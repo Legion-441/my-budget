@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 //* MUI
 import { Alert, Button, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 //* Types
@@ -9,6 +9,7 @@ const LeaveBudgetDialog: React.FC<BudgetDialogProps> = ({ budget, onClose }) => 
   const [error, setError] = useState<string>("");
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleCloseDialog = () => {
     setError("");
@@ -37,6 +38,14 @@ const LeaveBudgetDialog: React.FC<BudgetDialogProps> = ({ budget, onClose }) => 
     //   });
   };
 
+  const handleConfirm = () => {
+    handleCloseDialog();
+    const isBudgetPage = location.pathname.startsWith(`/budget/${budget.id}`);
+    if (isBudgetPage) {
+      navigate("/");
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       <DialogTitle>Opuszczanie budżetu!</DialogTitle>
@@ -58,7 +67,7 @@ const LeaveBudgetDialog: React.FC<BudgetDialogProps> = ({ budget, onClose }) => 
       </DialogContent>
       <DialogActions>
         {isSuccess ? (
-          <Button onClick={handleCloseDialog} type="button" variant="contained">
+          <Button onClick={handleConfirm} type="button" variant="contained">
             Gotowe
           </Button>
         ) : (
