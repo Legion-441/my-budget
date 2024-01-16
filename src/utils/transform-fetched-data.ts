@@ -1,4 +1,4 @@
-import { APP_THEME_OPTIONS, VALIDATED_ICON_MAPPING } from "../constants/constants";
+import { APP_THEME_OPTIONS, BUDGET_LIST_ITEM_INITIAL, VALIDATED_ICON_MAPPING } from "../constants/constants";
 //* Firebase
 import { User } from "firebase/auth";
 import { DocumentData, DocumentSnapshot, Timestamp } from "firebase/firestore";
@@ -7,38 +7,42 @@ import {
   AccountData,
   BudgetsListItem,
   AppBudgetMetaData,
-  BudgetIconName,
   MemberOrOwner,
   FirebaseMember,
   BudgetFormData,
   FirebaseBudgetMetaData,
 } from "../types/AppTypes";
 
-export const transformFetchedAccountData = (documentSnapshot: DocumentSnapshot<DocumentData>): AccountData => {
-  const docData = documentSnapshot.data();
-
-  const validateBudgetData = (): BudgetsListItem[] => {
-    let budgetData: BudgetsListItem[] = [];
-    if (docData && Array.isArray(docData.budgetsList)) {
-      docData.budgetsList.forEach((budgetItem) => {
+export const validateBudgetsListData = (budgetsList: any): BudgetsListItem[] => {
+  let budgetData: BudgetsListItem[] = [];
+  if (Array.isArray(budgetsList)) {
+    budgetsList.forEach((budgetItem) => {
+      if (budgetItem) {
+        const { icon, id, name, owner = {} } = budgetItem;
         const budget: BudgetsListItem = {
-          icon: "icon" in budgetItem && budgetItem.icon in VALIDATED_ICON_MAPPING ? budgetItem.icon : "None",
-          id: "id" in budgetItem ? String(budgetItem.id) : "",
-          name: "name" in budgetItem ? String(budgetItem.name) : "",
+          icon: icon && icon in VALIDATED_ICON_MAPPING ? icon : BUDGET_LIST_ITEM_INITIAL.icon,
+          id: id ? String(id) : BUDGET_LIST_ITEM_INITIAL.id,
+          name: name ? String(name) : BUDGET_LIST_ITEM_INITIAL.name,
           owner: {
-            id: budgetItem.owner && "id" in budgetItem.owner ? String(budgetItem.owner.id) : "",
-            username: budgetItem.owner && "username" in budgetItem.owner ? String(budgetItem.owner.username) : "",
+            id: owner.id ? String(owner.id) : BUDGET_LIST_ITEM_INITIAL.owner.id,
+            username: owner.username ? String(owner.username) : BUDGET_LIST_ITEM_INITIAL.owner.username,
           },
         };
         budgetData.push(budget);
-      });
-    }
-    return budgetData;
-  };
+      } else {
+        // TODO: usuń pozycję z listy jeśli nie jest objektem
+      }
+    });
+  }
+  return budgetData;
+};
+
+export const transformFetchedAccountData = (documentSnapshot: DocumentSnapshot<DocumentData>): AccountData => {
+  const docData = documentSnapshot.data();
 
   const accountData: AccountData = {
     appTheme: APP_THEME_OPTIONS.includes(docData?.appTheme) ? docData?.appTheme : "system",
-    budgetsList: validateBudgetData(),
+    budgetsList: validateBudgetsListData(docData?.budgetsList),
     friendsList: [],
   };
 

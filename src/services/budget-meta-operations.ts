@@ -3,7 +3,7 @@ import { FIREBASE_COLLECTIONS } from "../constants/constants";
 import { arrayRemove, arrayUnion, collection, doc, runTransaction, writeBatch } from "firebase/firestore";
 import { db } from "../firebase";
 //* Utils
-import { transformBudgetFormDataToFirebaseMetaData } from "../utils/transform-fetched-data";
+import { transformBudgetFormDataToFirebaseMetaData, validateBudgetsListData } from "../utils/transform-fetched-data";
 import checkAuthentication from "../utils/checkAuthentication";
 //* Types
 import { BudgetFormData, BudgetsListItem, AppBudgetMetaData, BudgetState } from "../types/AppTypes";
@@ -72,9 +72,9 @@ export const toggleArchiveBudget = async (budget: AppBudgetMetaData) => {
   const newData: { state: BudgetState } = { state: newBudgetState } as const;
 
   await runTransaction(db, async (transaction) => {
-    const accountDoc = await transaction.get(accountRef);
-    const budgetsList: BudgetsListItem[] = accountDoc.data()?.budgetsList;
-    const budgetToRemove: BudgetsListItem | null = budgetsList.find((item) => item.id === budget.id) || null;
+    const accountDocData = (await transaction.get(accountRef)).data();
+    const budgetsList: BudgetsListItem[] = validateBudgetsListData(accountDocData?.budgetsList);
+    const budgetToRemove: BudgetsListItem | null = budgetsList.find((item) => item?.id === budget.id) || null;
 
     transaction.update(budgetRef, newData);
     if (!isArchived && budgetToRemove) {

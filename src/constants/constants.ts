@@ -13,6 +13,18 @@ import {
   TwoWheeler,
   Work,
 } from "@mui/icons-material";
+//* Types
+import { BudgetsListItem } from "../types/AppTypes";
+
+export const BUDGET_LIST_ITEM_INITIAL: BudgetsListItem = {
+  icon: "none",
+  id: "",
+  name: "",
+  owner: {
+    id: "",
+    username: "",
+  },
+};
 
 export const ICON_COMPONENT_DICTIONARY = {
   person: Person,
