@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import { useAppSelector } from "../../app/hooks";
-import { selectAccountInfo } from "../../slices/account/account.slice";
 //* Firebase
 import { auth } from "../../firebase";
 //* Components
@@ -47,8 +45,6 @@ const BudgetManagementView: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [fetchingError, setFetchingError] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const { data } = useAppSelector(selectAccountInfo);
-  const { budgetsList } = data;
 
   const userUid = auth.currentUser?.uid;
 
@@ -76,16 +72,13 @@ const BudgetManagementView: React.FC = () => {
     setAnchorEl(null);
   };
 
-  const pinnedBudgets: AppBudgetMetaData[] = [];
   const asOwnerBudgets: AppBudgetMetaData[] = [];
   const asMemberbudgets: AppBudgetMetaData[] = [];
   const archivedBudgets: AppBudgetMetaData[] = [];
 
   budgets.forEach((item) => {
     if (item.state === "active") {
-      if (budgetsList.some((budgetListItem) => budgetListItem.id === item.id)) {
-        pinnedBudgets.push(item);
-      } else if (item.owner.id === userUid) {
+      if (item.owner.id === userUid) {
         asOwnerBudgets.push(item);
       } else {
         asMemberbudgets.push(item);
@@ -114,7 +107,6 @@ const BudgetManagementView: React.FC = () => {
           <BudgetManagementPageSkeleton />
         ) : (
           <>
-            <BudgetsCards header="Przypięte" budgetsList={pinnedBudgets} handleMenuOpen={handleOpenBudgetsMenu} />
             <BudgetsCards header="Aktywne własne" budgetsList={asOwnerBudgets} handleMenuOpen={handleOpenBudgetsMenu} />
             <BudgetsCards header="Aktywne obce" budgetsList={asMemberbudgets} handleMenuOpen={handleOpenBudgetsMenu} />
             <BudgetsCards header="Archiwalne" budgetsList={archivedBudgets} handleMenuOpen={handleOpenBudgetsMenu} />
