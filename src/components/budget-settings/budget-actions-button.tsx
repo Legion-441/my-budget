@@ -49,7 +49,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({ budget, variant, action, op
   const { text, icon, color } = actionConfig[action];
 
   const ActionButton = () => (
-    <Button onClick={() => openDialog(action)} color={color} variant="outlined">
+    <Button onClick={() => openDialog(action)} color={color} variant="outlined" startIcon={icon}>
       {text}
     </Button>
   );
