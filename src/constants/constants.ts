@@ -14,16 +14,21 @@ import {
   Work,
 } from "@mui/icons-material";
 //* Types
-import { BudgetsListItem } from "../types/AppTypes";
+import { AppBudgetMetaData, BudgetsListItem } from "../types/AppTypes";
 
 export const BUDGET_LIST_ITEM_INITIAL: BudgetsListItem = {
   icon: "none",
   id: "",
   name: "",
-  owner: {
-    id: "",
-    username: "",
-  },
+  owner: { id: "", username: "" },
+};
+
+export const BUDGET_INITIAL: AppBudgetMetaData = {
+  ...BUDGET_LIST_ITEM_INITIAL,
+  createdAt: 0,
+  description: "",
+  members: [],
+  state: "active",
 };
 
 export const ICON_COMPONENT_DICTIONARY = {

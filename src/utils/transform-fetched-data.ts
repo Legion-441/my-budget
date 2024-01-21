@@ -1,4 +1,4 @@
-import { APP_THEME_OPTIONS, BUDGET_LIST_ITEM_INITIAL, VALIDATED_ICON_MAPPING } from "../constants/constants";
+import { APP_THEME_OPTIONS, BUDGET_INITIAL, BUDGET_LIST_ITEM_INITIAL, VALIDATED_ICON_MAPPING } from "../constants/constants";
 //* Firebase
 import { User } from "firebase/auth";
 import { DocumentData, DocumentSnapshot, Timestamp } from "firebase/firestore";
@@ -50,8 +50,9 @@ export const transformFetchedAccountData = (documentSnapshot: DocumentSnapshot<D
 };
 
 export const transformFetchedBudgetsData = (documentSnapshot: DocumentSnapshot<DocumentData>): AppBudgetMetaData => {
-  const documentData = documentSnapshot.data();
+  const docData = documentSnapshot.data();
   const budgetID = documentSnapshot.id;
+  if (!docData) return { ...BUDGET_INITIAL, id: budgetID };
 
   const validateMembers = (membersObject: FirebaseMember): MemberOrOwner[] => {
     if (typeof membersObject !== "object") return [];
@@ -66,18 +67,16 @@ export const transformFetchedBudgetsData = (documentSnapshot: DocumentSnapshot<D
     return members;
   };
 
-  const validateOwnerProperties = (): MemberOrOwner => validateMembers(documentData?.owner)[0];
-
   // Transform Firestore data into the expected format
   const budgetData: AppBudgetMetaData = {
-    name: documentData && "name" in documentData ? String(documentData.name) : "",
-    createdAt: documentData && documentData.createdAt instanceof Timestamp ? documentData.createdAt.toDate().getTime() : 0,
-    description: documentData && "description" in documentData ? String(documentData.description) : "",
     id: budgetID,
-    icon: documentData && "icon" in documentData && documentData.icon in VALIDATED_ICON_MAPPING ? documentData.icon as BudgetIconName : "none",
-    members: validateMembers(documentData?.members),
-    owner: validateOwnerProperties(),
-    state: documentData && (documentData.state === "archived" || documentData.state === "active") ? documentData.state : "active",
+    name: docData.name ? String(docData.name) : BUDGET_INITIAL.name,
+    createdAt: docData.createdAt instanceof Timestamp ? docData.createdAt.toDate().getTime() : BUDGET_INITIAL.createdAt,
+    description: docData.description ? String(docData.description) : BUDGET_INITIAL.description,
+    icon: docData.icon in VALIDATED_ICON_MAPPING ? docData.icon : BUDGET_INITIAL.icon,
+    members: validateMembers(docData.members),
+    owner: validateMembers(docData.owner)[0],
+    state: docData.state === "archived" || docData.state === "active" ? docData.state : BUDGET_INITIAL.state,
   };
 
   return budgetData;
