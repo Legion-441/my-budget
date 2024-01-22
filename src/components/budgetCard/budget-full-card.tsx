@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 //* Components
 import BudgetIconComponent from "../budgetInfo/budget-icon";
+import BudgetPinButton from "./budget-card-pin-button";
 //* Types
 import { AppBudgetMetaData } from "../../types/AppTypes";
 
@@ -41,6 +42,7 @@ const BudgetFullCard: React.FC<BudgetFullCardProps> = ({ budget }) => {
             {new Date(budget.createdAt).toLocaleDateString()}
           </Box>
         }
+        action={<BudgetPinButton budget={budget} />}
       />
       <CardContent style={{ paddingBlock: 0 }}>
         <Typography variant="body1">{budget.description || "Brak opisu"}</Typography>

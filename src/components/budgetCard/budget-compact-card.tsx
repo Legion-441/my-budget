@@ -5,6 +5,7 @@ import { Avatar, Box, Card, CardActions, CardContent, CardHeader, Divider, IconB
 import { Group, MoreVert } from "@mui/icons-material";
 //* Components
 import BudgetIconComponent from "../budgetInfo/budget-icon";
+import BudgetPinButton from "./budget-card-pin-button";
 //* Types
 import { AppBudgetMetaData } from "../../types/AppTypes";
 
@@ -35,19 +36,23 @@ const BudgetCompactCard: React.FC<BudgetCompactCardProps> = ({ budget, handleMen
   const cardBackgroundColor = isHover ? theme.palette.action.focus : "initial";
 
   const actionButton = (
-    <IconButton
-      aria-label="option"
-      onClick={(e) => {
-        e.stopPropagation();
-        handleMenuOpen(e, budget);
-      }}
-      onMouseDown={(e) => e.stopPropagation()}
-      onMouseUp={(e) => e.stopPropagation()}
-      onTouchStart={(e) => e.stopPropagation()}
-      onTouchEnd={(e) => e.stopPropagation()}
-    >
-      <MoreVert />
-    </IconButton>
+    <>
+      <BudgetPinButton budget={budget} isHover={isHover} />
+      <IconButton
+        aria-label="opcje"
+        size="small"
+        onClick={(e) => {
+          e.stopPropagation();
+          handleMenuOpen(e, budget);
+        }}
+        onMouseDown={(e) => e.stopPropagation()}
+        onMouseUp={(e) => e.stopPropagation()}
+        onTouchStart={(e) => e.stopPropagation()}
+        onTouchEnd={(e) => e.stopPropagation()}
+      >
+        <MoreVert />
+      </IconButton>
+    </>
   );
 
   const membersButton = (
