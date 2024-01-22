@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 //* MUI
-import { Avatar, Box, Card, CardActions, CardContent, CardHeader, Divider, IconButton, Typography, styled, useTheme } from "@mui/material";
+import { Avatar, Box, Card, CardContent, CardHeader, Divider, IconButton, Typography, styled, useTheme } from "@mui/material";
 import { Group, MoreVert } from "@mui/icons-material";
 //* Components
 import BudgetIconComponent from "../budgetInfo/budget-icon";
@@ -55,10 +55,10 @@ const BudgetCompactCard: React.FC<BudgetCompactCardProps> = ({ budget, handleMen
     </>
   );
 
-  const membersButton = (
-    <Box display="flex" gap={1} alignItems="center" fontSize={"small"}>
+  const MembersCountInfo = () => (
+    <Box display="flex" gap={1} alignItems="center" fontSize={"small"} paddingTop={1}>
       <Group fontSize="inherit" />
-      {budget.members.length}
+      Ty i {budget.members.length} {budget.members.length === 1 ? "inny członek" : "innych członków"}
     </Box>
   );
 
@@ -71,6 +71,7 @@ const BudgetCompactCard: React.FC<BudgetCompactCardProps> = ({ budget, handleMen
       onPointerOut={() => setIsHover(false)}
     >
       <CardHeader
+        sx={{ paddingBottom: 0 }}
         avatar={
           <Avatar aria-label="icon" variant="rounded" sx={{ bgcolor: theme.palette.secondary.main }}>
             <BudgetIconComponent iconName={budget.icon} />
@@ -87,15 +88,14 @@ const BudgetCompactCard: React.FC<BudgetCompactCardProps> = ({ budget, handleMen
         }
       />
 
-      <CardContent style={{ paddingBlock: 0 }}>
-        <Typography variant="body2" color={budget.description ? "text.secondary" : "text.disabled"}>
-          {budget.description ? budget.description : "Brak opisu"}
-        </Typography>
+      <CardContent>
+        <Box gap={1}>
+          <Typography component={"span"} variant="body2" color={budget.description ? "text.secondary" : "text.disabled"}>
+            {budget.description ? budget.description : "Brak opisu"}
+          </Typography>
+          {budget.members.length > 0 && <MembersCountInfo />}
+        </Box>
       </CardContent>
-
-      <CardActions sx={{ paddingInline: 2 }} disableSpacing>
-        {budget.members.length > 0 && membersButton}
-      </CardActions>
     </StyledCard>
   );
 };
