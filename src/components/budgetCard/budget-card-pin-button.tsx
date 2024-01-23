@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useAppSelector } from "../../app/hooks";
 import { selectAccountInfo } from "../../slices/account/account.slice";
 //* MUI
@@ -14,12 +15,21 @@ type BudgetPinButtonProps = {
 };
 
 const BudgetPinButton: React.FC<BudgetPinButtonProps> = ({ budget, isHover = true }) => {
+  const [hasMouse, setHasMouse] = useState(true);
   const { budgetsList } = useAppSelector(selectAccountInfo).data;
   const isPinned = budgetsList.some((budgetListItem) => budgetListItem.id === budget.id);
   const isArchived = budget.state === "archived";
-  const isVisible = isArchived || (!isHover && !isPinned);
+  const isVisible = isHover || isPinned || !hasMouse;
 
-  if (isVisible) return null;
+  useEffect(() => {
+    if (window.matchMedia("(pointer: coarse)").matches) {
+      setHasMouse(false);
+    } else {
+      setHasMouse(true);
+    }
+  }, []);
+
+  if (isArchived || !isVisible) return null;
 
   const handleTogglePin = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
