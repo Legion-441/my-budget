@@ -23,7 +23,7 @@ interface BudgetCardsProps {
 const BudgetsCards: React.FC<BudgetCardsProps> = ({ header, budgetsList, handleMenuOpen }) => {
   return (
     <Stack gap={2} marginBottom={5}>
-      <Typography variant="h2" fontSize={"2.369rem"}>{`${header}:`}</Typography>
+      <Typography overflow={"hidden"} variant="h2" fontSize={"2.369rem"}>{`${header}:`}</Typography>
       {budgetsList.length > 0 ? (
         <Grid container spacing={2}>
           {budgetsList.map((budget) => (
@@ -96,7 +96,7 @@ const BudgetManagementView: React.FC = () => {
   return (
     <>
       <Box component={"main"}>
-        <Typography variant="h1" fontSize={"3.158rem"} marginY={"1rem"}>
+        <Typography overflow={"hidden"} variant="h1" fontSize={"3.158rem"} marginY={"1rem"}>
           Zarządzanie budżetami
         </Typography>
         {fetchingError ? (
