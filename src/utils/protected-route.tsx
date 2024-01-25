@@ -32,10 +32,7 @@ const ProtectedRoute: React.FC = () => {
   
 
   return (
-    <Box
-      display='flex'
-      minHeight='100vh'
-    >
+    <Box minHeight='100vh' >
       {authLoading ? null : <Outlet />} 
     </Box>
   )
