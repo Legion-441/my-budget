@@ -1,25 +1,23 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 //* MUI
-import {
-  Avatar,
-  Box,
-  Card,
-  CardActionArea,
-  CardContent,
-  CardHeader,
-  Divider,
-  IconButton,
-  Typography,
-  styled,
-  useTheme,
-} from "@mui/material";
+import { Avatar, Box, Card, CardActionArea, CardActions, CardContent, IconButton, Typography, styled, useTheme } from "@mui/material";
 import { Group, MoreVert } from "@mui/icons-material";
+//* Styled Components
+import HiddenOverflowCardHeader from "../../styled/budget-card-subcomponents/hidden-overflow-card-header";
 //* Components
 import BudgetIconComponent from "../budgetInfo/budget-icon";
 import BudgetPinButton from "./budget-card-pin-button";
 //* Types
 import { AppBudgetMetaData } from "../../types/AppTypes";
+
+const LineClampTypography = styled(Typography)({
+  display: "-webkit-box",
+  WebkitLineClamp: 2,
+  lineClamp: 2,
+  WebkitBoxOrient: "vertical",
+  overflow: "hidden",
+});
 
 interface BudgetCompactCardProps {
   budget: AppBudgetMetaData;
@@ -54,22 +52,16 @@ const BudgetCompactCard: React.FC<BudgetCompactCardProps> = ({ budget, handleMen
   );
 
   const MembersCountInfo = () => (
-    <Box display="flex" gap={1} alignItems="center" fontSize={"small"} paddingTop={1}>
+    <Box display="flex" gap={1} alignItems="center" fontSize={"small"}>
       <Group fontSize="inherit" />
       Ty i {budget.members.length} {budget.members.length === 1 ? "inny członek" : "innych członków"}
     </Box>
   );
 
   return (
-    <Card
-      elevation={6}
-      onClick={navigateToBudgetPage}
-      onPointerOver={() => setIsHover(true)}
-      onPointerOut={() => setIsHover(false)}
-    >
+    <Card elevation={6} onClick={navigateToBudgetPage} onPointerOver={() => setIsHover(true)} onPointerOut={() => setIsHover(false)}>
       <CardActionArea>
-        <CardHeader
-          sx={{ paddingBottom: 0 }}
+        <HiddenOverflowCardHeader
           avatar={
             <Avatar aria-label="icon" variant="rounded" sx={{ bgcolor: theme.palette.secondary.main }}>
               <BudgetIconComponent iconName={budget.icon} />
@@ -77,23 +69,16 @@ const BudgetCompactCard: React.FC<BudgetCompactCardProps> = ({ budget, handleMen
           }
           action={actionButton}
           title={budget.name}
-          subheader={
-            <Box display={"flex"} gap={1}>
-              {budget.owner.username}
-              <Divider orientation="vertical" flexItem />
-              {new Date(budget.createdAt).toLocaleDateString()}
-            </Box>
-          }
+          subheader={`${budget.owner.username} • ${new Date(budget.createdAt).toLocaleDateString()}`}
         />
-
         <CardContent>
           <Box gap={1}>
-            <Typography component={"span"} variant="body2" color={budget.description ? "text.secondary" : "text.disabled"}>
+            <LineClampTypography variant="body2" color={budget.description ? "text.secondary" : "text.disabled"}>
               {budget.description ? budget.description : "Brak opisu"}
-            </Typography>
-            {budget.members.length > 0 && <MembersCountInfo />}
+            </LineClampTypography>
           </Box>
         </CardContent>
+        <CardActions sx={{ paddingLeft: 2, paddingTop: 0 }}>{budget.members.length > 0 && <MembersCountInfo />}</CardActions>
       </CardActionArea>
     </Card>
   );

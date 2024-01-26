@@ -1,18 +1,7 @@
 //* MUI
-import {
-  Avatar,
-  Box,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  Chip,
-  Divider,
-  List,
-  ListItem,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Avatar, Box, Card, CardActions, CardContent, CardHeader, Chip, List, ListItem, Typography, useTheme } from "@mui/material";
+//* Styled Components
+import HiddenOverflowCardHeader from "../../styled/budget-card-subcomponents/hidden-overflow-card-header";
 //* Components
 import BudgetIconComponent from "../budgetInfo/budget-icon";
 import BudgetPinButton from "./budget-card-pin-button";
@@ -28,25 +17,20 @@ const BudgetFullCard: React.FC<BudgetFullCardProps> = ({ budget }) => {
 
   return (
     <Card>
-      <CardHeader
+      <HiddenOverflowCardHeader
         avatar={
           <Avatar aria-label="icon" variant="rounded" sx={{ bgcolor: theme.palette.secondary.main }}>
             <BudgetIconComponent iconName={budget.icon} />
           </Avatar>
         }
         title={budget.name}
-        subheader={
-          <Box display={"flex"} gap={1}>
-            {budget.owner.username}
-            <Divider orientation="vertical" flexItem />
-            {new Date(budget.createdAt).toLocaleDateString()}
-          </Box>
-        }
+        subheader={`${budget.owner.username} • ${new Date(budget.createdAt).toLocaleDateString()}`}
         action={<BudgetPinButton budget={budget} />}
       />
-      <CardContent style={{ paddingBlock: 0 }}>
-        <Typography variant="body1">{budget.description || "Brak opisu"}</Typography>
-        <br />
+      <CardContent>
+        <Typography paddingBottom={2} variant="body1" color={budget.description ? "text.secondary" : "text.disabled"}>
+          {budget.description || "Brak opisu"}
+        </Typography>
         <List dense subheader={<Typography>Członkowie:</Typography>}>
           {budget.members.length === 0 && (
             <Typography variant="body2" color={"text.disabled"}>
