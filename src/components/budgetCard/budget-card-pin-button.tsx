@@ -29,7 +29,7 @@ const BudgetPinButton: React.FC<BudgetPinButtonProps> = ({ budget, isHover = tru
     }
   }, []);
 
-  if (isArchived || !isVisible) return null;
+  if (isArchived) return null;
 
   const handleTogglePin = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
@@ -42,6 +42,7 @@ const BudgetPinButton: React.FC<BudgetPinButtonProps> = ({ budget, isHover = tru
 
   return (
     <IconButton
+      sx={{ visibility: isVisible ? "visible" : "hidden" }}
       aria-label={isPinned ? "Odepnij" : "Przypnij"}
       size="small"
       onClick={handleTogglePin}
