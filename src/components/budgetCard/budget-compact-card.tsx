@@ -1,7 +1,19 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 //* MUI
-import { Avatar, Box, Card, CardContent, CardHeader, Divider, IconButton, Typography, styled, useTheme } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Card,
+  CardActionArea,
+  CardContent,
+  CardHeader,
+  Divider,
+  IconButton,
+  Typography,
+  styled,
+  useTheme,
+} from "@mui/material";
 import { Group, MoreVert } from "@mui/icons-material";
 //* Components
 import BudgetIconComponent from "../budgetInfo/budget-icon";
