@@ -1,5 +1,5 @@
 //* MUI
-import { Avatar, Box, Card, CardActions, CardContent, CardHeader, Chip, List, ListItem, Typography, useTheme } from "@mui/material";
+import { Avatar, Card, CardActions, CardContent, Chip, List, ListItem, Typography, useTheme } from "@mui/material";
 //* Styled Components
 import HiddenOverflowCardHeader from "../../styled/budget-card-subcomponents/hidden-overflow-card-header";
 //* Components
