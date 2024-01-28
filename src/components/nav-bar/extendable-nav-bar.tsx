@@ -2,7 +2,7 @@ import * as React from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { selectIsDrawerOpen, selectIsTempDrawerOpen, toggleTempDrawer } from "../../slices/app/app.slice";
 //* MUI
-import { Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material";
+import { Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar } from "@mui/material";
 import { useMediaQuery, useTheme } from "@mui/material";
 //* Styled components
 import UnstyledLink from "../../styled/unstyled-link/unstyled-link.styled";
