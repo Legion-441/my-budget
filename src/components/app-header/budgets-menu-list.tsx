@@ -1,19 +1,21 @@
 import * as React from "react";
 //* Firebase
 import { auth } from "../../firebase";
-//* Components
-import BudgetIconComponent from "../budgetInfo/budget-icon";
 //* MUI
 import { MenuItem, ListItemIcon, ListItemText, Divider } from "@mui/material";
+//* Styled components
+import UnstyledLink from "../../styled/unstyled-link/unstyled-link.styled";
+//* Components
+import BudgetIconComponent from "../budgetInfo/budget-icon";
 //* Types
 import { BudgetsListItem } from "../../types/AppTypes";
 
 interface BudgetListProps {
   budgets: BudgetsListItem[];
-  onClick: (id: string) => void;
+  handleClick: () => void;
 }
 
-const BudgetsMenuList: React.FC<BudgetListProps> = ({ budgets, onClick }) => {
+const BudgetsMenuList: React.FC<BudgetListProps> = ({ budgets, handleClick }) => {
   if (budgets.length === 0) return <MenuItem disabled>Lista jest pusta</MenuItem>;
   const userUid = auth.currentUser?.uid;
 
@@ -22,7 +24,7 @@ const BudgetsMenuList: React.FC<BudgetListProps> = ({ budgets, onClick }) => {
 
   const renderBudgetItems = (budgets: BudgetsListItem[], isOwner: boolean): JSX.Element[] => {
     return budgets.map((item) => (
-      <MenuItem key={item.id} onClick={() => onClick(item.id)}>
+      <MenuItem component={UnstyledLink} to={`/budget/${item.id}/dash`} key={item.id} onClick={handleClick}>
         <ListItemIcon>
           <BudgetIconComponent iconName={item.icon} />
         </ListItemIcon>

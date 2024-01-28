@@ -1,16 +1,19 @@
-import PaperCard from '../../styled/paper-card/paper-card.styled';
-import { Button, Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
+//* MUI
+import { Button, Typography } from "@mui/material";
+//* Styled components
+import PaperCard from "../../styled/paper-card/paper-card.styled";
+import UnstyledLink from "../../styled/unstyled-link/unstyled-link.styled";
 
 const DashboardMainView: React.FC = () => {
-  const navigate = useNavigate()
-  return <>
+  const currentPath = useLocation().pathname;
+
+  return (
     <PaperCard>
-      {/* //TODO: fix the navigate function */}
-      <Button onClick={() => navigate(`/details`)}>Details</Button>
-      <Typography paragraph>
-        DASHBOARD - MAIN
-      </Typography>
+      <Button component={UnstyledLink} to={currentPath + "/details"}>
+        Details
+      </Button>
+      <Typography paragraph>DASHBOARD - MAIN</Typography>
       <Typography paragraph>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
@@ -40,7 +43,7 @@ const DashboardMainView: React.FC = () => {
         sapien faucibus et molestie ac.
       </Typography>
     </PaperCard>
-  </>
-}
+  );
+};
 
-export default DashboardMainView
+export default DashboardMainView;

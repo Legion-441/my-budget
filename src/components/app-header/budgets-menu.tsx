@@ -1,9 +1,10 @@
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
 import { selectAccountInfo } from "../../slices/account/account.slice";
 //* MUI
-import { Button, Divider, Menu, MenuItem, Typography } from "@mui/material";
+import { Button, Divider, Menu } from "@mui/material";
+//* Styled components
+import UnstyledLink from "../../styled/unstyled-link/unstyled-link.styled";
 //* Components
 import BudgetsMenuList from "./budgets-menu-list";
 
@@ -14,15 +15,7 @@ interface AppMenuProps {
 
 const AppBudgetsMenu: React.FC<AppMenuProps> = ({ anchorEl, handleToggleBudgetsMenu }) => {
   const isMenuOpen: boolean = Boolean(anchorEl);
-  const navigate = useNavigate();
-  const { data } = useAppSelector(selectAccountInfo);
-  const { budgetsList } = data;
-  const menuId = "primary-search-budget-menu";
-
-  function onBudgetListItemClick(itemID: string) {
-    handleToggleBudgetsMenu();
-    navigate(`/budget/${itemID}/dash`);
-  }
+  const { budgetsList } = useAppSelector(selectAccountInfo).data;
 
   return (
     <Menu
@@ -31,16 +24,16 @@ const AppBudgetsMenu: React.FC<AppMenuProps> = ({ anchorEl, handleToggleBudgetsM
         vertical: "bottom",
         horizontal: "right",
       }}
-      id={menuId}
+      id={"budgets-list-menu"}
       keepMounted
       transformOrigin={{
         vertical: "top",
         horizontal: "right",
       }}
       open={isMenuOpen}
-      onClose={() => handleToggleBudgetsMenu()}
+      onClose={handleToggleBudgetsMenu}
       MenuListProps={{
-        sx: { pb: 0}
+        sx: { pb: 0 },
       }}
       PaperProps={{
         elevation: 15,
@@ -54,9 +47,18 @@ const AppBudgetsMenu: React.FC<AppMenuProps> = ({ anchorEl, handleToggleBudgetsM
         },
       }}
     >
-      <BudgetsMenuList budgets={budgetsList} onClick={(itemID) => onBudgetListItemClick(itemID)} />
-      <Divider style={{ marginBottom: 0}} />
-      <Button color="secondary" style={{ width: '100%'}} onClick={() => {handleToggleBudgetsMenu(); navigate(`/budget-management`)}}>Zarządzaj</Button>
+      <BudgetsMenuList budgets={budgetsList} handleClick={handleToggleBudgetsMenu} />
+      <Divider style={{ marginBottom: 0 }} />
+      <Button
+        component={UnstyledLink}
+        to={`/budget-management`}
+        sx={{ borderRadius: 0 }}
+        color="secondary"
+        fullWidth
+        onClick={handleToggleBudgetsMenu}
+      >
+        Zarządzaj
+      </Button>
     </Menu>
   );
 };

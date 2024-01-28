@@ -39,7 +39,6 @@ const AppHeader: React.FC = () => {
         <Box
           component={UnstyledLink}
           to="/"
-          onClick={(e) => e.stopPropagation()}
           sx={{
             display: "flex",
             alignItems: "center",

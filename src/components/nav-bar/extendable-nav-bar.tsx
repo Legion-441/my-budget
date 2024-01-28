@@ -1,10 +1,11 @@
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { selectIsDrawerOpen, selectIsTempDrawerOpen, toggleTempDrawer } from "../../slices/app/app.slice";
 //* MUI
 import { Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material";
 import { useMediaQuery, useTheme } from "@mui/material";
+//* Styled components
+import UnstyledLink from "../../styled/unstyled-link/unstyled-link.styled";
 //* Components
 import { navLinks } from "./nav-pages";
 
@@ -13,47 +14,39 @@ import { navLinks } from "./nav-pages";
 const drawerWidth = [240, 60];
 
 interface ExtNavBarProps {
-  selectedSubPage: number | undefined,
-  pickedBudgetID: string
+  selectedSubPage: number | undefined;
+  pickedBudgetID: string;
 }
 
 export const ExtendableNavBar: React.FC<ExtNavBarProps> = ({ selectedSubPage, pickedBudgetID }) => {
   const theme = useTheme();
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch()
-  const isDrawerOpen = useAppSelector(selectIsDrawerOpen)
-  const isTempDrawerOpen = useAppSelector(selectIsTempDrawerOpen)
-    
+  const dispatch = useAppDispatch();
+  const isDrawerOpen = useAppSelector(selectIsDrawerOpen);
+  const isTempDrawerOpen = useAppSelector(selectIsTempDrawerOpen);
+
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"));
-  const drawerFontSize = isLargeScreen ? (isDrawerOpen ? "16px" : "12px") : (isTempDrawerOpen ? "16px" : "12px")
 
   const drawer: JSX.Element = (
     <>
-    <Toolbar />
-    <Box component='nav'>
-      <List component="ul" >
-        {navLinks.map((item, index) => (
-          <ListItem disablePadding key={item.label} onClick={() => {
-            navigate(item.subPath ? `/budget/${pickedBudgetID}/${item.subPath}` : "#");
-            isTempDrawerOpen && dispatch(toggleTempDrawer())
-          }}>
-            <ListItemButton
-              selected={selectedSubPage === index}
-              sx={{ overflow: "hidden" }}
+      <Toolbar />
+      <Box>
+        <List>
+          {navLinks.map((item, index) => (
+            <ListItem
+              component={UnstyledLink}
+              to={`/budget/${pickedBudgetID}/${item.subPath}`}
+              disablePadding
+              key={item.label}
+              onClick={() => isTempDrawerOpen && dispatch(toggleTempDrawer())}
             >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText
-                primary={
-                  <Typography variant="body1" style={{ fontSize: drawerFontSize }}>
-                    {item.label}
-                  </Typography>
-                }
-              />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </Box>
+              <ListItemButton selected={selectedSubPage === index} sx={{ overflow: "hidden" }}>
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.label} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      </Box>
     </>
   );
 
@@ -64,10 +57,10 @@ export const ExtendableNavBar: React.FC<ExtNavBarProps> = ({ selectedSubPage, pi
         variant="permanent"
         anchor="left"
         sx={{
-          width: drawerWidth[isLargeScreen ? Number(!isDrawerOpen) : 1],
+          width: drawerWidth[isLargeScreen && isDrawerOpen ? 0 : 1],
           flexShrink: 0,
           [`& .MuiDrawer-paper`]: {
-            width: drawerWidth[isLargeScreen ? Number(!isDrawerOpen) : 1],
+            width: drawerWidth[isLargeScreen && isDrawerOpen ? 0 : 1],
             boxSizing: "border-box",
           },
         }}
@@ -78,7 +71,7 @@ export const ExtendableNavBar: React.FC<ExtNavBarProps> = ({ selectedSubPage, pi
         PaperProps={{ elevation: 4 }}
         variant="temporary"
         open={isTempDrawerOpen}
-        onClose={() => {dispatch(toggleTempDrawer())}}
+        onClose={() => dispatch(toggleTempDrawer())}
         ModalProps={{ keepMounted: true }}
         sx={{
           display: { xs: "none", sm: "block", lg: "none" },

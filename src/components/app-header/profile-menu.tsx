@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
 import { clearAccountData } from "../../slices/account/account.slice";
 import { useDispatch } from "react-redux";
 //* Firebase
@@ -8,6 +7,8 @@ import { auth } from "../../firebase";
 //* MUI & Icons
 import { Menu, MenuItem, Divider, ListItemIcon } from "@mui/material";
 import { AccountCircle, Settings, Logout } from "@mui/icons-material";
+//* Styled components
+import UnstyledLink from "../../styled/unstyled-link/unstyled-link.styled";
 //* Components
 import { DarkModeSwitch } from "./darkModeSwitch";
 
@@ -18,9 +19,7 @@ interface AppMenuProps {
 
 const AppProfileMenu: React.FC<AppMenuProps> = ({ anchorEl, handleToggleProfileMenu }) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const isMenuOpen: boolean = Boolean(anchorEl);
-  const menuId = "primary-search-account-menu";
 
   const handleLogout = async () => {
     handleToggleProfileMenu();
@@ -32,11 +31,6 @@ const AppProfileMenu: React.FC<AppMenuProps> = ({ anchorEl, handleToggleProfileM
     }
   };
 
-  const handleProfile = () => {
-    handleToggleProfileMenu();
-    navigate("/profile");
-  };
-
   return (
     <Menu
       anchorEl={anchorEl}
@@ -44,7 +38,7 @@ const AppProfileMenu: React.FC<AppMenuProps> = ({ anchorEl, handleToggleProfileM
         vertical: "bottom",
         horizontal: "right",
       }}
-      id={menuId}
+      id={"account-menu"}
       keepMounted
       transformOrigin={{
         vertical: "top",
@@ -61,7 +55,7 @@ const AppProfileMenu: React.FC<AppMenuProps> = ({ anchorEl, handleToggleProfileM
         },
       }}
     >
-      <MenuItem onClick={handleProfile}>
+      <MenuItem component={UnstyledLink} to={"/profile"} onClick={handleToggleProfileMenu}>
         <ListItemIcon>
           <AccountCircle />
         </ListItemIcon>
@@ -69,7 +63,7 @@ const AppProfileMenu: React.FC<AppMenuProps> = ({ anchorEl, handleToggleProfileM
       </MenuItem>
       <DarkModeSwitch />
       <Divider />
-      <MenuItem onClick={() => handleToggleProfileMenu()}>
+      <MenuItem component={UnstyledLink} to={"/app-settings"} onClick={handleToggleProfileMenu}>
         <ListItemIcon>
           <Settings fontSize="small" />
         </ListItemIcon>
