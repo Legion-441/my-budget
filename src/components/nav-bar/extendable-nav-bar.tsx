@@ -27,7 +27,7 @@ export const ExtendableNavBar: React.FC<ExtNavBarProps> = ({ selectedSubPage, pi
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"));
 
   const drawer: JSX.Element = (
-    <>
+    <Box display={{ xs: "none", sm: "initial" }}>
       <Toolbar />
       <Box>
         <List>
@@ -47,7 +47,7 @@ export const ExtendableNavBar: React.FC<ExtNavBarProps> = ({ selectedSubPage, pi
           ))}
         </List>
       </Box>
-    </>
+    </Box>
   );
 
   return (

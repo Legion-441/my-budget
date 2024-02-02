@@ -2,7 +2,7 @@ import * as React from "react";
 //* Pages
 import { navLinks } from "./nav-pages";
 //* MUI
-import { BottomNavigation, BottomNavigationAction, Paper, Toolbar } from "@mui/material";
+import { BottomNavigation, BottomNavigationAction, Box, Paper, Toolbar } from "@mui/material";
 //* Styled Components
 import UnstyledLink from "../../styled/unstyled-link/unstyled-link.styled";
 
@@ -13,11 +13,10 @@ interface MobileNavBarProps {
 
 const MobileBottomNavigation: React.FC<MobileNavBarProps> = ({ selectedSubPage, pickedBudgetID }) => {
   return (
-    <>
-      <Toolbar />
+    <Toolbar component={Box} display={{ xs: "flex", sm: "none" }} >
       <BottomNavigation
         component={Paper}
-        sx={{ position: "fixed", bottom: 0, left: 0, right: 0, display: { xs: "flex", sm: "none" } }}
+        sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
         square={true}
         elevation={4}
         showLabels
@@ -33,7 +32,7 @@ const MobileBottomNavigation: React.FC<MobileNavBarProps> = ({ selectedSubPage, 
           />
         ))}
       </BottomNavigation>
-    </>
+    </Toolbar>
   );
 };
 
