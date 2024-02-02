@@ -3,39 +3,27 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 //* Firebase
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
-//* MUI
-import { Box } from "@mui/material";
 
 const ProtectedRoute: React.FC = () => {
   const [authLoading, setAuthLoading] = useState(true);
-  const [isMounted, setIsMounted] = useState(true);
 
   const navigate = useNavigate()
   const location = useLocation();
   
   
   useEffect(() => {
-    setIsMounted(true);
-
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (!user && isMounted) {
+      if (!user) {
         navigate('/login', { state: { from: location.pathname } })        
       }
       setAuthLoading(false)
     });
 
-    return () => {
-      setIsMounted(false);
-      unsubscribe()
-    }
-  }, [navigate, location, isMounted]);
+    return () => unsubscribe()
+  }, [navigate, location]);
   
 
-  return (
-    <Box minHeight='100vh' >
-      {authLoading ? null : <Outlet />} 
-    </Box>
-  )
+  return authLoading ? null : <Outlet />
 
 };
 
