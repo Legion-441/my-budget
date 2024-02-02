@@ -5,8 +5,6 @@ import { useAppSelector } from "../../app/hooks";
 import { selectPickedBudget } from "../../slices/app/app.slice";
 //* MUI & Icons
 import { Box } from "@mui/material";
-//* Styled Components
-import { PageContainer } from "../../styled/page-container/page-container.styled";
 //* Components
 import { navLinks } from "../../components/nav-bar/nav-pages";
 import { ExtendableNavBar } from "../../components/nav-bar/extendable-nav-bar";
@@ -35,14 +33,12 @@ const BudgetView: React.FC = () => {
   return (
     <>
       {pickedBudgetData && !pickedBudgetFetchError ? (
-        <Box sx={{ display: "flex", minHeight: "100vh", bgcolor: "background.default" }}>
-          {pickedBudgetData && <ExtendableNavBar selectedSubPage={selectedSubPage} pickedBudgetID={pickedBudgetData.id} />}
-          <Box component="main" sx={{ flexGrow: 1 }}>
-            <PageContainer>
-              <Outlet />
-            </PageContainer>
+        <Box display={"flex"} flexDirection={{ xs: "column", sm: "row" }}>
+          <ExtendableNavBar selectedSubPage={selectedSubPage} pickedBudgetID={pickedBudgetData.id} />
+          <Box component="main" flexGrow={1}>
+            <Outlet />
           </Box>
-          {pickedBudgetData && <MobileBottomNavigation selectedSubPage={selectedSubPage} pickedBudgetID={pickedBudgetData.id} />}
+          <MobileBottomNavigation selectedSubPage={selectedSubPage} pickedBudgetID={pickedBudgetData.id} />
         </Box>
       ) : (
         <DeniedAccessCard errorMessage={pickedBudgetFetchError?.message || null} />

@@ -4,8 +4,7 @@ import { Outlet, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { fetchAndSetSelectedBudget, selectPickedBudget } from "../../slices/app/app.slice";
 //* MUI
-import { Container, Box, Toolbar } from "@mui/material";
-import { PageContainer } from "../../styled/page-container/page-container.styled";
+import { Container } from "@mui/material";
 //* Components
 import AppHeader from "../../components/app-header/app-header";
 
@@ -24,14 +23,9 @@ const MainView: React.FC = () => {
   return (
     <>
       <AppHeader />
-      <Box sx={{ flexGrow: 1, pt: { sm: 2, xs: 1 }, px: { sm: 2, xs: 1 } }}>
-        <Toolbar />
-        <Container disableGutters maxWidth="xl">
-          <PageContainer>
-            <Outlet />
-          </PageContainer>
-        </Container>
-      </Box>
+      <Container sx={{ pt: { xs: 1, sm: 2 }, px: { xs: 1, sm: 2 } }} maxWidth="xl">
+        <Outlet />
+      </Container>
     </>
   );
 };
