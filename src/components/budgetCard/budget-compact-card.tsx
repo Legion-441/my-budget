@@ -1,11 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 //* MUI
 import { Avatar, Box, Card, CardActionArea, CardActions, CardContent, IconButton, Typography, styled } from "@mui/material";
 import { Group, MoreVert } from "@mui/icons-material";
 //* Styled Components
 import HiddenOverflowCardHeader from "../../styled/budget-card-subcomponents/hidden-overflow-card-header";
-//* Styled components
-import UnstyledLink from "../../styled/unstyled-link/unstyled-link.styled";
 //* Components
 import BudgetIconComponent from "../budgetInfo/budget-icon";
 import BudgetPinButton from "./budget-card-pin-button";
@@ -27,6 +26,7 @@ interface BudgetCompactCardProps {
 
 const BudgetCompactCard: React.FC<BudgetCompactCardProps> = ({ budget, handleMenuOpen }) => {
   const [isHover, setIsHover] = useState(false);
+  const navigate = useNavigate();
 
   const actionButton = (
     <>
@@ -57,7 +57,7 @@ const BudgetCompactCard: React.FC<BudgetCompactCardProps> = ({ budget, handleMen
 
   return (
     <Card elevation={6} onPointerOver={() => setIsHover(true)} onPointerOut={() => setIsHover(false)}>
-      <CardActionArea component={UnstyledLink} to={`/budget/${budget.id}/dash`}>
+      <CardActionArea onClick={() => navigate(`/budget/${budget.id}/dash`)}>
         <HiddenOverflowCardHeader
           avatar={
             <Avatar aria-label="icon" variant="rounded" sx={{ bgcolor: "secondary.main" }}>
