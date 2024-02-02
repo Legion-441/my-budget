@@ -31,7 +31,6 @@ const MainView: React.FC = () => {
             <Outlet />
           </PageContainer>
         </Container>
-        <Toolbar />
       </Box>
     </>
   );
