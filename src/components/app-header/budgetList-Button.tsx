@@ -3,14 +3,12 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { selectAccountInfo } from "../../slices/account/account.slice";
 import { selectPickedBudget } from "../../slices/app/app.slice";
 //* MUI
-import { ExpandLess, ExpandMore, Refresh } from "@mui/icons-material";
-import { Box, Button, IconButton, Tooltip, Typography } from "@mui/material";
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import { Button, Typography } from "@mui/material";
 //* Components
 import BudgetListAlert from "./budgetList-Alert";
 import BudgetIconComponent from "../budgetInfo/budget-icon";
 import AppBudgetsMenu from "./budgets-menu";
-//* Styled Components
-import CustomAlert from "../../styled/budgetList-alert/budgetList-alert.styled";
 //* Services
 import { subscribeToAccountData } from "../../services/account-operations";
 
