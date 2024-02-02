@@ -5,8 +5,8 @@ import { auth } from "../../firebase";
 //* MUI & Icons
 import { Menu, Divider } from "@mui/material";
 //* Components
-import ActionButton from "../budget-settings/budget-actions-button";
-import BudgetActionDialog from "../budget-settings/budget-actions-dialog";
+import ActionButton from "../budget-actions/budget-actions-button";
+import BudgetActionDialog from "../budget-actions/budget-actions-dialog";
 //* Types
 import { AppBudgetMetaData, BudgetActions } from "../../types/AppTypes";
 

@@ -7,7 +7,7 @@ import { auth } from "../../firebase";
 import { Box, Button, Dialog, Stack, useMediaQuery, useTheme } from "@mui/material";
 import { Group, Person } from "@mui/icons-material";
 //* Components
-import CreateOrEditBudgetDialog from "../../components/budget-settings/budget-create-or-edit-dialog";
+import CreateOrEditBudgetDialog from "../../components/budget-actions/budget-create-or-edit-dialog";
 //* Styled Components
 import PaperCard from "../../styled/paper-card/paper-card.styled";
 

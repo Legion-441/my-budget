@@ -7,8 +7,8 @@ import { auth } from "../../firebase";
 import { Stack } from "@mui/material";
 //* Components
 import BudgetFullCard from "../../components/budgetCard/budget-full-card";
-import ActionButton from "../../components/budget-settings/budget-actions-button";
-import BudgetActionDialog from "../../components/budget-settings/budget-actions-dialog";
+import ActionButton from "../../components/budget-actions/budget-actions-button";
+import BudgetActionDialog from "../../components/budget-actions/budget-actions-dialog";
 //* Types
 import { BudgetActions } from "../../types/AppTypes";
 
