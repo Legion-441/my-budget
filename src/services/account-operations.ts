@@ -4,14 +4,14 @@ import { setAppColorMode } from "../slices/app/app.slice";
 //* Constants
 import { FIREBASE_COLLECTIONS } from "../constants/constants";
 //* Firebase
-import { arrayUnion, doc, updateDoc, onSnapshot, arrayRemove } from "firebase/firestore";
+import { arrayUnion, doc, updateDoc, onSnapshot, arrayRemove, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 //* Utils
 import { transformFetchedAccountData } from "../utils/transform-fetched-data";
 import checkAuthentication from "../utils/checkAuthentication";
 import { getFirestoreErrorText } from "../utils/firestoreErrorHandling";
 //* Types
-import { AppBudgetMetaData, BudgetsListItem } from "../types/AppTypes";
+import { AccountData, AppBudgetMetaData, BudgetsListItem } from "../types/AppTypes";
 
 export const subscribeToAccountData = (dispatch: AppThunkDispatch) => {
   dispatch(startFetchingAccountData());
@@ -20,12 +20,12 @@ export const subscribeToAccountData = (dispatch: AppThunkDispatch) => {
   const unsubscribe = onSnapshot(
     docRef,
     (doc) => {
-      if (doc.exists()) {
-        const finalAccountData = transformFetchedAccountData(doc);
-        dispatch(setBudgetsList(finalAccountData.budgetsList));
-        dispatch(setAppColorMode(finalAccountData.appTheme));
-      } else {
-        throw new Error("not-found");
+      const finalAccountData = transformFetchedAccountData(doc);
+      dispatch(setBudgetsList(finalAccountData.budgetsList));
+      dispatch(setAppColorMode(finalAccountData.appTheme));
+
+      if (!doc.exists()) {
+        createAccountDoc(finalAccountData).catch((error) => console.error(error)); // TODO: handle error
       }
     },
     (error) => {
@@ -36,10 +36,10 @@ export const subscribeToAccountData = (dispatch: AppThunkDispatch) => {
   return unsubscribe;
 };
 
-export const updateAccount = async (budgetData: BudgetsListItem) => {
+export const createAccountDoc = async (accountData: AccountData) => {
   const currentUserUid = checkAuthentication().uid;
 
-  await updateDoc(doc(db, FIREBASE_COLLECTIONS.accounts, currentUserUid), { budgetsList: arrayUnion(budgetData) });
+  await setDoc(doc(db, FIREBASE_COLLECTIONS.accounts, currentUserUid), accountData);
 };
 
 export const pinToBudgetList = async (budget: AppBudgetMetaData) => {
