@@ -11,7 +11,6 @@ import { transformFetchedAccountData } from "../utils/transform-fetched-data";
 import checkAuthentication from "../utils/checkAuthentication";
 import { getFirestoreErrorText } from "../utils/firestoreErrorHandling";
 //* Types
-import { FieldValue } from "firebase/firestore";
 import { AppBudgetMetaData, BudgetsListItem } from "../types/AppTypes";
 
 export const subscribeToAccountData = (dispatch: AppThunkDispatch) => {
@@ -43,20 +42,23 @@ export const updateAccount = async (budgetData: BudgetsListItem) => {
   await updateDoc(doc(db, FIREBASE_COLLECTIONS.accounts, currentUserUid), { budgetsList: arrayUnion(budgetData) });
 };
 
-export const togglePinToBudgetList = async (budget: AppBudgetMetaData, budgetsList: BudgetsListItem[]) => {
+export const pinToBudgetList = async (budget: AppBudgetMetaData) => {
+  const currentUserUid = checkAuthentication().uid;
+  const accountRef = doc(db, FIREBASE_COLLECTIONS.accounts, currentUserUid);
+
+  const { name, icon, owner, id } = budget;
+  const budgetsListItemToPin: BudgetsListItem = { name, icon, owner, id };
+
+  await updateDoc(accountRef, { budgetsList: arrayUnion(budgetsListItemToPin) });
+};
+
+export const unpinFromBudgetList = async (budget: AppBudgetMetaData, budgetsList: BudgetsListItem[]) => {
   const currentUserUid = checkAuthentication().uid;
   const accountRef = doc(db, FIREBASE_COLLECTIONS.accounts, currentUserUid);
 
   const budgetsListItemToUnpin: BudgetsListItem | null = budgetsList.find((item) => item.id === budget.id) || null;
-  let budgetsListFieldValue: FieldValue;
 
   if (budgetsListItemToUnpin) {
-    budgetsListFieldValue = arrayRemove(budgetsListItemToUnpin);
-  } else {
-    const { name, icon, owner, id } = budget;
-    const budgetsListItemToPin: BudgetsListItem = { name, icon, owner, id };
-    budgetsListFieldValue = arrayUnion(budgetsListItemToPin);
+    await updateDoc(accountRef, { budgetsList: arrayRemove(budgetsListItemToUnpin) });
   }
-
-  await updateDoc(accountRef, { budgetsList: budgetsListFieldValue });
 };

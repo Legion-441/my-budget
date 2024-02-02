@@ -5,7 +5,7 @@ import { selectAccountInfo } from "../../slices/account/account.slice";
 import { IconButton } from "@mui/material";
 import { PushPin, PushPinOutlined } from "@mui/icons-material";
 //* Services
-import { togglePinToBudgetList } from "../../services/account-operations";
+import { pinToBudgetList, unpinFromBudgetList } from "../../services/account-operations";
 //* Types
 import { AppBudgetMetaData } from "../../types/AppTypes";
 
@@ -34,7 +34,11 @@ const BudgetPinButton: React.FC<BudgetPinButtonProps> = ({ budget, isHover = tru
   const handleTogglePin = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
     try {
-      await togglePinToBudgetList(budget, budgetsList);
+      if (isPinned) {
+        await unpinFromBudgetList(budget, budgetsList);
+      } else {
+        await pinToBudgetList(budget);
+      }
     } catch (error) {
       console.error(error); // TODO: handle errors
     }
