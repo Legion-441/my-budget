@@ -1,4 +1,3 @@
-import { useLocation } from "react-router-dom";
 //* MUI
 import { Button, Typography } from "@mui/material";
 //* Styled components
@@ -6,11 +5,10 @@ import PaperCard from "../../styled/paper-card/paper-card.styled";
 import UnstyledLink from "../../styled/unstyled-link/unstyled-link.styled";
 
 const DashboardMainView: React.FC = () => {
-  const currentPath = useLocation().pathname;
 
   return (
     <PaperCard>
-      <Button component={UnstyledLink} to={currentPath + "/details"}>
+      <Button component={UnstyledLink} to={"details"}>
         Details
       </Button>
       <Typography paragraph>DASHBOARD - MAIN</Typography>
