@@ -29,6 +29,8 @@ export const BUDGET_INITIAL: AppBudgetMetaData = {
   description: "",
   members: [],
   state: "active",
+  expenseCategories: [],
+  incomeCategories: [],
 };
 
 export const ICON_COMPONENT_DICTIONARY = {

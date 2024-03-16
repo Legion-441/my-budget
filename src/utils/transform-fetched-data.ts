@@ -11,6 +11,7 @@ import {
   FirebaseMember,
   BudgetFormData,
   FirebaseBudgetMetaData,
+  Category,
 } from "../types/AppTypes";
 
 export const validateBudgetsListData = (budgetsList: any): BudgetsListItem[] => {
@@ -66,6 +67,23 @@ export const transformFetchedBudgetsData = (documentSnapshot: DocumentSnapshot<D
 
     return members;
   };
+  const validateCategoriesList = (categoriesList: any): Category[] => {
+    if (!Array.isArray(categoriesList)) return [];
+
+    return categoriesList
+      .filter(
+        (category) =>
+          typeof category.id === "string" &&
+          category.id > "" &&
+          typeof category.order === "number" &&
+          typeof category.name === "string" &&
+          typeof category.color === "number"
+      )
+      .map((category) => {
+        const adjustedColor = ((category.color % 360) + 360) % 360;
+        return { ...category, color: adjustedColor };
+      });
+  };
 
   // Transform Firestore data into the expected format
   const budgetData: AppBudgetMetaData = {
@@ -77,6 +95,8 @@ export const transformFetchedBudgetsData = (documentSnapshot: DocumentSnapshot<D
     members: validateMembers(docData.members),
     owner: validateMembers(docData.owner)[0],
     state: docData.state === "archived" || docData.state === "active" ? docData.state : BUDGET_INITIAL.state,
+    expenseCategories: validateCategoriesList(docData.expenseCategories),
+    incomeCategories: validateCategoriesList(docData.incomeCategories),
   };
 
   return budgetData;

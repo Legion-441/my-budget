@@ -44,7 +44,16 @@ export type FirebaseBudgetMetaData = {
   createdAt: Timestamp;
 };
 
-export type AppBudgetMetaData = BudgetFormData & {
+export type Category = { id: string; order: number; name: string; color: number };
+
+type CategoriesTypes = {
+  expenseCategories: Category[];
+  incomeCategories: Category[];
+}
+
+export type CategoriesTypeName = keyof CategoriesTypes
+
+export type AppBudgetMetaData = BudgetFormData & CategoriesTypes & {
   owner: MemberOrOwner;
   createdAt: number;
   id: string;
