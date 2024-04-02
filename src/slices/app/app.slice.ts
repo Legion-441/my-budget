@@ -47,7 +47,7 @@ export const appSlice = createSlice({
     toggleTempDrawer: (state) => {
       state.isTempDrawerOpen = !state.isTempDrawerOpen;
     },
-    setPickedBudget: (state, action: PayloadAction<AppBudgetMetaData>) => {
+    setPickedBudget: (state, action: PayloadAction<AppBudgetMetaData | null>) => {
       state.pickedBudget.data = action.payload;
       state.pickedBudget.isFetching = false;
       state.pickedBudget.fetchError = null;
