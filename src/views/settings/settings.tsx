@@ -9,6 +9,7 @@ import { Stack } from "@mui/material";
 import BudgetFullCard from "../../components/budgetCard/budget-full-card";
 import ActionButton from "../../components/budget-actions/budget-actions-button";
 import BudgetActionDialog from "../../components/budget-actions/budget-actions-dialog";
+import CategoriesSection from "../../components/budget-settings-widgets/categories-section";
 //* Types
 import { BudgetActions } from "../../types/AppTypes";
 
@@ -49,6 +50,7 @@ const SettingsView: React.FC = () => {
         </Stack>
       )}
       <BudgetActionDialog budget={pickedBudgetData} type={dialogType} handleClose={handleCloseDialog} />
+      <CategoriesSection budgetData={pickedBudgetData} />
     </>
   );
 };
