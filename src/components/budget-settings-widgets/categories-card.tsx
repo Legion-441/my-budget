@@ -1,5 +1,7 @@
 //* MUI & icons
 import { Card, CardContent, CardHeader, Chip, List, ListItem, Typography, useTheme } from "@mui/material";
+//* Components
+import CategoryEditorDialog from "./categories-editor-dialog";
 //* Types
 import { CategoriesTypeName, Category } from "../../types/AppTypes";
 //* Lodash
@@ -17,7 +19,10 @@ export const CategoriesCard: React.FC<CategoriesCardProps> = ({ categoriesList, 
 
   return (
     <Card>
-      <CardHeader title={categoriesType === "expenseCategories" ? "Kategorie wydatków" : "Kategorie przychodów"} />
+      <CardHeader
+        title={categoriesType === "expenseCategories" ? "Kategorie wydatków" : "Kategorie przychodów"}
+        action={<CategoryEditorDialog categories={sortedCategories} categoriesType={categoriesType} />}
+      />
       <CardContent>
         <List dense sx={{ maxHeight: "80vh", overflow: "auto" }}>
           {sortedCategories.length === 0 ? (
