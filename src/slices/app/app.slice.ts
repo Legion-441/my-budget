@@ -5,7 +5,7 @@ import { fetchBudgetMetadataByID } from "../../services/budget-list-operations";
 //* Utils
 import { getFirestoreErrorText } from "../../utils/firestoreErrorHandling";
 //* Types
-import { AppTheme, AppBudgetMetaData, BudgetsListItem } from "../../types/AppTypes";
+import { AppTheme, AppBudgetMetaData, Category, CategoriesTypeName } from "../../types/AppTypes";
 
 type FetchError = {
   message: string;
@@ -60,12 +60,27 @@ export const appSlice = createSlice({
       state.pickedBudget.isFetching = false;
       state.pickedBudget.fetchError = action.payload;
     },
+    updateBudgetCategories: (state, action: PayloadAction<{ data: Category[]; type: CategoriesTypeName }>) => {
+      if (state.pickedBudget.data) {
+        state.pickedBudget.data[action.payload.type] = action.payload.data;
+        state.pickedBudget.isFetching = false;
+        state.pickedBudget.fetchError = null;
+      }
+    },
   },
 });
 
 //! Actions
-export const { setAppColorMode, toggleDrawer, toggleTempDrawer, setPickedBudget, startFetchingBudgetMetadata, setBudgetMetadataError } =
-  appSlice.actions;
+export const {
+  setAppColorMode,
+  toggleDrawer,
+  toggleTempDrawer,
+  setPickedBudget,
+  startFetchingBudgetMetadata,
+  setBudgetMetadataError,
+  updateBudgetCategories,
+} = appSlice.actions;
+
 export const fetchAndSetSelectedBudget =
   (budgetID: string): AppThunk =>
   async (dispatch) => {
