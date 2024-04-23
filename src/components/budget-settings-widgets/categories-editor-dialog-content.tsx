@@ -2,10 +2,12 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { updateBudgetCategories } from "../../slices/app/app.slice";
 //* MUI & icons
-import { Button, DialogActions, DialogContent } from "@mui/material";
-import { Add, Close, Gradient, Save, Shuffle } from "@mui/icons-material";
+import { Alert, Button, DialogActions, DialogContent } from "@mui/material";
+import { Add, Close, Gradient, Refresh, Save, Shuffle } from "@mui/icons-material";
 //* Components
 import CategoriesListItem from "./categories-editor-dialog-listItem";
+//* Utils
+import { getFirestoreErrorText } from "../../utils/firestoreErrorHandling";
 //* Types
 import { CategoriesTypeName, Category } from "../../types/AppTypes";
 //* Lodash
@@ -24,6 +26,7 @@ const CategoryEditorDialogContent: React.FC<CategoriesEditorDialogContentProps> 
 }) => {
   const InitialCategories = cloneDeep(categoriesData);
   const [categories, setCategories] = useState<Category[]>(InitialCategories);
+  const [updateCategoryError, setUpdateCategoryError] = useState<string | null>(null);
   const dispatch = useDispatch();
 
   const handleTextChange = (value: string, index: number) => {
@@ -52,6 +55,7 @@ const CategoryEditorDialogContent: React.FC<CategoriesEditorDialogContentProps> 
       return updatedCategories;
     });
   };
+
   const handleShuffleColor = () => {
     setCategories((prevCategories) => {
       let updatedCategories = cloneDeep(prevCategories);
@@ -66,14 +70,15 @@ const CategoryEditorDialogContent: React.FC<CategoriesEditorDialogContentProps> 
     });
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     // TODO: update DB
     dispatch(updateBudgetCategories({ data: cloneDeep(categories), type: categoriesType }));
     closeDialog();
   };
 
   return (
-    <>
+    <form onSubmit={handleConfirm}>
       <DialogActions sx={{ justifyContent: "space-evenly" }}>
         <Button
           onClick={handleSpreadColor}
@@ -107,15 +112,20 @@ const CategoryEditorDialogContent: React.FC<CategoriesEditorDialogContentProps> 
           />
         ))}
       </DialogContent>
+      {updateCategoryError ? (
+        <Alert severity="error" variant="outlined" sx={{ m: 1 }}>
+          {updateCategoryError} Lorem ipsum elit.
+        </Alert>
+      ) : null}
       <DialogActions>
         <Button variant="outlined" onClick={closeDialog} startIcon={<Close />}>
           Anuluj
         </Button>
-        <Button variant="contained" onClick={handleConfirm} startIcon={<Save />}>
-          Zapisz
+        <Button type="submit" variant="contained" startIcon={updateCategoryError ? <Refresh /> : <Save />}>
+          {updateCategoryError ? "Ponów" : "Zapisz"}
         </Button>
       </DialogActions>
-    </>
+    </form>
   );
 };
 
