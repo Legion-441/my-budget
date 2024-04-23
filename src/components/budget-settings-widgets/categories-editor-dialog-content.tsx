@@ -29,6 +29,14 @@ const CategoryEditorDialogContent: React.FC<CategoriesEditorDialogContentProps> 
   const [updateCategoryError, setUpdateCategoryError] = useState<string | null>(null);
   const dispatch = useDispatch();
 
+  const addCategory = () => {
+    setCategories((prevCategories) => {
+      let updatedCategories = cloneDeep(prevCategories);
+      updatedCategories.push({ id: (updatedCategories.length + 1).toString(), name: "", color: 0, order: updatedCategories.length });
+      return updatedCategories;
+    });
+  };
+
   const handleTextChange = (value: string, index: number) => {
     setCategories((prevCategories) => {
       let updatedCategories = cloneDeep(prevCategories);
@@ -80,6 +88,9 @@ const CategoryEditorDialogContent: React.FC<CategoriesEditorDialogContentProps> 
   return (
     <form onSubmit={handleConfirm}>
       <DialogActions sx={{ justifyContent: "space-evenly" }}>
+        <Button onClick={addCategory} variant="outlined" startIcon={<Add />} size="small" sx={{ textTransform: "none" }}>
+          Dodaj kategorię
+        </Button>
         <Button
           onClick={handleSpreadColor}
           variant="outlined"
