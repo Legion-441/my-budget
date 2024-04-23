@@ -8,11 +8,12 @@ import CategoryEditorDialogContent from "./categories-editor-dialog-content";
 import { CategoriesTypeName, Category } from "../../types/AppTypes";
 
 interface CategoriesEditorDialogProps {
+  budgetID: string;
   categories: Category[];
   categoriesType: CategoriesTypeName;
 }
 
-const CategoryEditorDialog: React.FC<CategoriesEditorDialogProps> = ({ categories: categoriesData, categoriesType }) => {
+const CategoryEditorDialog: React.FC<CategoriesEditorDialogProps> = ({ budgetID, categories: categoriesData, categoriesType }) => {
   const [open, setOpen] = useState(false);
 
   const theme = useTheme();
@@ -34,7 +35,12 @@ const CategoryEditorDialog: React.FC<CategoriesEditorDialogProps> = ({ categorie
         <DialogTitle id="alert-dialog-title">
           Edycja - Kategorie {categoriesType === "expenseCategories" ? "wydatków" : "przychodów"}
         </DialogTitle>
-        <CategoryEditorDialogContent categories={categoriesData} categoriesType={categoriesType} closeDialog={closeDialog} />
+        <CategoryEditorDialogContent
+          budgetID={budgetID}
+          categories={categoriesData}
+          categoriesType={categoriesType}
+          closeDialog={closeDialog}
+        />
       </Dialog>
     </>
   );

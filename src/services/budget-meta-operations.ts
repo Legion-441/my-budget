@@ -1,12 +1,12 @@
 import { FIREBASE_COLLECTIONS } from "../constants/constants";
 //* Firebase
-import { arrayRemove, arrayUnion, collection, doc, runTransaction, writeBatch } from "firebase/firestore";
+import { arrayRemove, arrayUnion, collection, doc, runTransaction, updateDoc, writeBatch } from "firebase/firestore";
 import { db } from "../firebase";
 //* Utils
 import { transformBudgetFormDataToFirebaseMetaData, validateBudgetsListData } from "../utils/transform-fetched-data";
 import checkAuthentication from "../utils/checkAuthentication";
 //* Types
-import { BudgetFormData, BudgetsListItem, AppBudgetMetaData, BudgetState } from "../types/AppTypes";
+import { BudgetFormData, BudgetsListItem, AppBudgetMetaData, BudgetState, CategoriesTypeName, Category } from "../types/AppTypes";
 
 export const createBudget = async (budgetFormData: BudgetFormData, pin: boolean) => {
   const currentUser = checkAuthentication();
@@ -98,4 +98,13 @@ export const deleteBudget = async (budgetID: string) => {
       transaction.update(accountRef, { budgetsList: arrayRemove(budgetToRemove) });
     }
   });
+};
+
+export const updateFirestoreBudgetCategories = async (budgetID: string, categoriesType: CategoriesTypeName, categories: Category[]) => {
+  checkAuthentication();
+  const budgetRef = doc(db, FIREBASE_COLLECTIONS.budgets, budgetID);
+
+  const updatedData: Partial<AppBudgetMetaData> = { [categoriesType]: categories };
+
+  await updateDoc(budgetRef, updatedData);
 };

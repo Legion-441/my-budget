@@ -15,8 +15,8 @@ const CategoriesSection: React.FC<CategoriesSectionProps> = ({ budgetData }) => 
   return (
     <>
       <Box display={"flex"} gap={5} flexDirection={{ xs: "column", sm: "row" }}>
-        <CategoriesCard categoriesList={expenseCategories} categoriesType="expenseCategories" />
-        <CategoriesCard categoriesList={incomeCategories} categoriesType="incomeCategories" />
+        <CategoriesCard budgetID={budgetData.id} categoriesList={expenseCategories} categoriesType="expenseCategories" />
+        <CategoriesCard budgetID={budgetData.id} categoriesList={incomeCategories} categoriesType="incomeCategories" />
       </Box>
     </>
   );

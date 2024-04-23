@@ -8,11 +8,12 @@ import { CategoriesTypeName, Category } from "../../types/AppTypes";
 import cloneDeep from "lodash/cloneDeep";
 
 interface CategoriesCardProps {
+  budgetID: string;
   categoriesList: Category[];
   categoriesType: CategoriesTypeName;
 }
 
-export const CategoriesCard: React.FC<CategoriesCardProps> = ({ categoriesList, categoriesType }) => {
+export const CategoriesCard: React.FC<CategoriesCardProps> = ({ budgetID, categoriesList, categoriesType }) => {
   const sortedCategories: Category[] = cloneDeep(categoriesList).sort((a, b) => a.order - b.order);
 
   const theme = useTheme();
@@ -21,7 +22,7 @@ export const CategoriesCard: React.FC<CategoriesCardProps> = ({ categoriesList, 
     <Card>
       <CardHeader
         title={categoriesType === "expenseCategories" ? "Kategorie wydatków" : "Kategorie przychodów"}
-        action={<CategoryEditorDialog categories={sortedCategories} categoriesType={categoriesType} />}
+        action={<CategoryEditorDialog budgetID={budgetID} categories={sortedCategories} categoriesType={categoriesType} />}
       />
       <CardContent>
         <List dense sx={{ maxHeight: "80vh", overflow: "auto" }}>

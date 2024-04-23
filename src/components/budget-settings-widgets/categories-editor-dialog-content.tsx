@@ -6,6 +6,8 @@ import { Alert, Button, DialogActions, DialogContent } from "@mui/material";
 import { Add, Close, Gradient, Refresh, Save, Shuffle } from "@mui/icons-material";
 //* Components
 import CategoriesListItem from "./categories-editor-dialog-listItem";
+//* Services
+import { updateFirestoreBudgetCategories } from "../../services/budget-meta-operations";
 //* Utils
 import { getFirestoreErrorText } from "../../utils/firestoreErrorHandling";
 //* Types
@@ -14,12 +16,14 @@ import { CategoriesTypeName, Category } from "../../types/AppTypes";
 import cloneDeep from "lodash/cloneDeep";
 
 interface CategoriesEditorDialogContentProps {
+  budgetID: string;
   categories: Category[];
   categoriesType: CategoriesTypeName;
   closeDialog: () => void;
 }
 
 const CategoryEditorDialogContent: React.FC<CategoriesEditorDialogContentProps> = ({
+  budgetID,
   categories: categoriesData,
   categoriesType,
   closeDialog,
@@ -78,11 +82,16 @@ const CategoryEditorDialogContent: React.FC<CategoriesEditorDialogContentProps> 
     });
   };
 
-  const handleConfirm = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleConfirm = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // TODO: update DB
-    dispatch(updateBudgetCategories({ data: cloneDeep(categories), type: categoriesType }));
-    closeDialog();
+    try {
+      await updateFirestoreBudgetCategories(budgetID, categoriesType, categories);
+      setUpdateCategoryError(null);
+      dispatch(updateBudgetCategories({ data: cloneDeep(categories), type: categoriesType }));
+      closeDialog();
+    } catch (error) {
+      setUpdateCategoryError(getFirestoreErrorText(error));
+    }
   };
 
   return (
