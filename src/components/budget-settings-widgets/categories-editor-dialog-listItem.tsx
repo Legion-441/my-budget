@@ -3,21 +3,28 @@ import { Box, FormControl, FormHelperText, IconButton, ListItem, OutlinedInput, 
 import { DragIndicator } from "@mui/icons-material";
 //* Types
 import { Category } from "../../types/AppTypes";
+import { cloneDeep } from "lodash";
 
 interface CategoriesListItemProps {
   category: Category;
   index: number;
-  handleTextChange: (value: string, index: number) => void;
-  handleTextOnBlur: (value: string, index: number) => void;
+  setCategories: React.Dispatch<React.SetStateAction<Category[]>>;
 }
 
-const CategoriesListItem: React.FC<CategoriesListItemProps> = ({
-  category,
-  index,
-  handleTextChange,
-  handleTextOnBlur,
-}) => {
+const CategoriesListItem: React.FC<CategoriesListItemProps> = ({ category, index, setCategories }) => {
   const theme = useTheme();
+
+  const handleTextChange = (value: string, index: number) => {
+    setCategories((prevCategories) => {
+      let updatedCategories = cloneDeep(prevCategories);
+      updatedCategories[index].name = value;
+      return updatedCategories;
+    });
+  };
+
+  const handleTextOnBlur = (value: string, index: number) => {
+    handleTextChange(value.trim(), index);
+  };
 
   return (
     <ListItem disableGutters>
@@ -27,6 +34,7 @@ const CategoriesListItem: React.FC<CategoriesListItemProps> = ({
         </IconButton>
         <FormControl variant="outlined">
           <OutlinedInput
+            autoFocus={!category.name}
             required
             id={`expenses-category-${category.id}-name`}
             aria-label={`Nazwa kategorii ${category.id}`}

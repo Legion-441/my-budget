@@ -41,21 +41,6 @@ const CategoryEditorDialogContent: React.FC<CategoriesEditorDialogContentProps> 
     });
   };
 
-  const handleTextChange = (value: string, index: number) => {
-    setCategories((prevCategories) => {
-      let updatedCategories = cloneDeep(prevCategories);
-      updatedCategories[index].name = value;
-      return updatedCategories;
-    });
-  };
-  const handleTextOnBlur = (value: string, index: number) => {
-    setCategories((prevCategories) => {
-      let updatedCategories = cloneDeep(prevCategories);
-      updatedCategories[index].name = value.trim();
-      return updatedCategories;
-    });
-  };
-
   const handleSpreadColor = () => {
     setCategories((prevCategories) => {
       let updatedCategories = cloneDeep(prevCategories);
@@ -122,14 +107,9 @@ const CategoryEditorDialogContent: React.FC<CategoriesEditorDialogContentProps> 
         </Button>
       </DialogActions>
       <DialogContent dividers>
+        {categories.length === 0 && "Brak kategorii"}
         {categories.map((category, index) => (
-          <CategoriesListItem
-            key={`EditMode_${categoriesType}_${index}`}
-            category={category}
-            index={index}
-            handleTextChange={handleTextChange}
-            handleTextOnBlur={handleTextOnBlur}
-          />
+          <CategoriesListItem key={`EditMode_${categoriesType}_${index}`} category={category} index={index} setCategories={setCategories} />
         ))}
       </DialogContent>
       {updateCategoryError ? (
