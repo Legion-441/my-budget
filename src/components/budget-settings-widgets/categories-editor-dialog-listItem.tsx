@@ -1,6 +1,8 @@
 //* MUI & icons
 import { Box, FormControl, FormHelperText, IconButton, ListItem, OutlinedInput, useTheme } from "@mui/material";
 import { DragIndicator } from "@mui/icons-material";
+//* Styled components
+import CategoryColorSelector from "./category-color-selector";
 //* Types
 import { Category } from "../../types/AppTypes";
 import { cloneDeep } from "lodash";
@@ -26,6 +28,14 @@ const CategoriesListItem: React.FC<CategoriesListItemProps> = ({ category, index
     handleTextChange(value.trim(), index);
   };
 
+  const handleColorChange = (color: number, index: number) => {
+    setCategories((prevCategories) => {
+      let updatedCategories = cloneDeep(prevCategories);
+      updatedCategories[index].color = color;
+      return updatedCategories;
+    });
+  };
+
   return (
     <ListItem disableGutters>
       <Box bgcolor="inherit" flexDirection="row" display="flex" alignItems="center">
@@ -43,6 +53,7 @@ const CategoriesListItem: React.FC<CategoriesListItemProps> = ({ category, index
             onBlur={(event) => handleTextOnBlur(event.target.value, index)}
             onChange={(event) => handleTextChange(event.target.value, index)}
             value={category.name}
+            endAdornment={<CategoryColorSelector category={category} onChange={(color) => handleColorChange(color, index)} />}
             sx={{
               color: `hsl(${category.color}, 80%, ${theme.palette.mode === "light" ? "30%" : "60%"})`,
             }}
