@@ -114,7 +114,7 @@ const CategoryEditorDialogContent: React.FC<CategoriesEditorDialogContentProps> 
       </DialogContent>
       {updateCategoryError ? (
         <Alert severity="error" variant="outlined" sx={{ m: 1 }}>
-          {updateCategoryError} Lorem ipsum elit.
+          {updateCategoryError}
         </Alert>
       ) : null}
       <DialogActions>

@@ -46,6 +46,7 @@ export const getAuthInputError = (error: FirebaseError | Error | unknown): AuthE
     "auth/popup-closed-by-user": { errorField: "externalProviderError", errorText: "Popup zamknięte przez użytkownika" },
     "auth/cancelled-popup-request": { errorField: "externalProviderError", errorText: "Żądanie otwarcia popup anulowane" },
     //* general errors
+    "auth/network-request-failed": { errorField: "generalError", errorText: "Bład połączenia sieciowego." },
     "auth/too-many-requests": { errorField: "generalError", errorText: "Osiągnięto limit prób logowania." },
     "auth/provider-already-linked": { errorField: "generalError", errorText: "Konto dostawcy jest już powiązane." },
     "auth/credential-already-in-use": { errorField: "generalError", errorText: "Konto dostawcy jest już używane." },
