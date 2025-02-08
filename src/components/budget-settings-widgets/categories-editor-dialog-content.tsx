@@ -7,7 +7,7 @@ import { Add, Close, Gradient, Refresh, Save, Shuffle } from "@mui/icons-materia
 //* Components
 import CategoriesListItem from "./categories-editor-dialog-listItem";
 //* Services
-import { updateFirestoreBudgetCategories } from "../../services/budget-meta-operations";
+import { updateFirestoreBudgetCategories } from "../../services/budget-operations";
 //* Utils
 import { getFirestoreErrorText } from "../../utils/firestoreErrorHandling";
 //* Types

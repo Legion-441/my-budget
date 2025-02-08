@@ -4,7 +4,7 @@ import { Alert, Box, Button, Checkbox, DialogActions, DialogContent, DialogTitle
 //* Components
 import IconSelector from "../budgetInfo/Icon-selector";
 //* Services
-import { createBudget, updateBudget } from "../../services/budget-meta-operations";
+import { createBudget, updateBudget } from "../../services/budget-operations";
 //* Utils
 import { getFirestoreErrorText } from "../../utils/firestoreErrorHandling";
 import getChangedBudgetData from "../../utils/get-budget-changes";

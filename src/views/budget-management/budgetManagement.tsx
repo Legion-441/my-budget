@@ -6,7 +6,7 @@ import BudgetCompactCard from "../../components/budgetCard/budget-compact-card";
 import { BudgetManagementPageSkeleton } from "../../components/budgetCard/budget-card-skeleton";
 import BudgetCardMenu from "../../components/budgetCard/budget-card-menu";
 //* Services
-import { fetchUserBudgetsMetadata } from "../../services/budget-list-operations";
+import { fetchUserBudgetsMetadata } from "../../services/budget-operations";
 //* MUI
 import { Alert, Box, Grid, Stack, Typography } from "@mui/material";
 //* Utils

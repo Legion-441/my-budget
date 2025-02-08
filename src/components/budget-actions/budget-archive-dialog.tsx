@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 //* MUI
 import { Alert, Button, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 //* Services
-import { toggleArchiveBudget } from "../../services/budget-meta-operations";
+import { toggleArchiveBudget } from "../../services/budget-operations";
 //* Utils
 import { getFirestoreErrorText } from "../../utils/firestoreErrorHandling";
 //* Types

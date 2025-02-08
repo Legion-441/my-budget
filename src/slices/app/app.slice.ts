@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "../../app/store";
 //* Services
-import { fetchBudgetMetadataByID } from "../../services/budget-list-operations";
+import { fetchBudgetMetadataByID } from "../../services/budget-operations";
 //* Utils
 import { getFirestoreErrorText } from "../../utils/firestoreErrorHandling";
 //* Types
