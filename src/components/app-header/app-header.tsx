@@ -1,18 +1,21 @@
 import * as React from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { selectPickedBudget, toggleDrawer, toggleTempDrawer } from "../../slices/app/app.slice";
+//* Components
+import BudgetListButton from "./budgetList-Button";
+import ProfileButton from "./profile-Button";
 //* MUI
 import { AppBar, Box, Toolbar, IconButton, Typography, Badge } from "@mui/material";
 import { useMediaQuery, useTheme } from "@mui/material";
 import { Menu, Mail, Notifications } from "@mui/icons-material";
 //* Styled Components
 import UnstyledLink from "../../styled/unstyled-link/unstyled-link.styled";
-//* Components
-import BudgetListButton from "./budgetList-Button";
-import ProfileButton from "./profile-Button";
+import { selectPickedBudget, toggleDrawer, toggleTempDrawer } from "../../slices/app/app.slice";
+//* Slices
+import { selectAccountInfo } from "../../slices/account/account.slice";
 
 const AppHeader: React.FC = () => {
   const pickedBudget = useAppSelector(selectPickedBudget);
+  const { fetchError } = useAppSelector(selectAccountInfo);
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"));
@@ -50,7 +53,7 @@ const AppHeader: React.FC = () => {
             myBudget
           </Typography>
         </Box>
-        <BudgetListButton />
+        {fetchError ? <></> : <BudgetListButton />}
         <Box sx={{ display: "flex" }}>
           <IconButton size="large" aria-label="show 4 new mails" color="inherit">
             <Badge badgeContent={4} color="error">

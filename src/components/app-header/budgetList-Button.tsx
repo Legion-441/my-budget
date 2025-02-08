@@ -1,48 +1,27 @@
-import { useCallback, useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { selectAccountInfo } from "../../slices/account/account.slice";
-import { selectPickedBudget } from "../../slices/app/app.slice";
+import { useState } from "react";
+import { useAppSelector } from "../../app/hooks";
 //* MUI
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { Button, Typography } from "@mui/material";
 //* Components
-import BudgetListAlert from "./budgetList-Alert";
 import BudgetIconComponent from "../budgetInfo/budget-icon";
 import AppBudgetsMenu from "./budgets-menu";
-//* Services
-import { subscribeToAccountData } from "../../services/account-operations";
+//* Slices
+import { selectAccountInfo } from "../../slices/account/account.slice";
+import { selectPickedBudget } from "../../slices/app/app.slice";
 
 const BudgetListButton: React.FC = () => {
   const [budgetAnchorEl, setBudgetAnchorEl] = useState<null | HTMLElement>(null);
-  const { isFetching, fetchError } = useAppSelector(selectAccountInfo);
-  const dispatch = useAppDispatch();
+  const { isFetching } = useAppSelector(selectAccountInfo);
   const pickedBudget = useAppSelector(selectPickedBudget);
   const pickedBudgetIcon = pickedBudget.data?.icon || null;
   const pickedBudgetName = pickedBudget.data?.name || null;
 
   const isOpen = budgetAnchorEl !== null;
 
-  const subscribe = useCallback(() => {
-    const unsubscribe = subscribeToAccountData(dispatch);
-    return () => {
-      unsubscribe();
-    };
-  }, [dispatch]);
-
-  useEffect(() => {
-    const unsubscribe = subscribe();
-    return () => {
-      unsubscribe();
-    };
-  }, [subscribe]);
-
   const handleToggleBudgetsMenu = (event?: React.MouseEvent<HTMLElement>) => {
     setBudgetAnchorEl(!budgetAnchorEl && event ? event.currentTarget : null);
   };
-
-  if (fetchError) {
-    return <BudgetListAlert error={fetchError} handleRetry={subscribe}/>
-  }
 
   return (
     <>
