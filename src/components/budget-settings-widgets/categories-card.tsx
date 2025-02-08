@@ -40,9 +40,9 @@ export const CategoriesCard: React.FC<CategoriesCardProps> = ({ budgetID, catego
                       size="small"
                       variant="outlined"
                       sx={{
-                        backgroundColor: `hsl(${category.color}, ${theme.palette.mode === "light" ? "100%, 85%" : "100%, 15%"})`,
-                        borderColor: `hsl(${category.color}, ${theme.palette.mode === "light" ? "50%, 50%" : "50%, 30%"})`,
-                        color: `hsl(${category.color}, ${theme.palette.mode === "light" ? "50%, 10%" : "50%, 90%"})`,
+                        backgroundColor: `hsl(${category.color}, 80%, ${theme.palette.mode === "light" ? "50%" : "60%"})`,
+                        borderColor: `hsl(${category.color}, ${theme.palette.mode === "light" ? "50%, 40%" : "50%, 30%"})`,
+                        color: theme.palette.getContrastText(`hsl(${category.color}, 80%, ${theme.palette.mode === "light" ? "50%" : "60%"})`),
                       }}
                     />
                   </ListItem>
