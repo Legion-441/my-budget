@@ -7,6 +7,7 @@ import AuthView from "./views/auth/auth";
 import BudgetView from "./views/budget/budget";
 import DashboardDetailsView from "./views/dashboard/dashboard-details";
 import DashboardMainView from "./views/dashboard/dashboard";
+import ErrorView from "./views/error/error";
 import HistoryView from "./views/history/history";
 import HomeView from "./views/home/home";
 import LogInView from "./views/log-in/log-in";
@@ -41,6 +42,7 @@ const App: React.FC = () => {
               </Route>
               <Route path="profile" element={<UserProfileView />} />
               <Route path="budget-management" element={<BudgetManagementView />} />
+              <Route path="error" element={<ErrorView />} />
               <Route path="*" element={<NotFoundView />} />
             </Route>
           </Route>
