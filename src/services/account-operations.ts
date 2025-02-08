@@ -1,6 +1,4 @@
 import { AppThunkDispatch } from "../app/store";
-import { setBudgetsList, setFetchError, startFetchingAccountData } from "../slices/account/account.slice";
-import { setAppColorMode } from "../slices/app/app.slice";
 //* Constants
 import { FIREBASE_COLLECTIONS } from "../constants/constants";
 //* Firebase
@@ -10,6 +8,9 @@ import { db } from "../firebase";
 import { transformFetchedAccountData } from "../utils/transform-fetched-data";
 import checkAuthentication from "../utils/checkAuthentication";
 import { getFirestoreErrorText } from "../utils/firestoreErrorHandling";
+//* Slices
+import { setBudgetsList, setFetchError, startFetchingAccountData } from "../slices/account/account.slice";
+import { setAppColorMode } from "../slices/app/app.slice";
 //* Types
 import { AccountData, AppBudgetMetaData, BudgetsListItem } from "../types/AppTypes";
 
@@ -25,7 +26,10 @@ export const subscribeToAccountData = (dispatch: AppThunkDispatch) => {
       dispatch(setAppColorMode(finalAccountData.appTheme));
 
       if (!doc.exists()) {
-        createAccountDoc(finalAccountData).catch((error) => console.error(error)); // TODO: handle error
+        createAccountDoc(finalAccountData).catch((error) => {
+          const errorText = getFirestoreErrorText(error);
+          dispatch(setFetchError(errorText));
+        });
       }
     },
     (error) => {
@@ -38,8 +42,20 @@ export const subscribeToAccountData = (dispatch: AppThunkDispatch) => {
 
 export const createAccountDoc = async (accountData: AccountData) => {
   const currentUserUid = checkAuthentication().uid;
+  let attempt = 0;
 
-  await setDoc(doc(db, FIREBASE_COLLECTIONS.accounts, currentUserUid), accountData);
+  while (attempt < 5) {
+    try {
+      await setDoc(doc(db, FIREBASE_COLLECTIONS.accounts, currentUserUid), accountData);
+      break;
+    } catch (error) {
+      attempt++;
+      if (attempt >= 5) {
+        console.error("Max retries reached:", error);
+        throw error;
+      }
+    }
+  }
 };
 
 export const pinToBudgetList = async (budget: AppBudgetMetaData) => {
