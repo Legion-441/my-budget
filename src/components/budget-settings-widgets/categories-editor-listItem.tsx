@@ -1,6 +1,6 @@
 //* MUI & icons
 import { Box, FormControl, FormHelperText, IconButton, ListItem, OutlinedInput, useTheme } from "@mui/material";
-import { DragIndicator } from "@mui/icons-material";
+import { Close, DragIndicator } from "@mui/icons-material";
 //* Styled components
 import CategoryColorSelector from "./category-color-selector";
 //* Types
@@ -35,6 +35,11 @@ const CategoriesListItem: React.FC<CategoriesListItemProps> = ({ category, index
       return updatedCategories;
     });
   };
+  
+  //! REMOVE OR IMPLEMENT BEFORE COMMIT
+  const handleDisable = (id: string) => {
+    console.error(`Funcionality not implemented, this action should disable category #${id}`);
+  };
 
   return (
     <ListItem disableGutters>
@@ -46,7 +51,7 @@ const CategoriesListItem: React.FC<CategoriesListItemProps> = ({ category, index
           <OutlinedInput
             autoFocus={!category.name}
             required
-            id={`expenses-category-${category.id}-name`}
+            id={`category-${category.id}-name`}
             aria-label={`Nazwa kategorii ${category.id}`}
             size="small"
             error={category.name.length === 0}
@@ -55,13 +60,16 @@ const CategoriesListItem: React.FC<CategoriesListItemProps> = ({ category, index
             value={category.name}
             endAdornment={<CategoryColorSelector category={category} onChange={(color) => handleColorChange(color, index)} />}
             sx={{
-              color: `hsl(${category.color}, 80%, ${theme.palette.mode === "light" ? "30%" : "60%"})`,
+              color: `hsl(${category.color}, 80%, ${theme.palette.mode === "light" ? "20%" : "60%"})`,
             }}
           />
           <FormHelperText hidden={category.name.length !== 0} error>
             Pole wymagane
           </FormHelperText>
         </FormControl>
+        <IconButton sx={{ mx: 1 }} onClick={() => handleDisable(category.id)}>
+          <Close />
+        </IconButton>
       </Box>
     </ListItem>
   );

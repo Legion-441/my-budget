@@ -5,7 +5,7 @@ import { updateBudgetCategories } from "../../slices/app/app.slice";
 import { Alert, Button, DialogActions, DialogContent } from "@mui/material";
 import { Close, Refresh, Save } from "@mui/icons-material";
 //* Components
-import CategoriesListItem from "./categories-editor-dialog-listItem";
+import CategoriesListItem from "./categories-editor-listItem";
 //* Services
 import { updateFirestoreBudgetCategories } from "../../services/budget-operations";
 //* Utils
