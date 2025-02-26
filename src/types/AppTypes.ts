@@ -44,7 +44,9 @@ export type FirebaseBudgetMetaData = {
   createdAt: Timestamp;
 };
 
-export type Category = { id: string; order: number; name: string; color: number };
+export type Category = { id: string; order: number; name: string; color: number; hidden: boolean };
+
+export type GroupedCategories = { sorted: Category[]; hidden: Category[] };
 
 type CategoriesTypes = {
   expenseCategories: Category[];

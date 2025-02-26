@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { updateBudgetCategories } from "../../slices/app/app.slice";
 //* MUI & icons
-import { Alert, Button, DialogActions, DialogContent } from "@mui/material";
+import { Alert, Button, DialogActions, DialogContent, Divider } from "@mui/material";
 import { Close, Refresh, Save } from "@mui/icons-material";
 //* Components
 import CategoriesListItem from "./categories-editor-listItem";
@@ -11,28 +11,29 @@ import { updateFirestoreBudgetCategories } from "../../services/budget-operation
 //* Utils
 import { getFirestoreErrorText } from "../../utils/firestoreErrorHandling";
 //* Types
-import { CategoriesTypeName, Category } from "../../types/AppTypes";
+import { CategoriesTypeName, Category, GroupedCategories } from "../../types/AppTypes";
 //* Lodash
 import cloneDeep from "lodash/cloneDeep";
 import CategoryEditorActions from "./categories-editor-actions";
 
 interface CategoriesEditorDialogContentProps {
   budgetID: string;
-  categories: Category[];
+  groupedCategories: GroupedCategories;
   categoriesType: CategoriesTypeName;
   closeDialog: () => void;
 }
 
 const CategoryEditorDialogContent: React.FC<CategoriesEditorDialogContentProps> = ({
   budgetID,
-  categories: categoriesData,
+  groupedCategories,
   categoriesType,
   closeDialog,
 }) => {
-  const InitialCategories = cloneDeep(categoriesData);
-  const [categories, setCategories] = useState<Category[]>(InitialCategories);
+  const [sortedCategories, setSortedCategories] = useState<Category[]>(cloneDeep(groupedCategories.sorted));
+  const [disabledCategories, setHiddenCategories] = useState<Category[]>(cloneDeep(groupedCategories.hidden));
   const [updateCategoryError, setUpdateCategoryError] = useState<string | null>(null);
   const dispatch = useDispatch();
+  const categories = [...sortedCategories, ...disabledCategories];
 
   const handleConfirm = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -48,11 +49,27 @@ const CategoryEditorDialogContent: React.FC<CategoriesEditorDialogContentProps> 
 
   return (
     <form onSubmit={handleConfirm}>
-      <CategoryEditorActions setCategories={setCategories} />
+      <CategoryEditorActions setSortedCategories={setSortedCategories} />
       <DialogContent dividers>
-        {categories.length === 0 && "Brak kategorii"}
-        {categories.map((category, index) => (
-          <CategoriesListItem key={`EditMode_${categoriesType}_${index}`} category={category} index={index} setCategories={setCategories} />
+        {sortedCategories.length === 0 && "Brak aktywnych kategorii"}
+        {sortedCategories.map((category, index) => (
+          <CategoriesListItem
+            key={`EditMode_${categoriesType}_${index}_active`}
+            category={category}
+            index={index}
+            setSortedCategories={setSortedCategories}
+            setHiddenCategories={setHiddenCategories}
+          />
+        ))}
+        {disabledCategories.length > 0 && <Divider />}
+        {disabledCategories.map((category, index) => (
+          <CategoriesListItem
+            key={`EditMode_${categoriesType}_${index}_disabled`}
+            category={category}
+            index={index}
+            setSortedCategories={setSortedCategories}
+            setHiddenCategories={setHiddenCategories}
+          />
         ))}
       </DialogContent>
       {updateCategoryError ? (

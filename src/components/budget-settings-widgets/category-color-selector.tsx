@@ -50,9 +50,9 @@ const CategoryColorSelector: React.FC<CategoryColorSelectorProps> = ({ category,
 
   return (
     <>
-      <IconButton size="small" onClick={handleMenuOpen}>
+      <IconButton size="small" onClick={handleMenuOpen} disabled={category.hidden}>
         <PaletteTwoTone
-          sx={{ color: `hsl(${category.color}, 100%, ${theme.palette.mode === "light" ? "40%" : "60%"})` }}
+          sx={{ color: `hsl(${category.color}, ${category.hidden ? "0%" : "100%"}, ${theme.palette.mode === "light" ? "40%" : "60%"})` }}
           fontSize="medium"
         />
       </IconButton>

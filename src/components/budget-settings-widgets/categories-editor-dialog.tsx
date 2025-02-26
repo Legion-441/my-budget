@@ -5,15 +5,15 @@ import { ModeEdit } from "@mui/icons-material";
 //* Components
 import CategoryEditorDialogContent from "./categories-editor-dialog-content";
 //* Types
-import { CategoriesTypeName, Category } from "../../types/AppTypes";
+import { CategoriesTypeName, GroupedCategories } from "../../types/AppTypes";
 
 interface CategoriesEditorDialogProps {
   budgetID: string;
-  categories: Category[];
+  groupedCategories: GroupedCategories;
   categoriesType: CategoriesTypeName;
 }
 
-const CategoryEditorDialog: React.FC<CategoriesEditorDialogProps> = ({ budgetID, categories: categoriesData, categoriesType }) => {
+const CategoryEditorDialog: React.FC<CategoriesEditorDialogProps> = ({ budgetID, groupedCategories, categoriesType }) => {
   const [open, setOpen] = useState(false);
 
   const theme = useTheme();
@@ -37,7 +37,7 @@ const CategoryEditorDialog: React.FC<CategoriesEditorDialogProps> = ({ budgetID,
         </DialogTitle>
         <CategoryEditorDialogContent
           budgetID={budgetID}
-          categories={categoriesData}
+          groupedCategories={groupedCategories}
           categoriesType={categoriesType}
           closeDialog={closeDialog}
         />

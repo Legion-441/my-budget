@@ -3,9 +3,7 @@ import { Card, CardContent, CardHeader, Chip, List, ListItem, Typography, useThe
 //* Components
 import CategoryEditorDialog from "./categories-editor-dialog";
 //* Types
-import { CategoriesTypeName, Category } from "../../types/AppTypes";
-//* Lodash
-import cloneDeep from "lodash/cloneDeep";
+import { CategoriesTypeName, Category, GroupedCategories } from "../../types/AppTypes";
 
 interface CategoriesCardProps {
   budgetID: string;
@@ -14,7 +12,15 @@ interface CategoriesCardProps {
 }
 
 export const CategoriesCard: React.FC<CategoriesCardProps> = ({ budgetID, categoriesList, categoriesType }) => {
-  const sortedCategories: Category[] = cloneDeep(categoriesList).sort((a, b) => a.order - b.order);
+  const groupedCategories: GroupedCategories = categoriesList.reduce(
+    (acc, category) => {
+      category.hidden ? acc.hidden.push(category) : acc.sorted.push(category);
+      return acc;
+    },
+    { sorted: [], hidden: [] } as { sorted: Category[]; hidden: Category[] }
+  );
+
+  groupedCategories.sorted.sort((a, b) => a.order - b.order);
 
   const theme = useTheme();
 
@@ -22,32 +28,48 @@ export const CategoriesCard: React.FC<CategoriesCardProps> = ({ budgetID, catego
     <Card>
       <CardHeader
         title={categoriesType === "expenseCategories" ? "Kategorie wydatków" : "Kategorie przychodów"}
-        action={<CategoryEditorDialog budgetID={budgetID} categories={sortedCategories} categoriesType={categoriesType} />}
+        action={<CategoryEditorDialog budgetID={budgetID} groupedCategories={groupedCategories} categoriesType={categoriesType} />}
       />
       <CardContent>
         <List dense sx={{ maxHeight: "80vh", overflow: "auto" }}>
-          {sortedCategories.length === 0 ? (
+          {groupedCategories.sorted.length === 0 ? (
             <Typography variant="body2" color={"text.disabled"}>
               Brak
             </Typography>
           ) : (
             <>
-              {sortedCategories.map((category, index) => {
+              {groupedCategories.sorted.map((category, index) => {
                 return (
                   <ListItem disableGutters key={`${categoriesType}_${index}`}>
                     <Chip
-                      label={category.name}
+                      label={category.order + " " + category.name}
                       size="small"
                       variant="outlined"
                       sx={{
                         backgroundColor: `hsl(${category.color}, 80%, ${theme.palette.mode === "light" ? "50%" : "60%"})`,
                         borderColor: `hsl(${category.color}, ${theme.palette.mode === "light" ? "50%, 40%" : "50%, 30%"})`,
-                        color: theme.palette.getContrastText(`hsl(${category.color}, 80%, ${theme.palette.mode === "light" ? "50%" : "60%"})`),
+                        color: theme.palette.getContrastText(
+                          `hsl(${category.color}, 80%, ${theme.palette.mode === "light" ? "50%" : "60%"})`
+                        ),
                       }}
                     />
                   </ListItem>
                 );
               })}
+              {groupedCategories.hidden.length > 0 && (
+                <ListItem disableGutters key={`${categoriesType}_disabled`}>
+                  <Chip
+                    label={`Wyłączone: ${groupedCategories.hidden.length}`}
+                    size="small"
+                    variant="outlined"
+                    sx={{
+                      backgroundColor: `hsl(0, 0%, ${theme.palette.mode === "light" ? "80%" : "30%"})`,
+                      borderColor: `hsl(0, 0%, 40%)`,
+                      color: theme.palette.getContrastText(`hsl(0, 0%, ${theme.palette.mode === "light" ? "80%" : "30%"})`),
+                    }}
+                  />
+                </ListItem>
+              )}
             </>
           )}
         </List>

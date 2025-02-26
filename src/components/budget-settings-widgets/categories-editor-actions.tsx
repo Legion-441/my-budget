@@ -3,47 +3,39 @@ import { Button, DialogActions } from "@mui/material";
 import { Add, Gradient, Shuffle } from "@mui/icons-material";
 //* Types
 import { Category } from "../../types/AppTypes";
-//* Lodash
-import cloneDeep from "lodash/cloneDeep";
 
 interface CategoriesEditorActionsProps {
-  setCategories: React.Dispatch<React.SetStateAction<Category[]>>;
+  setSortedCategories: React.Dispatch<React.SetStateAction<Category[]>>;
 }
 
-const CategoryEditorActions: React.FC<CategoriesEditorActionsProps> = ({ setCategories }) => {
+const CategoryEditorActions: React.FC<CategoriesEditorActionsProps> = ({ setSortedCategories }) => {
   const addCategory = () => {
-    setCategories((prevCategories) => {
-      let updatedCategories = cloneDeep(prevCategories);
-      let newCategory: Category = { id: (updatedCategories.length + 1).toString(), name: "", color: 0, order: updatedCategories.length };
-      updatedCategories.push(newCategory);
-      return updatedCategories;
-    });
+    setSortedCategories((prevCategories) => [
+      ...prevCategories,
+      // todo: set safer id generation e.g. nanoid(6)
+      { id: Date.now().toString(36), name: "", color: 0, order: prevCategories.length, hidden: false },
+    ]);
   };
 
   const handleSpreadColor = () => {
-    setCategories((prevCategories) => {
-      let updatedCategories = cloneDeep(prevCategories);
-
-      updatedCategories.forEach((category, index) => {
-        category.color = Math.round((360 / updatedCategories.length) * index);
-      });
-
-      return updatedCategories;
-    });
+    setSortedCategories((prevCategories) =>
+      prevCategories.map((category, index, array) => ({
+        ...category,
+        color: Math.round((360 / array.length) * index),
+      }))
+    );
   };
 
   const handleShuffleColor = () => {
-    setCategories((prevCategories) => {
-      let updatedCategories = cloneDeep(prevCategories);
-
-      updatedCategories
+    setSortedCategories((prevCategories) =>
+      prevCategories
         .sort(() => Math.random() - 0.5)
-        .forEach((category, index) => {
-          category.color = Math.round((360 / updatedCategories.length) * index);
-        });
-      updatedCategories.sort((a, b) => a.order - b.order);
-      return updatedCategories;
-    });
+        .map((category, index) => ({
+          ...category,
+          color: Math.round((360 / prevCategories.length) * index),
+        }))
+        .sort((a, b) => a.order - b.order)
+    );
   };
 
   return (
