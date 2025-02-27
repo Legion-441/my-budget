@@ -1,3 +1,4 @@
+import { nanoid } from "nanoid";
 //* MUI & icons
 import { Button, DialogActions } from "@mui/material";
 import { Add, Gradient, Shuffle } from "@mui/icons-material";
@@ -12,8 +13,7 @@ const CategoryEditorActions: React.FC<CategoriesEditorActionsProps> = ({ setSort
   const addCategory = () => {
     setSortedCategories((prevCategories) => [
       ...prevCategories,
-      // todo: set safer id generation e.g. nanoid(6)
-      { id: Date.now().toString(36), name: "", color: 0, order: prevCategories.length, hidden: false },
+      { id: nanoid(6), name: "", color: 0, order: prevCategories.length, hidden: false },
     ]);
   };
 
