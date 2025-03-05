@@ -42,7 +42,7 @@ export const CategoriesCard: React.FC<CategoriesCardProps> = ({ budgetID, catego
                 return (
                   <ListItem disableGutters key={`${categoriesType}_${index}`}>
                     <Chip
-                      label={category.order + " " + category.name}
+                      label={category.name}
                       size="small"
                       variant="outlined"
                       sx={{
