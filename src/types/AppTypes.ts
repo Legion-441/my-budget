@@ -1,4 +1,7 @@
 import { APP_THEME_OPTIONS, ICON_COMPONENT_DICTIONARY } from "../constants/constants";
+//* Schemas
+import { z } from "zod";
+import { StrictCategorySchema } from "../zod-schemas/dataZodSchemas";
 //* Firebase
 import { Timestamp } from "firebase/firestore";
 //* MUI type
@@ -44,7 +47,7 @@ export type FirebaseBudgetMetaData = {
   createdAt: Timestamp;
 };
 
-export type Category = { id: string; order: number; name: string; color: number; hidden: boolean };
+export type Category = z.infer<typeof StrictCategorySchema>;
 
 export type GroupedCategories = { sorted: Category[]; hidden: Category[] };
 

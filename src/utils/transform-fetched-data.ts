@@ -1,4 +1,5 @@
 import { APP_THEME_OPTIONS, BUDGET_INITIAL, BUDGET_LIST_ITEM_INITIAL, VALIDATED_ICON_MAPPING } from "../constants/constants";
+import { CategoriesSchema, StrictCategorySchema } from "../zod-schemas/dataZodSchemas";
 //* Firebase
 import { User } from "firebase/auth";
 import { DocumentData, DocumentSnapshot, Timestamp } from "firebase/firestore";
@@ -14,6 +15,7 @@ import {
   Category,
 } from "../types/AppTypes";
 
+// todo: Use zod schemas to validate this data
 export const validateBudgetsListData = (budgetsList: any): BudgetsListItem[] => {
   let budgetData: BudgetsListItem[] = [];
   if (Array.isArray(budgetsList)) {
@@ -58,35 +60,33 @@ export const transformFetchedBudgetsData = (documentSnapshot: DocumentSnapshot<D
   const validateMembers = (membersObject: FirebaseMember): MemberOrOwner[] => {
     if (typeof membersObject !== "object") return [];
 
-    const members = Object.keys(membersObject).map((memberID) => {
+    return Object.keys(membersObject).map((memberID) => {
       return {
         id: memberID,
         username: membersObject[memberID],
       };
     });
-
-    return members;
   };
-  const validateCategoriesList = (categoriesList: any): Category[] => {
-    if (!Array.isArray(categoriesList)) return [];
 
-    return categoriesList
-      .filter(
-        (category) =>
-          typeof category.id === "string" &&
-          category.id > "" &&
-          typeof category.order === "number" &&
-          typeof category.name === "string" &&
-          typeof category.color === "number"
-      )
-      .map((category) => {
-        const adjustedColor = ((category.color % 360) + 360) % 360;
-        return { ...category, color: adjustedColor };
-      });
-  };
+  // todo: in the future add functionality to approve/reject proposed data fixes by user
+  const validateCategoriesList = (dataCategories: unknown): Category[]  => {
+    const result = CategoriesSchema.safeParse(dataCategories);
+    if (result.success) return result.data;
+
+    if (!Array.isArray(dataCategories)) return [];
+    if (result.error.errors.some(error => JSON.stringify(error.path) === JSON.stringify([]))) return [];
+
+    const filteredDataCategories = dataCategories.filter((category: unknown) => StrictCategorySchema.safeParse(category).data);
+
+    const validatedData = CategoriesSchema.safeParse(filteredDataCategories).data || [];
+  
+    return validatedData;
+
+  }
 
   // Transform Firestore data into the expected format
   const budgetData: AppBudgetMetaData = {
+    // todo: Use zod schemas to validate this data
     id: budgetID,
     name: docData.name ? String(docData.name) : BUDGET_INITIAL.name,
     createdAt: docData.createdAt instanceof Timestamp ? docData.createdAt.toDate().getTime() : BUDGET_INITIAL.createdAt,
