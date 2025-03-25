@@ -2,18 +2,22 @@ import { z } from "zod";
 
 export const NanoidSchema = z.string().min(1).regex(/^[a-zA-Z0-9_-]+$/)
 
+// only id throw error, rest is catched
 export const StrictCategorySchema = z.object({
   id: NanoidSchema,
-  order: z.number().int().catch(999),
+  order: z.number().int().catch((value) => {
+    const num = Number(value.input);
+    return Math.round(isNaN(num) ? 999 : num)
+  }),
   name: z.string().min(1).max(20).transform((value) => value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()).catch("NIEPRAWIDŁOWA NAZWA"),
   hidden: z.boolean().catch(false),
   color: z.number().int().min(0).max(359).catch((value) => {
     const num = Number(value.input);
-    return ((isNaN(num) ? 0 : num % 360) + 360) % 360
+    return ((isNaN(num) ? 0 : Math.round(num) % 360) + 360) % 360
   }),
 }).strip()
 
-export const CategoriesSchema = z.array(StrictCategorySchema).transform((data) => {
+export const CategoriesSchema = z.array(z.unknown()).transform((data) => {
   const validCategories = data
     .map(category => StrictCategorySchema.safeParse(category))
     .filter(result => result.success)
